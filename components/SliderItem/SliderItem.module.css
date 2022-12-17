@@ -1,0 +1,23 @@
+.slider-item {
+  color: #fff;
+  position: relative;
+}
+
+.slider-info {
+  position: absolute;
+  width: 600px;
+  z-index: 1;
+  top: 130px;
+  left: 150px;
+}
+
+.slider-title {
+  font-size: 56px;
+  margin-bottom: 40px;
+}
+
+.slider-decr {
+  font-size: 22px;
+  margin-bottom: 30px;
+  font-family: var(--secondary-font);
+}
