@@ -30,7 +30,11 @@ import {
 } from "@mui/material";
 import BreadCumb from "../components/BreadCumb/BreadCumb";
 
-const shop = () => {
+const Shop = () => {
+  const [view, setView] = useState("grid");
+  const [sort, setSort] = useState("");
+  const [value, setValue] = useState([20, 37]);
+
   const breadcrumbs = [
     <Link
       underline="hover"
@@ -69,10 +73,6 @@ const shop = () => {
     paddingBottom: "10px",
     borderBottom: "1px solid #d23369",
   });
-
-  const [view, setView] = useState("grid");
-  const [sort, setSort] = useState("");
-  const [value, setValue] = useState([20, 37]);
 
   const handleChangeView = (e, nextView) => {
     setView(nextView);
@@ -314,4 +314,4 @@ const shop = () => {
   );
 };
 
-export default shop;
+export default Shop;
