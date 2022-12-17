@@ -35,7 +35,12 @@ function a11yProps(index) {
   };
 }
 
-const detail = () => {
+const Detail = () => {
+  const [value, setValue] = useState(0);
+  const [size, setSize] = useState(1);
+  const [model, setModel] = useState("VRG07E");
+  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+
   const breadcrumbs = [
     <Link
       underline="hover"
@@ -51,7 +56,7 @@ const detail = () => {
 
     <Link
       underline="hover"
-      key="1"
+      key="2"
       sx={{
         fontFamily: "'Kodchasan', sans-serif",
       }}
@@ -140,15 +145,9 @@ const detail = () => {
     fontFamily: "'Kodchasan', sans-serif",
   });
 
-  const [value, setValue] = useState(0);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
-  const [size, setSize] = useState(1);
-  const [model, setModel] = useState("VRG07E");
-  const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   const handleSelectSize = (event, newSize) => {
     setSize(newSize);
@@ -484,4 +483,4 @@ const detail = () => {
   );
 };
 
-export default detail;
+export default Detail;
