@@ -121,7 +121,7 @@ const News = () => {
         >
           <Container>
             {listNew.map((news) => {
-              return <NewsItem news={news} />;
+              return <NewsItem key={news.id} news={news} />;
             })}
           </Container>
 
