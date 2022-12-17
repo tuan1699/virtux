@@ -1,5 +1,12 @@
-import { Box, Grid, IconButton, Stack, styled } from "@mui/material";
-import { Typography } from "antd";
+import {
+  Box,
+  Grid,
+  IconButton,
+  Stack,
+  styled,
+  Typography,
+} from "@mui/material";
+
 import React from "react";
 import Counter from "./Counter";
 
