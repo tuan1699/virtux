@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from "react";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
@@ -69,9 +70,9 @@ const shop = () => {
     borderBottom: "1px solid #d23369",
   });
 
-  const [view, setView] = React.useState("grid");
-  const [sort, setSort] = React.useState("");
-  const [value, setValue] = React.useState([20, 37]);
+  const [view, setView] = useState("grid");
+  const [sort, setSort] = useState("");
+  const [value, setValue] = useState([20, 37]);
 
   const handleChangeView = (e, nextView) => {
     setView(nextView);
