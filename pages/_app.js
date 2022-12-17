@@ -8,7 +8,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 import { ThemeProvider } from "@emotion/react";
-import { theme } from "./config";
+// import { theme } from "./config";
+import { theme } from "../config";
 import Layout from "../components/Layout";
 
 function MyApp({ Component, pageProps }) {
