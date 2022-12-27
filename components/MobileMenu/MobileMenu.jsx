@@ -18,7 +18,9 @@ const MobileMenu = () => {
         <List>
           <ListItemButton sx={{ padding: "4px 150px" }}>
             <ListItemIcon>
-              <ListItemText>Home</ListItemText>
+              <ListItemText onClick={() => setOpenMenu(!openMenu)}>
+                Home
+              </ListItemText>
             </ListItemIcon>
           </ListItemButton>
         </List>

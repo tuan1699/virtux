@@ -10,10 +10,16 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { useSelector } from "react-redux";
 import BreadCumb from "../components/BreadCumb/BreadCumb";
 import CartItem from "../components/CartItem";
+import { selectCart } from "../store/features/Cart.slice";
 
 const Cart = () => {
+  // const { productsInCart, totalPrice } = useSelector(selectCart);
+
+  const { productsInCart, totalPrice } = useSelector(selectCart);
+
   const breadcrumbs = [
     <Link
       underline="hover"
@@ -69,8 +75,9 @@ const Cart = () => {
             <Grid container spacing={4}>
               <Grid item xs={12} md={8}>
                 <StyledHeadingCart>Products</StyledHeadingCart>
-                <CartItem />
-                <CartItem />
+                {productsInCart.map((productItem) => (
+                  <CartItem productItem={productItem} />
+                ))}
 
                 <Stack justifyContent="space-between" direction="row">
                   <Button variant="contained">Continue shopping</Button>
@@ -90,7 +97,7 @@ const Cart = () => {
                     marginBottom: "15px",
                   }}
                 >
-                  Subtotal : Rs. 4,808.00
+                  Subtotal: {totalPrice} $
                 </Typography>
 
                 <Typography
@@ -122,9 +129,11 @@ const Cart = () => {
                   Shipping, taxes, and discounts will be calculated at checkout.
                 </Typography>
 
-                <Button variant="contained" sx={{ width: "100%" }}>
-                  Proceed to Checkout
-                </Button>
+                <Link href="/checkout">
+                  <Button variant="contained" sx={{ width: "100%" }}>
+                    Proceed to Checkout
+                  </Button>
+                </Link>
               </Grid>
             </Grid>
           </Container>

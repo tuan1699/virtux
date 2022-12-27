@@ -28,7 +28,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
 
 const Header = () => {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(1);
 
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
@@ -50,7 +50,7 @@ const Header = () => {
       <AppBar sx={{ background: "#FFF" }} position="fixed">
         <Toolbar classes={{ padding: "0 200px" }} className="padding">
           <Box>
-            <img src="./assets/img/logo.png" alt="" />
+            <img src="/assets/img/logo.png" alt="" />
           </Box>
 
           {!isMatch ? (
@@ -69,7 +69,7 @@ const Header = () => {
                   // icon={<KeyboardArrowDownIcon />}
                   // iconPosition="end"
                   component={Link}
-                  href="/shop"
+                  href="/products"
                 />
                 <Tab
                   label="Page"
@@ -108,7 +108,7 @@ const Header = () => {
                 sx={{ marginLeft: "auto" }}
                 alignItems="center"
               >
-                <Link href="/account">
+                <Link href="/signup">
                   <IconButton>
                     <PersonIcon />
                   </IconButton>

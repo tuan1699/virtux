@@ -26,17 +26,6 @@ import Slider from "../components/SliderItem/SliderItem";
 import { useState } from "react";
 import DetailModal from "../components/DetailModal";
 
-// const style = {
-//   position: "absolute",
-//   top: "50%",
-//   left: "50%",
-//   width: "60%",
-//   transform: "translate(-50%, -50%)",
-//   bgcolor: "background.paper",
-//   boxShadow: 24,
-//   p: 4,
-// };
-
 export default function Home() {
   const StyledSection = styled(Box)({
     display: "flex",
@@ -45,10 +34,6 @@ export default function Home() {
     alignItems: "center",
     margin: "100px 0",
   });
-
-  // const [open, setOpen] = useState(false);
-  // const handleOpen = () => setOpen(true);
-  // const handleClose = () => setOpen(false);
 
   return (
     <div>
@@ -114,24 +99,6 @@ export default function Home() {
           </Grid>
         </Box>
       </StyledSection>
-
-      {/* <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={open}>
-          <Box sx={style}>
-            <DetailModal />
-          </Box>
-        </Fade>
-      </Modal> */}
 
       {/* About Project */}
       <Box sx={{ padding: { md: "0 80px" } }}>

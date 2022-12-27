@@ -23,5 +23,9 @@ export const theme = createTheme({
       main: "#64748B",
       contrastText: "#fff",
     },
+
+    auth: {
+      main: "#d23f57",
+    },
   },
 });

@@ -18,7 +18,11 @@ import {
 import React from "react";
 import BreadCumb from "../components/BreadCumb/BreadCumb";
 
+import { selectWishList } from "../store/features/Wishlist.slice";
+import WishListSlice from "../store/features/Wishlist.slice";
+
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { useDispatch, useSelector } from "react-redux";
 
 function createData(image, product, price) {
   return { image, product, price };
@@ -39,6 +43,17 @@ const rows = [
 ];
 
 const wishList = () => {
+  const dispatch = useDispatch();
+
+  const { productsInWishList, removeItemInWishList } =
+    useSelector(selectWishList);
+
+  console.log(productsInWishList);
+
+  const handleRemoveItem = (productId) => {
+    dispatch(removeItemInWishList(productId));
+  };
+
   const breadcrumbs = [
     <Link
       underline="hover"
@@ -111,31 +126,31 @@ const wishList = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row) => (
+                  {productsInWishList.map((product) => (
                     <TableRow
-                      key={row.name}
+                      key={product.id}
                       sx={{
                         "&:last-child td, &:last-child th": { border: 0 },
-                        // display: "flex",
-                        // flexDirection: { xs: "column", md: "row" },
                       }}
                     >
                       <TableCell component="th" scope="row" align="center">
                         <Box
                           component="img"
-                          src={row.image}
+                          src={product.thumbnail_1}
                           width="120px"
                           height="100px"
                         ></Box>
                       </TableCell>
                       <StyledNameProduct align="center">
-                        {row.product}
+                        {product.name}
                       </StyledNameProduct>
 
-                      <TableCell align="center">{row.price}</TableCell>
+                      <TableCell align="center">{product.price} $</TableCell>
 
                       <TableCell align="center">
-                        <IconButton>
+                        <IconButton
+                          onClick={() => handleRemoveItem(product.id)}
+                        >
                           <DeleteOutlineIcon />
                         </IconButton>
                       </TableCell>

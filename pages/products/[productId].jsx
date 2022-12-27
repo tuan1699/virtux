@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  ButtonGroup,
   Container,
   Grid,
   IconButton,
@@ -17,8 +18,10 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import BreadCumb from "../components/BreadCumb/BreadCumb";
-import Counter from "../components/Counter";
+import { useDispatch, useSelector } from "react-redux";
+
+import BreadCumb from "../../components/BreadCumb/BreadCumb";
+import Counter from "../../components/Counter";
 
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
@@ -26,7 +29,10 @@ import GoogleIcon from "@mui/icons-material/Google";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs } from "swiper";
-import Item from "../components/Item/Item";
+import Item from "../../components/Item/Item";
+
+import { addItem } from "../../store/features/Cart.slice";
+import { selectProductById } from "../../store/selector";
 
 function a11yProps(index) {
   return {
@@ -35,11 +41,27 @@ function a11yProps(index) {
   };
 }
 
-const Detail = () => {
+const Detail = ({ product, productId }) => {
+  const [count, setCount] = useState(1);
+
   const [value, setValue] = useState(0);
   const [size, setSize] = useState(1);
   const [model, setModel] = useState("VRG07E");
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
+
+  const dispatch = useDispatch();
+
+  productId = Number(productId);
+  console.log(productId);
+
+  const handleAddtoCart = (productId) => {
+    dispatch(
+      addItem({
+        productId: productId,
+        quantity: count,
+      })
+    );
+  };
 
   const breadcrumbs = [
     <Link
@@ -107,7 +129,6 @@ const Detail = () => {
     fontSize: "18px",
     fontWeight: "300",
     fontFamily: "'Kodchasan', sans-serif",
-    marginBottom: "20px",
   });
 
   const StyledTitleDetail = styled(Typography)({
@@ -161,7 +182,7 @@ const Detail = () => {
     <>
       <Box
         sx={{
-          backgroundImage: `url(./assets/img/background-page.png)`,
+          backgroundImage: `url(/assets/img/background-page.png)`,
           minHeight: "900px",
           marginTop: "70px",
         }}
@@ -197,24 +218,21 @@ const Detail = () => {
                   modules={[FreeMode, Navigation, Thumbs]}
                   className="mySwiper2"
                 >
-                  <SwiperSlide>
-                    <Box
-                      component="img"
-                      src="./assets/img/detail/detaildemo-1.png"
-                    ></Box>
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <Box
-                      component="img"
-                      src="./assets/img/detail/detaildemo-2.png"
-                    ></Box>
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <Box
-                      component="img"
-                      src="./assets/img/detail/detaildemo-3.png"
-                    ></Box>
-                  </SwiperSlide>
+                  {product.screen_shots.map((item) => {
+                    return (
+                      <SwiperSlide>
+                        <Box
+                          sx={{
+                            width: "100%",
+                            paddingTop: "100%",
+                            backgroundImage: `url(${item})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                          }}
+                        ></Box>
+                      </SwiperSlide>
+                    );
+                  })}
                 </Swiper>
                 <Swiper
                   //   onSwiper={setThumbsSwiper}
@@ -225,29 +243,26 @@ const Detail = () => {
                   modules={[FreeMode, Navigation, Thumbs]}
                   className="mySwiper"
                 >
-                  <SwiperSlide>
-                    <Box
-                      component="img"
-                      src="./assets/img/detail/detaildemo-1.png"
-                    ></Box>
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <Box
-                      component="img"
-                      src="./assets/img/detail/detaildemo-2.png"
-                    ></Box>
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <Box
-                      component="img"
-                      src="./assets/img/detail/detaildemo-3.png"
-                    ></Box>
-                  </SwiperSlide>
+                  {product.screen_shots.map((item) => {
+                    return (
+                      <SwiperSlide>
+                        <Box
+                          sx={{
+                            width: "170px",
+                            paddingTop: "80%",
+                            backgroundImage: `url(${item})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                          }}
+                        ></Box>
+                      </SwiperSlide>
+                    );
+                  })}
                 </Swiper>
               </Grid>
 
               <Grid item xs={12} md={6}>
-                <StyledHeadingDetail>3D VR Headset Glass</StyledHeadingDetail>
+                <StyledHeadingDetail>{product.name}</StyledHeadingDetail>
                 <Rating value={5} />
 
                 <StyledDecrDetail
@@ -255,10 +270,7 @@ const Detail = () => {
                     marginTop: "10px",
                   }}
                 >
-                  Nam tempus turpis at metus scelerisque placerat nulla
-                  deumantos solicitud felis. Pellentesque diam dolor, elementum
-                  etos lobortis des mollis ut risus. Sedcus faucibus an
-                  sullamcorper mattis drostique des commodo pharetras...
+                  {product.over_view}
                 </StyledDecrDetail>
 
                 <List
@@ -269,15 +281,14 @@ const Detail = () => {
                   <ListItem
                     sx={{
                       padding: "0px",
-
                       minHeight: "50px",
                     }}
                   >
                     <StyledTitleDetail>Price: </StyledTitleDetail>
-                    <StyledDecrDetail>Rs. 3,990.00</StyledDecrDetail>
+                    <StyledDecrDetail>$ {product.price}</StyledDecrDetail>
                   </ListItem>
 
-                  <ListItem
+                  {/* <ListItem
                     sx={{
                       padding: "0px",
 
@@ -302,9 +313,9 @@ const Detail = () => {
                         6.2
                       </ToggleButton>
                     </StyledToggleButtonGroup>
-                  </ListItem>
+                  </ListItem> */}
 
-                  <ListItem
+                  {/* <ListItem
                     sx={{
                       padding: "0px",
                       minHeight: "50px",
@@ -328,7 +339,7 @@ const Detail = () => {
                         VRG08E
                       </ToggleButton>
                     </StyledToggleButtonGroup>
-                  </ListItem>
+                  </ListItem> */}
 
                   <ListItem sx={{ padding: "0px", minHeight: "50px" }}>
                     <StyledTitleDetail>Vendor: </StyledTitleDetail>
@@ -342,7 +353,43 @@ const Detail = () => {
 
                   <ListItem sx={{ padding: "0px", minHeight: "50px" }}>
                     <StyledTitleDetail>Quantity:</StyledTitleDetail>
-                    <Counter />
+                    <ButtonGroup
+                      variant="outlined"
+                      aria-label="outlined button group"
+                    >
+                      <Button
+                        onClick={() => {
+                          setCount(Math.max(count - 1, 1));
+                        }}
+                        variant="outlined"
+                        sx={{
+                          maxWidth: "30px",
+                          maxHeight: "30px",
+                        }}
+                      >
+                        -
+                      </Button>
+                      <Button
+                        sx={{
+                          maxWidth: "30px",
+                          maxHeight: "30px",
+                        }}
+                      >
+                        {count}
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          setCount(count + 1);
+                        }}
+                        variant="outlined"
+                        sx={{
+                          width: "30px",
+                          height: "30px",
+                        }}
+                      >
+                        +
+                      </Button>
+                    </ButtonGroup>
                   </ListItem>
                 </List>
 
@@ -353,7 +400,12 @@ const Detail = () => {
                     margin: "20px 0",
                   }}
                 >
-                  <Button variant="contained">Add to Cart</Button>
+                  <Button
+                    variant="contained"
+                    onClick={() => handleAddtoCart(product.id)}
+                  >
+                    Add to Cart
+                  </Button>
                   <Button variant="contained">Buy it now</Button>
                   <Button variant="contained">Add to wishlist</Button>
                 </Stack>
@@ -460,7 +512,7 @@ const Detail = () => {
             </Box>
 
             <Grid container>
-              <Grid item xs={12} sm={6} md={3}>
+              {/* <Grid item xs={12} sm={6} md={3}>
                 <Item />
               </Grid>
 
@@ -474,7 +526,7 @@ const Detail = () => {
 
               <Grid item xs={12} sm={6} md={3}>
                 <Item />
-              </Grid>
+              </Grid> */}
             </Grid>
           </Container>
         </Box>
@@ -484,3 +536,37 @@ const Detail = () => {
 };
 
 export default Detail;
+
+export const getStaticProps = async (context) => {
+  const productId = context.params.productId;
+
+  const res = await fetch(
+    "http://localhost:3002/products/" + context.params.productId
+  );
+
+  const product = await res.json();
+
+  return {
+    props: {
+      product,
+      productId,
+    },
+  };
+};
+
+export async function getStaticPaths() {
+  const res = await fetch("http://localhost:3002/products");
+
+  const data = await res.json();
+
+  const paths = data.map((product) => {
+    return {
+      params: { productId: product.id.toString() },
+    };
+  });
+
+  return {
+    paths,
+    fallback: false,
+  };
+}
