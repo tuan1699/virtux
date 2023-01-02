@@ -541,7 +541,8 @@ export const getStaticProps = async (context) => {
   const productId = context.params.productId;
 
   const res = await fetch(
-    "http://localhost:3002/products/" + context.params.productId
+    "https://63a8fbcd100b7737b987d5fd.mockapi.io/products/" +
+      context.params.productId
   );
 
   const product = await res.json();
@@ -555,7 +556,9 @@ export const getStaticProps = async (context) => {
 };
 
 export async function getStaticPaths() {
-  const res = await fetch("http://localhost:3002/products");
+  const res = await fetch(
+    "https://63a8fbcd100b7737b987d5fd.mockapi.io/products"
+  );
 
   const data = await res.json();
 

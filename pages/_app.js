@@ -13,7 +13,14 @@ import Layout from "../components/Layout";
 import { Provider } from "react-redux";
 import store from "../store";
 
+import { app } from "../lib/firebase";
+import { getAuth } from "firebase/auth";
+
 function MyApp({ Component, pageProps }) {
+  const auth = getAuth(app);
+
+  // console.log(auth.currentUser);
+
   return (
     <ThemeProvider theme={theme}>
       <Provider store={store}>

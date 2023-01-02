@@ -11,7 +11,18 @@ import React from "react";
 
 import { useForm } from "react-hook-form";
 
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { app } from "../lib/firebase";
+
 const login = () => {
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
   const {
     register: register3,
     handleSubmit: handleSubmit3,
@@ -69,7 +80,10 @@ const login = () => {
         <form
           key={3}
           action=""
-          onSubmit={handleSubmit3((data) => console.log(data))}
+          onSubmit={handleSubmit3((data) => {
+            signInWithEmailAndPassword(auth, data.email, data.password);
+            console.log(auth.currentUser);
+          })}
         >
           <Box
             sx={{
@@ -152,6 +166,9 @@ const login = () => {
             width: "100%",
             bgcolor: "#009EFF",
             marginBottom: "20px",
+          }}
+          onClick={() => {
+            signInWithPopup(auth, provider).catch((err) => console.error(err));
           }}
         >
           Continue With Google

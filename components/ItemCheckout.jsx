@@ -1,15 +1,15 @@
 import { Badge, Box, Stack, Typography } from "@mui/material";
 import React from "react";
 
-const ItemCheckout = () => {
+const ItemCheckout = ({ product }) => {
   return (
     <>
-      <Badge badgeContent={4} color="primary">
+      <Badge badgeContent={product.quantity} color="primary">
         <Box
           sx={{
             width: "60px",
             height: "60px",
-            backgroundImage: `url(/assets/img/detail/detaildemo-1.png)`,
+            backgroundImage: `url(${product.thumbnail_1})`,
             backgroundSize: "cover",
             border: "1px solid #ccc",
             borderRadius: "10px",
@@ -30,7 +30,7 @@ const ItemCheckout = () => {
             fontFamily: '"Kodchasan", sans-serif',
           }}
         >
-          3D VR Headset Glass
+          {product.name}
         </Typography>
         <Typography
           sx={{
@@ -38,7 +38,7 @@ const ItemCheckout = () => {
             fontWeight: "300",
           }}
         >
-          4.7 / VRG07E
+          {product.categories}
         </Typography>
       </Stack>
 
@@ -47,7 +47,7 @@ const ItemCheckout = () => {
           fontWeight: "600",
         }}
       >
-        ₹2,528.00
+        {product.price} $
       </Typography>
     </>
   );

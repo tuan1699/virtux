@@ -1,10 +1,11 @@
+import styles from "../styles/WishItem.module.css";
+
 import {
   Box,
   Button,
   Container,
   Grid,
   IconButton,
-  Link,
   Paper,
   styled,
   Table,
@@ -15,7 +16,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BreadCumb from "../components/BreadCumb/BreadCumb";
 
 import { selectWishList } from "../store/features/Wishlist.slice";
@@ -23,35 +24,47 @@ import WishListSlice from "../store/features/Wishlist.slice";
 
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { useDispatch, useSelector } from "react-redux";
+import Link from "next/link";
 
-function createData(image, product, price) {
-  return { image, product, price };
-}
-
-const rows = [
-  createData(
-    "./assets/img/cart/cartdemo-1.png",
-    "Deluxe Audio Strap",
-    "Rs. 3,228.00"
-  ),
-
-  createData(
-    "./assets/img/cart/cartdemo-2.png",
-    "Multifunctional VR",
-    "Rs. 2,555.00"
-  ),
-];
+import {
+  getFirestore,
+  collection,
+  doc,
+  deleteDoc,
+  onSnapshot,
+  query,
+} from "firebase/firestore";
+import { app } from "../lib/firebase";
+import { userSelector } from "../store/selector";
 
 const wishList = () => {
   const dispatch = useDispatch();
+  const user = useSelector(userSelector);
 
-  const { productsInWishList, removeItemInWishList } =
-    useSelector(selectWishList);
+  
 
-  console.log(productsInWishList);
+  // wishList
 
-  const handleRemoveItem = (productId) => {
-    dispatch(removeItemInWishList(productId));
+  const wishlistRef = collection(getFirestore(app), "wishlist");
+  const [wishlist, setWishlist] = useState([]);
+
+  useEffect(() => {
+    const q = query(wishlistRef);
+    const wishlist = onSnapshot(q, (querySnapshot) => {
+      let data = [];
+      querySnapshot.forEach((doc) => {
+        data.push({ ...doc.data(), id: doc.id });
+      });
+      setWishlist(data.filter((item) => item.uid == (user && user.uid)));
+    });
+    return () => wishlist();
+  }, []);
+
+
+
+  const handleRemoveItem = async (productId) => {
+    const reference = doc(wishlistRef, productId);
+    await deleteDoc(reference);
   };
 
   const breadcrumbs = [
@@ -86,7 +99,7 @@ const wishList = () => {
   });
 
   const StyledNameProduct = styled(TableCell)({
-    fontSize: "16px",
+    fontSize: "18px",
     fontWeight: "600",
     fontFamily: "'Kodchasan', sans-serif",
   });
@@ -126,26 +139,56 @@ const wishList = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {productsInWishList.map((product) => (
+                  {wishlist.map((product) => (
                     <TableRow
                       key={product.id}
                       sx={{
                         "&:last-child td, &:last-child th": { border: 0 },
                       }}
                     >
-                      <TableCell component="th" scope="row" align="center">
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        align="center"
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                        }}
+                      >
                         <Box
-                          component="img"
-                          src={product.thumbnail_1}
+                          sx={{
+                            backgroundImage: `url(${product.thumbnail_1})`,
+                            backgroundSize: "cover",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "center",
+                          }}
                           width="120px"
                           height="100px"
                         ></Box>
                       </TableCell>
                       <StyledNameProduct align="center">
-                        {product.name}
+                        <Link
+                          href={{
+                            pathname: "products/[productId]",
+                            query: { productId: product.id },
+                          }}
+                          className={styles["link-item"]}
+                        >
+                          {product.name}
+                        </Link>
                       </StyledNameProduct>
 
-                      <TableCell align="center">{product.price} $</TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          fontSize: "18px",
+                          fontWeight: "600",
+                          fontFamily: "'Kodchasan', sans-serif",
+                          color: "#d23369",
+                        }}
+                      >
+                        {product.price} $
+                      </TableCell>
 
                       <TableCell align="center">
                         <IconButton

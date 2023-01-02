@@ -9,16 +9,42 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import BreadCumb from "../components/BreadCumb/BreadCumb";
 import CartItem from "../components/CartItem";
 import { selectCart } from "../store/features/Cart.slice";
 
+import {
+  getFirestore,
+  collection,
+  doc,
+  deleteDoc,
+  onSnapshot,
+  query,
+} from "firebase/firestore";
+import { app } from "../lib/firebase";
+import { userSelector } from "../store/selector";
+
 const Cart = () => {
   // const { productsInCart, totalPrice } = useSelector(selectCart);
 
+  const user = useSelector(userSelector);
+
   const { productsInCart, totalPrice } = useSelector(selectCart);
+  const cartRef = collection(getFirestore(app), "cart");
+  const [carts, setCart] = useState([]);
+
+  useEffect(() => {
+    const q = query(cartRef);
+    onSnapshot(q, async (querySnapshot) => {
+      let data = [];
+      querySnapshot.forEach((doc) => {
+        data.push({ ...doc.data(), id: doc.id });
+      });
+      setCart(data.filter((item) => item.uid == (user && user.uid)));
+    });
+  }, []);
 
   const breadcrumbs = [
     <Link
@@ -75,13 +101,15 @@ const Cart = () => {
             <Grid container spacing={4}>
               <Grid item xs={12} md={8}>
                 <StyledHeadingCart>Products</StyledHeadingCart>
-                {productsInCart.map((productItem) => (
-                  <CartItem productItem={productItem} />
-                ))}
+                {carts.length == 0 ? (
+                  // console.log(carts)
+                  <Typography>Giỏ hàng trống</Typography>
+                ) : (
+                  carts.map((product) => <CartItem product={product} />)
+                )}
 
                 <Stack justifyContent="space-between" direction="row">
                   <Button variant="contained">Continue shopping</Button>
-                  <Button variant="contained">Update Cart</Button>
                 </Stack>
               </Grid>
 
@@ -97,7 +125,11 @@ const Cart = () => {
                     marginBottom: "15px",
                   }}
                 >
-                  Subtotal: {totalPrice} $
+                  Subtotal:{" "}
+                  {carts.reduce((total, cur) => {
+                    return (total += cur.price * cur.quantity);
+                  }, 0)}{" "}
+                  $
                 </Typography>
 
                 <Typography

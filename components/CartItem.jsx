@@ -19,10 +19,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectCart } from "../store/features/Cart.slice";
 import Link from "next/link";
 
-const CartItem = ({ productItem }) => {
+import {
+  getFirestore,
+  collection,
+  doc,
+  deleteDoc,
+  onSnapshot,
+  query,
+  updateDoc,
+} from "firebase/firestore";
+import { app } from "../lib/firebase";
+import { userSelector } from "../store/selector";
+
+const CartItem = ({ product }) => {
   const dispatch = useDispatch();
 
   const { incQty, decQty, removeItem } = useSelector(selectCart);
+  const cartRef = collection(getFirestore(app), "cart");
 
   const StyledItemTitle = styled(Typography)({
     fontSize: "24px",
@@ -46,8 +59,23 @@ const CartItem = ({ productItem }) => {
     color: "#d23369",
   });
 
-  const handleRemoveItem = (id) => {
-    dispatch(removeItem(id));
+  const handleRemoveItem = async (id) => {
+    const reference = doc(cartRef, id);
+    await deleteDoc(reference);
+  };
+
+  const incrementCart = async (id, quantity) => {
+    const reference = doc(cartRef, id);
+    await updateDoc(reference, {
+      quantity: quantity + 1,
+    });
+  };
+
+  const decrementCart = async (id, quantity) => {
+    const reference = doc(cartRef, id);
+    await updateDoc(reference, {
+      quantity: Math.max(quantity - 1, 1),
+    });
   };
 
   return (
@@ -63,7 +91,7 @@ const CartItem = ({ productItem }) => {
           <Grid item xs={12} sm={4}>
             <Box
               sx={{
-                backgroundImage: `url(${productItem.product.thumbnail_1})`,
+                backgroundImage: `url(${product.thumbnail_1})`,
                 width: "100%",
                 minHeight: "270px",
                 backgroundSize: "cover",
@@ -89,22 +117,22 @@ const CartItem = ({ productItem }) => {
                 <Link
                   href={{
                     pathname: "products/[productId]",
-                    query: { productId: productItem.product.id },
+                    query: { productId: product.id },
                   }}
                   className={styles["link-item"]}
                 >
-                  {productItem.product.name}
+                  {product.name}
                 </Link>
               </StyledItemTitle>
 
-              <StyledItemPrice>{productItem.product.price} $</StyledItemPrice>
+              <StyledItemPrice>{product.price} $</StyledItemPrice>
               <ButtonGroup
                 variant="outlined"
                 aria-label="outlined button group"
               >
                 <Button
                   onClick={() => {
-                    dispatch(decQty(productItem.product.id));
+                    decrementCart(product.id, product.quantity);
                   }}
                   variant="outlined"
                   sx={{
@@ -120,11 +148,11 @@ const CartItem = ({ productItem }) => {
                     maxHeight: "30px",
                   }}
                 >
-                  {productItem.quantity}
+                  {product.quantity}
                 </Button>
                 <Button
                   onClick={() => {
-                    dispatch(incQty(productItem.product.id));
+                    incrementCart(product.id, product.quantity);
                   }}
                   variant="outlined"
                   sx={{
@@ -148,7 +176,7 @@ const CartItem = ({ productItem }) => {
                 >
                   Total:{" "}
                 </Box>
-                {productItem.quantity * productItem.product.price} $
+                {product.quantity * product.price} $
               </StyledItemPrice>
             </Stack>
           </Grid>
@@ -165,7 +193,7 @@ const CartItem = ({ productItem }) => {
               color: "#fff",
             },
           }}
-          onClick={() => handleRemoveItem(productItem.product.id)}
+          onClick={() => handleRemoveItem(product.id)}
         >
           <CloseIcon />
         </IconButton>

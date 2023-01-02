@@ -12,7 +12,20 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { isValidPhoneNumber } from "react-phone-number-input";
 
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { app } from "../lib/firebase";
+import { collection, getDoc, getFirestore, setDoc } from "firebase/firestore";
+
 const signup = () => {
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
   const {
     register: register2,
     handleSubmit: handleSubmit2,
@@ -88,7 +101,20 @@ const signup = () => {
           Create Your Account
         </Typography>
 
-        <form key={2} onSubmit={handleSubmit2((data) => console.log(data))}>
+        <form
+          key={2}
+          onSubmit={handleSubmit2((data) => {
+            createUserWithEmailAndPassword(auth, data.mail, data.password)
+              .then(() => {
+                updateProfile(auth.currentUser, {
+                  displayName: data.name,
+                });
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+          })}
+        >
           <Box
             sx={{
               marginBottom: "20px",
@@ -164,7 +190,7 @@ const signup = () => {
               label="Retype Password"
               variant="outlined"
               type="password"
-              fullWidth 
+              fullWidth
               {...rePassword}
             />
             <Typography
@@ -225,6 +251,9 @@ const signup = () => {
             width: "100%",
             bgcolor: "#009EFF",
             marginBottom: "20px",
+          }}
+          onClick={() => {
+            signInWithPopup(auth, provider).catch((err) => console.error(err));
           }}
         >
           Continue With Google

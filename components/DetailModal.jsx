@@ -16,7 +16,7 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import Counter from "../components/Counter";
 
@@ -27,7 +27,24 @@ import GoogleIcon from "@mui/icons-material/Google";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs } from "swiper";
 
-const DetailModal = () => {
+import { userSelector } from "../store/selector";
+import {
+  collection,
+  doc,
+  getFirestore,
+  onSnapshot,
+  query,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { app } from "../lib/firebase";
+import { useSelector } from "react-redux";
+
+const DetailModal = ({ product }) => {
+  const [wishlist, setWishlist] = useState([]);
+  const [cart, setCart] = useState([]);
+  const user = useSelector(userSelector);
+
   const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
     "& .MuiToggleButtonGroup-grouped": {
       margin: theme.spacing(0.5),
@@ -68,6 +85,8 @@ const DetailModal = () => {
     width: "140px",
   });
 
+  const [count, setCount] = useState(1);
+
   const [size, setSize] = useState(1);
   const [model, setModel] = useState("VRG07E");
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -78,6 +97,44 @@ const DetailModal = () => {
 
   const handleSelectModel = (event, newModel) => {
     setModel(newModel);
+  };
+
+  // Add to Cart
+
+  const cartRef = collection(getFirestore(app), "cart");
+
+  useEffect(() => {
+    const q = query(cartRef);
+    const wishlist = onSnapshot(q, (querySnapshot) => {
+      let data = [];
+      querySnapshot.forEach((doc) => {
+        data.push({ ...doc.data(), id: doc.id });
+      });
+      setCart(data.filter((item) => item.uid == (user && user.uid)));
+    });
+    return () => wishlist();
+  }, []);
+
+  const handleAddtoCart = async (product) => {
+    // check product exist
+    const check = cart.filter(
+      (item) => item.uid == user.uid && item.name == product.name
+    );
+
+    if (check.length > 0) {
+      const reference = doc(cartRef, check[0].id);
+      await updateDoc(reference, {
+        quantity: check[0].quantity + count,
+      });
+    } else {
+      const reference = doc(cartRef);
+      await setDoc(reference, {
+        uid: user.uid,
+        productId: product.id,
+        quantity: 1,
+        ...product,
+      });
+    }
   };
 
   return (
@@ -198,7 +255,43 @@ const DetailModal = () => {
 
               <ListItem sx={{ padding: "0px", minHeight: "50px" }}>
                 <StyledTitleDetail>Quantity:</StyledTitleDetail>
-                <Counter />
+                <ButtonGroup
+                  variant="outlined"
+                  aria-label="outlined button group"
+                >
+                  <Button
+                    onClick={() => {
+                      setCount(Math.max(count - 1, 1));
+                    }}
+                    variant="outlined"
+                    sx={{
+                      maxWidth: "30px",
+                      maxHeight: "30px",
+                    }}
+                  >
+                    -
+                  </Button>
+                  <Button
+                    sx={{
+                      maxWidth: "30px",
+                      maxHeight: "30px",
+                    }}
+                  >
+                    {count}
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setCount(count + 1);
+                    }}
+                    variant="outlined"
+                    sx={{
+                      width: "30px",
+                      height: "30px",
+                    }}
+                  >
+                    +
+                  </Button>
+                </ButtonGroup>
               </ListItem>
             </List>
 
@@ -209,7 +302,12 @@ const DetailModal = () => {
                 margin: "20px 0",
               }}
             >
-              <Button variant="contained">Add to Cart</Button>
+              <Button
+                variant="contained"
+                onClick={() => handleAddtoCart(product)}
+              >
+                Add to Cart
+              </Button>
               <Button variant="contained">Add to wishlist</Button>
             </Stack>
 

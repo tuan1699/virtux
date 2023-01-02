@@ -21,7 +21,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BreadCumb from "../components/BreadCumb/BreadCumb";
 
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
@@ -29,8 +29,37 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ItemCheckout from "../components/ItemCheckout";
 import { useForm } from "react-hook-form";
 
+import {
+  getFirestore,
+  collection,
+  doc,
+  deleteDoc,
+  onSnapshot,
+  query,
+} from "firebase/firestore";
+import { app } from "../lib/firebase";
+import { userSelector } from "../store/selector";
+import { useSelector } from "react-redux";
+
 const checkout = () => {
   const [payment, setPayment] = useState("credit");
+
+  const user = useSelector(userSelector);
+
+  const cartRef = collection(getFirestore(app), "cart");
+  const [carts, setCart] = useState([]);
+
+  useEffect(() => {
+    const q = query(cartRef);
+    onSnapshot(q, (querySnapshot) => {
+      let data = [];
+      querySnapshot.forEach((doc) => {
+        console.log(doc.data());
+        data.push({ ...doc.data(), id: doc.id });
+      });
+      setCart(data);
+    });
+  }, []);
 
   const {
     register: register4,
@@ -511,38 +540,20 @@ const checkout = () => {
                       borderBottom: "1px solid #ccc",
                     }}
                   >
-                    <ListItem
-                      disablePadding
-                      sx={{
-                        marginBottom: "20px",
-                      }}
-                    >
-                      <ItemCheckout />
-                    </ListItem>
-                    <ListItem
-                      disablePadding
-                      sx={{
-                        marginBottom: "20px",
-                      }}
-                    >
-                      <ItemCheckout />
-                    </ListItem>
-                    <ListItem
-                      disablePadding
-                      sx={{
-                        marginBottom: "20px",
-                      }}
-                    >
-                      <ItemCheckout />
-                    </ListItem>
-                    <ListItem
-                      disablePadding
-                      sx={{
-                        marginBottom: "20px",
-                      }}
-                    >
-                      <ItemCheckout />
-                    </ListItem>
+                    {carts.length !== 0 && user ? (
+                      carts.map((product) => (
+                        <ListItem
+                          disablePadding
+                          sx={{
+                            marginBottom: "20px",
+                          }}
+                        >
+                          <ItemCheckout product={product} />
+                        </ListItem>
+                      ))
+                    ) : (
+                      <Typography>Giỏ hàng trống</Typography>
+                    )}
                   </List>
 
                   <Box
@@ -583,7 +594,7 @@ const checkout = () => {
                           fontWeight: "600",
                         }}
                       >
-                        ₹1,500.00
+                        Free Ship
                       </Typography>
                     </Stack>
                   </Box>
@@ -608,7 +619,10 @@ const checkout = () => {
                         fontWeight: "600",
                       }}
                     >
-                      ₹4,028.00
+                      {carts.reduce((total, cur) => {
+                        return (total += cur.price * cur.quantity);
+                      }, 0)}{" "}
+                      $
                     </Typography>
                   </Stack>
                 </Box>
