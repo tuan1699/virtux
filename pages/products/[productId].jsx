@@ -17,7 +17,7 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import BreadCumb from "../../components/BreadCumb/BreadCumb";
@@ -34,6 +34,18 @@ import Item from "../../components/Item/Item";
 import { addItem } from "../../store/features/Cart.slice";
 import { selectProductById } from "../../store/selector";
 
+import { userSelector } from "../../store/selector";
+import {
+  collection,
+  doc,
+  getFirestore,
+  onSnapshot,
+  query,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { app } from "../../lib/firebase";
+
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
@@ -42,25 +54,86 @@ function a11yProps(index) {
 }
 
 const Detail = ({ product, productId }) => {
+  const [wishlist, setWishlist] = useState([]);
+  const [cart, setCart] = useState([]);
+  const user = useSelector(userSelector);
   const [count, setCount] = useState(1);
 
   const [value, setValue] = useState(0);
-  const [size, setSize] = useState(1);
-  const [model, setModel] = useState("VRG07E");
+  // const [size, setSize] = useState(1);
+  // const [model, setModel] = useState("VRG07E");
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   const dispatch = useDispatch();
 
-  productId = Number(productId);
-  console.log(productId);
+  // Add to WishList
+  const wishlistRef = collection(getFirestore(app), "wishlist");
 
-  const handleAddtoCart = (productId) => {
-    dispatch(
-      addItem({
-        productId: productId,
-        quantity: count,
-      })
+  useEffect(() => {
+    const q = query(wishlistRef);
+    const wishlist = onSnapshot(q, (querySnapshot) => {
+      let data = [];
+      querySnapshot.forEach((doc) => {
+        data.push({ ...doc.data(), id: doc.id });
+      });
+      setWishlist(data.filter((item) => item.uid == (user && user.uid)));
+    });
+    return () => wishlist();
+  }, []);
+
+  const handleAddtoWishList = async (product) => {
+    const check = wishlist.filter(
+      (item) => item.uid == user.uid && item.name == product.name
     );
+
+    if (check.length > 0) {
+      console.log("Cos roi");
+    } else {
+      const reference = doc(wishlistRef);
+      await setDoc(reference, {
+        uid: user.uid,
+        productId: product.id,
+        ...product,
+      });
+    }
+  };
+
+  // Add to Cart
+
+  const cartRef = collection(getFirestore(app), "cart");
+
+  useEffect(() => {
+    const q = query(cartRef);
+    const wishlist = onSnapshot(q, (querySnapshot) => {
+      let data = [];
+      querySnapshot.forEach((doc) => {
+        data.push({ ...doc.data(), id: doc.id });
+      });
+      setCart(data.filter((item) => item.uid == (user && user.uid)));
+    });
+    return () => wishlist();
+  }, []);
+
+  const handleAddtoCart = async (product) => {
+    // check product exist
+    const check = cart.filter(
+      (item) => item.uid == user.uid && item.name == product.name
+    );
+
+    if (check.length > 0) {
+      const reference = doc(cartRef, check[0].id);
+      await updateDoc(reference, {
+        quantity: check[0].quantity + count,
+      });
+    } else {
+      const reference = doc(cartRef);
+      await setDoc(reference, {
+        uid: user.uid,
+        productId: product.id,
+        quantity: count,
+        ...product,
+      });
+    }
   };
 
   const breadcrumbs = [
@@ -346,10 +419,10 @@ const Detail = ({ product, productId }) => {
                     <StyledDecrDetail>3D Reality</StyledDecrDetail>
                   </ListItem>
 
-                  <ListItem sx={{ padding: "0px", minHeight: "50px" }}>
+                  {/* <ListItem sx={{ padding: "0px", minHeight: "50px" }}>
                     <StyledTitleDetail>Type:</StyledTitleDetail>
                     <StyledDecrDetail>Gaming</StyledDecrDetail>
-                  </ListItem>
+                  </ListItem> */}
 
                   <ListItem sx={{ padding: "0px", minHeight: "50px" }}>
                     <StyledTitleDetail>Quantity:</StyledTitleDetail>
@@ -402,12 +475,17 @@ const Detail = ({ product, productId }) => {
                 >
                   <Button
                     variant="contained"
-                    onClick={() => handleAddtoCart(product.id)}
+                    onClick={() => handleAddtoCart(product)}
                   >
                     Add to Cart
                   </Button>
-                  <Button variant="contained">Buy it now</Button>
-                  <Button variant="contained">Add to wishlist</Button>
+
+                  <Button
+                    variant="contained"
+                    onClick={() => handleAddtoWishList(product)}
+                  >
+                    Add to wishlist
+                  </Button>
                 </Stack>
 
                 <Stack direction="row" spacing={2} alignItems="center">

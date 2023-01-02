@@ -41,8 +41,6 @@ const wishList = () => {
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
 
-  
-
   // wishList
 
   const wishlistRef = collection(getFirestore(app), "wishlist");
@@ -59,8 +57,6 @@ const wishList = () => {
     });
     return () => wishlist();
   }, []);
-
-
 
   const handleRemoveItem = async (productId) => {
     const reference = doc(wishlistRef, productId);
@@ -114,7 +110,7 @@ const wishList = () => {
         }}
       >
         <BreadCumb breadcrumbs={breadcrumbs} Page={" Wish List"} />
-
+        {console.log(wishlist)}
         <Box
           sx={{
             display: "block",
@@ -170,7 +166,7 @@ const wishList = () => {
                         <Link
                           href={{
                             pathname: "products/[productId]",
-                            query: { productId: product.id },
+                            query: { productId: product.productId },
                           }}
                           className={styles["link-item"]}
                         >

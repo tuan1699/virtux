@@ -577,7 +577,10 @@ const checkout = () => {
                           fontWeight: "600",
                         }}
                       >
-                        ₹2,528.00
+                        {carts.reduce((total, cur) => {
+                          return (total += cur.price * cur.quantity);
+                        }, 0)}{" "}
+                        $
                       </Typography>
                     </Stack>
                     <Stack direction="row" justifyContent="space-between">

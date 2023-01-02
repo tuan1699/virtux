@@ -22,7 +22,7 @@ import MailIcon from "@mui/icons-material/Mail";
 
 const Footer = () => {
   const StyledFooter = styled(Box)({
-    backgroundImage: `url(./assets/img/bg-footer.png)`,
+    backgroundImage: `url(/assets/img/bg-footer.png)`,
     padding: "250px 80px 50px",
     backgroundSize: "cover",
     display: "flex",

@@ -35,18 +35,36 @@ import {
   GoogleAuthProvider,
   signOut,
 } from "firebase/auth";
-import { app } from "../../lib/firebase";
+
 import { useDispatch, useSelector } from "react-redux";
 
-import { userSelector } from "../../store/selector";
 import { setUser } from "../../store/features/auth.slice";
 
+import {
+  getFirestore,
+  collection,
+  doc,
+  deleteDoc,
+  onSnapshot,
+  query,
+} from "firebase/firestore";
+import { app } from "../../lib/firebase";
+import { userSelector } from "../../store/selector";
+
 const Header = () => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorAuth, setanchorAuth] = useState(null);
+
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
+
+  const cartRef = collection(getFirestore(app), "cart");
+  const [carts, setCart] = useState([]);
+  const wishlistRef = collection(getFirestore(app), "wishlist");
+  const [wishlist, setWishlist] = useState([]);
 
   useEffect(() => {
     auth.onAuthStateChanged((auth, error) => {
@@ -65,6 +83,29 @@ const Header = () => {
     });
   }, []);
 
+  useEffect(() => {
+    const q = query(cartRef);
+    onSnapshot(q, async (querySnapshot) => {
+      let data = [];
+      querySnapshot.forEach((doc) => {
+        data.push({ ...doc.data(), id: doc.id });
+      });
+      setCart(data.filter((item) => item.uid == (user && user.uid)));
+    });
+  }, [user == null ? null : user.uid]);
+
+  useEffect(() => {
+    const q = query(wishlistRef);
+    const wishlist = onSnapshot(q, (querySnapshot) => {
+      let data = [];
+      querySnapshot.forEach((doc) => {
+        data.push({ ...doc.data(), id: doc.id });
+      });
+      setWishlist(data.filter((item) => item.uid == (user && user.uid)));
+    });
+    return () => wishlist();
+  }, [user == null ? null : user.uid]);
+
   console.log(auth.currentUser);
 
   const [value, setValue] = useState(1);
@@ -72,17 +113,30 @@ const Header = () => {
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
 
-  const [anchorEl, setAnchorEl] = useState(null);
-
   function handleClick(event) {
     if (anchorEl !== event.currentTarget) {
       setAnchorEl(event.currentTarget);
     }
   }
 
+  // Modal Login
+
   function handleClose() {
     setAnchorEl(null);
   }
+
+  function handleClickModalAuth(event) {
+    if (anchorAuth !== event.currentTarget) {
+      setanchorAuth(event.currentTarget);
+    }
+  }
+
+  function handleCloseModalAuth() {
+    setanchorAuth(null);
+  }
+
+  const openAuth = Boolean(anchorAuth);
+  const idAuth = openAuth ? "simple-popover" : undefined;
 
   return (
     <React.Fragment>
@@ -165,30 +219,73 @@ const Header = () => {
                       <Button variant="contained">Log in</Button>
                     </Link>
                   ) : (
-                    <Stack direction="row">
-                      <IconButton>
-                        <PersonIcon />
-                        <Typography>{auth.currentUser.displayName}</Typography>
-                      </IconButton>
-                      <Button
-                        variant="contained"
-                        onClick={() => auth.signOut()}
+                    <Box>
+                      <IconButton
+                        aria-describedby={auth}
+                        onClick={handleClickModalAuth}
                       >
-                        Đăng xuất
-                      </Button>
-                    </Stack>
+                        <PersonIcon />
+                      </IconButton>
+
+                      <Popover
+                        anchorReference="anchorPosition"
+                        anchorPosition={{ top: 73, left: 1265 }}
+                        id={idAuth}
+                        open={openAuth}
+                        anchorEl={anchorAuth}
+                        onClose={handleCloseModalAuth}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "left",
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: "left",
+                        }}
+                      >
+                        <Stack>
+                          <Button>{auth.currentUser.displayName}</Button>
+                          <Button
+                            variant="contained"
+                            onClick={() => auth.signOut()}
+                          >
+                            Đăng xuất
+                          </Button>
+                        </Stack>
+                      </Popover>
+                    </Box>
+                    // <Stack direction="row">
+                    //   <IconButton>
+                    //     <PersonIcon />
+                    //     <Typography>{auth.currentUser.displayName}</Typography>
+                    //   </IconButton>
+                    //   <Button
+                    //     variant="contained"
+                    //     onClick={() => auth.signOut()}
+                    //   >
+                    //     Đăng xuất
+                    //   </Button>
+                    // </Stack>
                   )}
 
                   <Link href="/wishList">
                     <IconButton>
-                      <FavoriteIcon />
+                      <Badge badgeContent={wishlist.length} color="primary">
+                        <FavoriteIcon sx={{ color: "#757575" }} />
+                      </Badge>
                     </IconButton>
                   </Link>
                   <IconButton>
                     <SearchIcon />
                   </IconButton>
                   <Link href="/cart">
-                    <Badge badgeContent={4} color="primary">
+                    <Badge
+                      badgeContent={carts.reduce(
+                        (total, cur) => (total += cur.quantity),
+                        0
+                      )}
+                      color="primary"
+                    >
                       <ShoppingCartOutlinedIcon sx={{ color: "#757575" }} />
                     </Badge>
                   </Link>

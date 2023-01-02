@@ -44,6 +44,10 @@ const DetailModal = ({ product }) => {
   const [wishlist, setWishlist] = useState([]);
   const [cart, setCart] = useState([]);
   const user = useSelector(userSelector);
+  const [count, setCount] = useState(1);
+  const [size, setSize] = useState(1);
+  const [model, setModel] = useState("VRG07E");
+  const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
     "& .MuiToggleButtonGroup-grouped": {
@@ -85,18 +89,44 @@ const DetailModal = ({ product }) => {
     width: "140px",
   });
 
-  const [count, setCount] = useState(1);
-
-  const [size, setSize] = useState(1);
-  const [model, setModel] = useState("VRG07E");
-  const [thumbsSwiper, setThumbsSwiper] = useState(null);
-
   const handleSelectSize = (event, newSize) => {
     setSize(newSize);
   };
 
   const handleSelectModel = (event, newModel) => {
     setModel(newModel);
+  };
+
+  // Add to WishList
+  const wishlistRef = collection(getFirestore(app), "wishlist");
+
+  useEffect(() => {
+    const q = query(wishlistRef);
+    const wishlist = onSnapshot(q, (querySnapshot) => {
+      let data = [];
+      querySnapshot.forEach((doc) => {
+        data.push({ ...doc.data(), id: doc.id });
+      });
+      setWishlist(data.filter((item) => item.uid == (user && user.uid)));
+    });
+    return () => wishlist();
+  }, []);
+
+  const handleAddtoWishList = async (product) => {
+    const check = wishlist.filter(
+      (item) => item.uid == user.uid && item.name == product.name
+    );
+
+    if (check.length > 0) {
+      console.log("Cos roi");
+    } else {
+      const reference = doc(wishlistRef);
+      await setDoc(reference, {
+        uid: user.uid,
+        productId: product.id,
+        ...product,
+      });
+    }
   };
 
   // Add to Cart
@@ -131,7 +161,7 @@ const DetailModal = ({ product }) => {
       await setDoc(reference, {
         uid: user.uid,
         productId: product.id,
-        quantity: 1,
+        quantity: count,
         ...product,
       });
     }
@@ -160,29 +190,16 @@ const DetailModal = ({ product }) => {
               modules={[FreeMode, Navigation, Thumbs]}
               className="mySwiper2"
             >
-              <SwiperSlide>
-                <Box
-                  component="img"
-                  src="./assets/img/detail/detaildemo-1.png"
-                ></Box>
-              </SwiperSlide>
-              <SwiperSlide>
-                <Box
-                  component="img"
-                  src="./assets/img/detail/detaildemo-2.png"
-                ></Box>
-              </SwiperSlide>
-              <SwiperSlide>
-                <Box
-                  component="img"
-                  src="./assets/img/detail/detaildemo-3.png"
-                ></Box>
-              </SwiperSlide>
+              {product.screen_shots.map((item) => (
+                <SwiperSlide>
+                  <Box component="img" src={item}></Box>
+                </SwiperSlide>
+              ))}
             </Swiper>
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <StyledHeadingDetail>3D VR Headset Glass</StyledHeadingDetail>
+            <StyledHeadingDetail>{product.name}</StyledHeadingDetail>
 
             <List
               sx={{
@@ -197,10 +214,10 @@ const DetailModal = ({ product }) => {
                 }}
               >
                 <StyledTitleDetail>Price: </StyledTitleDetail>
-                <StyledDecrDetail>Rs. 3,990.00</StyledDecrDetail>
+                <StyledDecrDetail>{product.price} $</StyledDecrDetail>
               </ListItem>
 
-              <ListItem
+              {/* <ListItem
                 sx={{
                   padding: "0px",
 
@@ -251,7 +268,7 @@ const DetailModal = ({ product }) => {
                     VRG08E
                   </ToggleButton>
                 </StyledToggleButtonGroup>
-              </ListItem>
+              </ListItem> */}
 
               <ListItem sx={{ padding: "0px", minHeight: "50px" }}>
                 <StyledTitleDetail>Quantity:</StyledTitleDetail>
@@ -308,7 +325,12 @@ const DetailModal = ({ product }) => {
               >
                 Add to Cart
               </Button>
-              <Button variant="contained">Add to wishlist</Button>
+              <Button
+                variant="contained"
+                onClick={() => handleAddtoWishList(product)}
+              >
+                Add to wishlist
+              </Button>
             </Stack>
 
             <StyledDecrDetail
@@ -316,10 +338,7 @@ const DetailModal = ({ product }) => {
                 marginTop: "10px",
               }}
             >
-              Nam tempus turpis at metus scelerisque placerat nulla deumantos
-              solicitud felis. Pellentesque diam dolor, elementum etos lobortis
-              des mollis ut risus. Sedcus faucibus an sullamcorper mattis
-              drostique des commodo pharetras...
+              {product.over_view}
             </StyledDecrDetail>
 
             <Link
