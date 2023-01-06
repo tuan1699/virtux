@@ -65,23 +65,22 @@ const Header = () => {
   const [anchorAuth, setanchorAuth] = useState(null);
   const [value, setValue] = useState(1);
   const [search, setSearch] = useState("");
+  const [carts, setCart] = useState([]);
+  const [wishlist, setWishlist] = useState([]);
 
   const auth = getAuth(app);
-  const provider = new GoogleAuthProvider();
 
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
 
   const cartRef = collection(getFirestore(app), "cart");
-  const [carts, setCart] = useState([]);
+
   const wishlistRef = collection(getFirestore(app), "wishlist");
-  const [wishlist, setWishlist] = useState([]);
 
   useEffect(() => {
     dispatch(fetchProducts());
   }, []);
 
-  const products = useSelector(selectAllProduct);
   const productSearched = useSelector(productsRemainingSelector);
 
   useEffect(() => {
@@ -292,7 +291,7 @@ const Header = () => {
                     >
                       {productSearched.length !== 0
                         ? productSearched.map((product) => (
-                            <ItemSearch product={product} />
+                            <ItemSearch product={product} key={product.id} />
                           ))
                         : ""}
                     </Box>

@@ -25,15 +25,12 @@ import React, { useEffect, useState } from "react";
 import BreadCumb from "../components/BreadCumb/BreadCumb";
 
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ItemCheckout from "../components/ItemCheckout";
 import { useForm } from "react-hook-form";
 
 import {
   getFirestore,
   collection,
-  doc,
-  deleteDoc,
   onSnapshot,
   query,
 } from "firebase/firestore";
@@ -41,13 +38,12 @@ import { app } from "../lib/firebase";
 import { userSelector } from "../store/selector";
 import { useSelector } from "react-redux";
 
-const checkout = () => {
+const Checkout = () => {
   const [payment, setPayment] = useState("credit");
+  const [carts, setCart] = useState([]);
 
   const user = useSelector(userSelector);
-
   const cartRef = collection(getFirestore(app), "cart");
-  const [carts, setCart] = useState([]);
 
   useEffect(() => {
     const q = query(cartRef);
@@ -64,7 +60,6 @@ const checkout = () => {
   const {
     register: register4,
     handleSubmit: handleSubmit4,
-    getValues,
     formState: { errors: errors4, isSubmitSuccessful },
   } = useForm({
     mode: "onChange",
@@ -638,4 +633,4 @@ const checkout = () => {
   );
 };
 
-export default checkout;
+export default Checkout;

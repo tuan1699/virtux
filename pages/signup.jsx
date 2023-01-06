@@ -23,9 +23,6 @@ import { app } from "../lib/firebase";
 import { collection, getDoc, getFirestore, setDoc } from "firebase/firestore";
 
 const signup = () => {
-  const auth = getAuth(app);
-  const provider = new GoogleAuthProvider();
-
   const {
     register: register2,
     handleSubmit: handleSubmit2,
@@ -35,6 +32,9 @@ const signup = () => {
     mode: "onChange",
     defaultValues: {},
   });
+
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
 
   const name = register2("name", {
     required: "Please fill out this field.",

@@ -29,24 +29,13 @@ import {
 import BreadCumb from "../../components/BreadCumb/BreadCumb";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
-import qs from "query-string";
 
 import { fetchProducts } from "../../store/features/Product.slice";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  productsRemainingSelector,
-  selectAllProduct,
-} from "../../store/selector";
-import {
-  brandFilterChange,
-  categoriesFilterChange,
-} from "../../store/features/Filter.slice";
-import { Toys } from "@mui/icons-material";
 
 import { collection, getDocs, getFirestore, query } from "firebase/firestore";
-// import { app } from "../../lib/firebase";
 import { app } from "../../lib/firebase";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const categories = [
@@ -120,7 +109,7 @@ const brand = [
   },
 ];
 
-const Shop = ({ data, filtered, filter, total, page, sort }) => {
+const Shop = ({ data, total, page, sort }) => {
   const [view, setView] = useState("grid");
   const [priceFilter, setPriceFilter] = useState([10, 2000]);
 
@@ -149,24 +138,11 @@ const Shop = ({ data, filtered, filter, total, page, sort }) => {
   }, []);
 
   const { register, handleSubmit, getValues } = useForm({
-    defaultValues: {
-      // categories: filter.categories,
-      // brand: filter.brand,
-    },
+    defaultValues: {},
   });
 
   const handlePriceChange = (e, newPrice) => {
-    // console.log(newPrice);
-    // console.log(newPrice[0]);
     setPriceFilter(newPrice);
-    // router.push({
-    //   pathname: "/products",
-    //   query: {
-    //     ...router.query,
-    //     minPrice: newPrice[0],
-    //     maxPrice: newPrice[1],
-    //   },
-    // });
   };
 
   const breadcrumbs = [
@@ -222,14 +198,7 @@ const Shop = ({ data, filtered, filter, total, page, sort }) => {
     });
   };
 
-  // const handleChange = (event, newValue) => {
-  //   setValue(newValue);
-  // };
-
   const handleChangePageCur = (event, value) => {
-    let categories = getValues("categories");
-    let brand = getValues("brand");
-
     router.push({
       pathname: "/products",
       query: { ...router.query, page: value },

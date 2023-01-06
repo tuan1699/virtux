@@ -20,18 +20,18 @@ import {
 import { app } from "../lib/firebase";
 
 const login = () => {
-  const auth = getAuth(app);
-  const provider = new GoogleAuthProvider();
-
   const {
     register: register3,
     handleSubmit: handleSubmit3,
-    getValues,
+
     formState: { errors: errors3, isSubmitSuccessful },
   } = useForm({
     mode: "onChange",
     defaultValues: {},
   });
+
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
 
   const email = register3("email", {
     required: "Please fill out this field.",

@@ -3,42 +3,24 @@ import {
   Typography,
   styled,
   Grid,
-  Paper,
-  Card,
-  CardMedia,
   Button,
-  Modal,
-  Fade,
   Container,
 } from "@mui/material";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import { display } from "@mui/system";
+
 import Head from "next/head";
 import Header from "../components/Header/Header";
-import Item from "../components/Item/Item";
 import Review from "../components/Review";
-import SliderItem from "../components/SliderItem/SliderItem";
-import Footer from "../components/Footer/Footer";
-
-import Backdrop from "@mui/material/Backdrop";
 
 import Slider from "../components/SliderItem/SliderItem";
 
-import { useEffect, useState } from "react";
-import DetailModal from "../components/DetailModal";
-
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation, FreeMode, Thumbs } from "swiper";
+import { Navigation, FreeMode, Thumbs } from "swiper";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import HighQuality from "../components/HighQuality";
 
-import { ToastContainer, toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
-import { loaderReview, selectAllReview } from "../store/selector";
-import { fetchReviews } from "../store/review.slice";
+import { ToastContainer } from "react-toastify";
 
 export default function Home({ data, reviews }) {
   const StyledSection = styled(Box)({
@@ -371,8 +353,8 @@ export default function Home({ data, reviews }) {
               className="mySwiper"
             >
               {reviews.map((review) => (
-                <SwiperSlide>
-                  <Review key={review.id} review={review} />
+                <SwiperSlide key={review.id}>
+                  <Review review={review} />
                 </SwiperSlide>
               ))}
               {}

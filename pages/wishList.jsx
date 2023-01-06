@@ -45,13 +45,12 @@ import ConfirmDialog from "../components/ConfirmDialog";
 import { ToastContainer, toast } from "react-toastify";
 
 const wishList = () => {
-  const [confirmDel, setConfirmDel] = useState(false);
-  const [open, setOpen] = useState(false);
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
     title: "",
     subTitle: "",
   });
+  const [wishlist, setWishlist] = useState([]);
 
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
@@ -60,7 +59,6 @@ const wishList = () => {
   // wishList
 
   const wishlistRef = collection(getFirestore(app), "wishlist");
-  const [wishlist, setWishlist] = useState([]);
 
   useEffect(() => {
     const q = query(wishlistRef);

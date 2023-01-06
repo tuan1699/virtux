@@ -95,14 +95,6 @@ const DetailModal = ({ product }) => {
     width: "140px",
   });
 
-  const handleSelectSize = (event, newSize) => {
-    setSize(newSize);
-  };
-
-  const handleSelectModel = (event, newModel) => {
-    setModel(newModel);
-  };
-
   // Add to WishList
   const wishlistRef = collection(getFirestore(app), "wishlist");
 
@@ -262,7 +254,7 @@ const DetailModal = ({ product }) => {
               className="mySwiper2"
             >
               {product.screen_shots.map((item) => (
-                <SwiperSlide>
+                <SwiperSlide key={item.id}>
                   <Box component="img" src={item}></Box>
                 </SwiperSlide>
               ))}

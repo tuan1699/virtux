@@ -33,7 +33,6 @@ const Cart = () => {
   const user = useSelector(userSelector);
   const auth = getAuth(app);
 
-  const { productsInCart, totalPrice } = useSelector(selectCart);
   const cartRef = collection(getFirestore(app), "cart");
   const [carts, setCart] = useState([]);
   const [confirmDialog, setConfirmDialog] = useState({
@@ -116,6 +115,7 @@ const Cart = () => {
                   ) : (
                     carts.map((product) => (
                       <CartItem
+                        key={product.id}
                         product={product}
                         confirmDialog={confirmDialog}
                         setConfirmDialog={setConfirmDialog}

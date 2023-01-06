@@ -13,7 +13,6 @@ import {
   styled,
   Tab,
   Tabs,
-  ToggleButton,
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
@@ -21,7 +20,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import BreadCumb from "../../components/BreadCumb/BreadCumb";
-import Counter from "../../components/Counter";
+
 
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
@@ -31,8 +30,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs, Pagination } from "swiper";
 import Item from "../../components/Item/Item";
 
-import { addItem } from "../../store/features/Cart.slice";
-import { selectProductById } from "../../store/selector";
 
 import { userSelector } from "../../store/selector";
 import {
