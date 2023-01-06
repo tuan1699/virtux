@@ -18,6 +18,7 @@ import store from "../store";
 
 import { app } from "../lib/firebase";
 import { getAuth } from "firebase/auth";
+import Head from "next/head";
 
 function MyApp({ Component, pageProps }) {
   const auth = getAuth(app);
@@ -27,6 +28,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <ThemeProvider theme={theme}>
       <Provider store={store}>
+        <Head>
+          <title>Virtua</title>
+        </Head>
         <Layout>
           <Component {...pageProps} />
         </Layout>
