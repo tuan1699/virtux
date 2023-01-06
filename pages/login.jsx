@@ -19,11 +19,10 @@ import {
 } from "firebase/auth";
 import { app } from "../lib/firebase";
 
-const login = () => {
+const Login = () => {
   const {
     register: register3,
     handleSubmit: handleSubmit3,
-
     formState: { errors: errors3, isSubmitSuccessful },
   } = useForm({
     mode: "onChange",
@@ -200,4 +199,4 @@ const login = () => {
   );
 };
 
-export default login;
+export default Login;

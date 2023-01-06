@@ -21,7 +21,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import BreadCumb from "../../components/BreadCumb/BreadCumb";
 
-
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -29,7 +28,6 @@ import GoogleIcon from "@mui/icons-material/Google";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs, Pagination } from "swiper";
 import Item from "../../components/Item/Item";
-
 
 import { userSelector } from "../../store/selector";
 import {
@@ -60,10 +58,7 @@ const Detail = ({ product, productId, products }) => {
   const user = useSelector(userSelector);
   const [count, setCount] = useState(1);
   const auth = getAuth(app);
-
   const [value, setValue] = useState(0);
-  // const [size, setSize] = useState(1);
-  // const [model, setModel] = useState("VRG07E");
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   const dispatch = useDispatch();
@@ -373,7 +368,7 @@ const Detail = ({ product, productId, products }) => {
                 >
                   {product.screen_shots.map((item) => {
                     return (
-                      <SwiperSlide>
+                      <SwiperSlide key={item.id}>
                         <Box
                           sx={{
                             width: "100%",
@@ -388,7 +383,6 @@ const Detail = ({ product, productId, products }) => {
                   })}
                 </Swiper>
                 <Swiper
-                  //   onSwiper={setThumbsSwiper}
                   spaceBetween={10}
                   slidesPerView={3}
                   freeMode={true}
@@ -398,7 +392,7 @@ const Detail = ({ product, productId, products }) => {
                 >
                   {product.screen_shots.map((item) => {
                     return (
-                      <SwiperSlide>
+                      <SwiperSlide key={item.id}>
                         <Box
                           sx={{
                             width: "170px",
@@ -441,68 +435,10 @@ const Detail = ({ product, productId, products }) => {
                     <StyledDecrDetail>$ {product.price}</StyledDecrDetail>
                   </ListItem>
 
-                  {/* <ListItem
-                    sx={{
-                      padding: "0px",
-
-                      minHeight: "50px",
-                    }}
-                  >
-                    <StyledTitleDetail>Size:</StyledTitleDetail>
-                    <StyledToggleButtonGroup
-                      value={size}
-                      color="primary"
-                      exclusive
-                      onChange={handleSelectSize}
-                      aria-label="text alignment"
-                    >
-                      <ToggleButton value="1" aria-label="left aligned">
-                        4.7
-                      </ToggleButton>
-                      <ToggleButton value="2" aria-label="centered">
-                        5.2
-                      </ToggleButton>
-                      <ToggleButton value="3" aria-label="right aligned">
-                        6.2
-                      </ToggleButton>
-                    </StyledToggleButtonGroup>
-                  </ListItem> */}
-
-                  {/* <ListItem
-                    sx={{
-                      padding: "0px",
-                      minHeight: "50px",
-                    }}
-                  >
-                    <StyledTitleDetail>Model:</StyledTitleDetail>
-                    <StyledToggleButtonGroup
-                      value={model}
-                      color="primary"
-                      exclusive
-                      onChange={handleSelectModel}
-                      aria-label="text alignment"
-                    >
-                      <ToggleButton value="VRG07E" aria-label="left aligned">
-                        VRG07E
-                      </ToggleButton>
-                      <ToggleButton value="VRG06E" aria-label="centered">
-                        VRG06E
-                      </ToggleButton>
-                      <ToggleButton value="VRG08E" aria-label="right aligned">
-                        VRG08E
-                      </ToggleButton>
-                    </StyledToggleButtonGroup>
-                  </ListItem> */}
-
                   <ListItem sx={{ padding: "0px", minHeight: "50px" }}>
                     <StyledTitleDetail>Vendor: </StyledTitleDetail>
                     <StyledDecrDetail>3D Reality</StyledDecrDetail>
                   </ListItem>
-
-                  {/* <ListItem sx={{ padding: "0px", minHeight: "50px" }}>
-                    <StyledTitleDetail>Type:</StyledTitleDetail>
-                    <StyledDecrDetail>Gaming</StyledDecrDetail>
-                  </ListItem> */}
 
                   <ListItem sx={{ padding: "0px", minHeight: "50px" }}>
                     <StyledTitleDetail>Quantity:</StyledTitleDetail>

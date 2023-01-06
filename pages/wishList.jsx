@@ -44,14 +44,13 @@ import ConfirmDialog from "../components/ConfirmDialog";
 
 import { ToastContainer, toast } from "react-toastify";
 
-const wishList = () => {
+const WishList = () => {
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
     title: "",
     subTitle: "",
   });
   const [wishlist, setWishlist] = useState([]);
-
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
   const auth = getAuth(app);
@@ -277,4 +276,4 @@ const wishList = () => {
   );
 };
 
-export default wishList;
+export default WishList;

@@ -538,6 +538,7 @@ const Checkout = () => {
                     {carts.length !== 0 && user ? (
                       carts.map((product) => (
                         <ListItem
+                          key={product.id}
                           disablePadding
                           sx={{
                             marginBottom: "20px",

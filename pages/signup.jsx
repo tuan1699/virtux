@@ -22,7 +22,7 @@ import {
 import { app } from "../lib/firebase";
 import { collection, getDoc, getFirestore, setDoc } from "firebase/firestore";
 
-const signup = () => {
+const Signup = () => {
   const {
     register: register2,
     handleSubmit: handleSubmit2,
@@ -274,4 +274,4 @@ const signup = () => {
   );
 };
 
-export default signup;
+export default Signup;
