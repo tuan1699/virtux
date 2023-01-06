@@ -44,6 +44,7 @@ import { app } from "../../lib/firebase";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getAuth } from "firebase/auth";
+import ItemRelated from "../../components/Item/ItemRelated";
 
 function a11yProps(index) {
   return {
@@ -609,7 +610,7 @@ const Detail = ({ product, productId, products }) => {
               <Swiper {...swiperProps}>
                 {productsRelated.map((product) => (
                   <SwiperSlide key={product.id}>
-                    <Item product={product} />
+                    <ItemRelated product={product} />
                   </SwiperSlide>
                 ))}
               </Swiper>
