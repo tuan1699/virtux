@@ -393,7 +393,7 @@ const Detail = ({ product, productId, products }) => {
                 >
                   {product.screen_shots.map((item) => {
                     return (
-                      <SwiperSlide key={item.id}>
+                      <SwiperSlide key={item}>
                         <Box
                           sx={{
                             width: "170px",
