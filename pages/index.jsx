@@ -24,7 +24,7 @@ import Footer from "../components/Footer/Footer";
 import Backdrop from "@mui/material/Backdrop";
 
 import Slider from "../components/SliderItem/SliderItem";
-// import Slider from "react-slick";
+
 import { useEffect, useState } from "react";
 import DetailModal from "../components/DetailModal";
 
@@ -41,8 +41,6 @@ import { loaderReview, selectAllReview } from "../store/selector";
 import { fetchReviews } from "../store/review.slice";
 
 export default function Home({ data, reviews }) {
-  const dispatch = useDispatch();
-
   const StyledSection = styled(Box)({
     display: "flex",
     flexDirection: "column",
@@ -50,16 +48,6 @@ export default function Home({ data, reviews }) {
     margin: "100px 0",
     textAlign: "center",
   });
-
-  const dataOf1 = data.slice(0, 4);
-  const dataOf2 = data.slice(4, 8);
-
-  const swiperProps = {
-    modules: [Navigation, Pagination],
-    spaceBetween: 24,
-    slidesPerView: 4,
-    navigation: true,
-  };
 
   return (
     <div>
@@ -114,6 +102,7 @@ export default function Home({ data, reviews }) {
             <HighQuality data={data} />
           </Box>
         </StyledSection>
+
         {/* About Project */}
         <Box>
           <Grid container bgcolor="#fff1f5">
@@ -125,6 +114,10 @@ export default function Home({ data, reviews }) {
                   height: "100%",
                   backgroundSize: "cover",
                   backgroundPosition: "center",
+                  transition: "opacity ease-in-out 0.3s",
+                  "&:hover": {
+                    opacity: "0.7",
+                  },
                 }}
               />
             </Grid>
@@ -254,6 +247,10 @@ export default function Home({ data, reviews }) {
                   height: "100%",
                   backgroundSize: "cover",
                   backgroundPosition: "center",
+                  transition: "opacity ease-in-out 0.3s",
+                  "&:hover": {
+                    opacity: "0.7",
+                  },
                 }}
               />
             </Grid>

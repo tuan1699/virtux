@@ -1,0 +1,64 @@
+.hero-thumbnail-1,
+.hero-thumbnail-2,
+.hero-thumbnail-3 {
+  transition: ease-in-out 0.5s;
+  object-fit: contain;
+}
+
+.hero-thumbnail-1,
+.hero-thumbnail-2,
+.hero-thumbnail-3 {
+  height: 100%;
+  transition: ease-in-out 0.5s;
+  object-fit: cover;
+}
+
+.hero-1,
+.hero-2,
+.hero-3 {
+  overflow: hidden;
+}
+
+.hero-2,
+.hero-3 {
+  height: 50%;
+}
+
+.text-children-1,
+.text-children-2,
+.text-children-3 {
+  display: none;
+  transition: ease-in-out 0.5s;
+  opacity: 0;
+  transform: scale(1.1);
+}
+
+.hero-1:hover .hero-thumbnail-1 {
+  transform: scale(1.1);
+}
+
+.hero-1:hover .text-children-1 {
+  display: flex;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.hero-2:hover .hero-thumbnail-2 {
+  transform: scale(1.1);
+}
+
+.hero-2:hover .text-children-2 {
+  display: flex;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.hero-3:hover .hero-thumbnail-3 {
+  transform: scale(1.1);
+}
+
+.hero-3:hover .text-children-3 {
+  display: flex;
+  opacity: 1;
+  transform: scale(1);
+}

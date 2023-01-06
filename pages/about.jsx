@@ -1,3 +1,5 @@
+import styles from "../styles/About.module.css";
+
 import * as React from "react";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
@@ -22,6 +24,8 @@ import TheatersOutlinedIcon from "@mui/icons-material/TheatersOutlined";
 
 import BreadCumb from "../components/BreadCumb/BreadCumb";
 import { fontWeight } from "@mui/system";
+
+// import { ReactComponent as YourSvg } from "./assets/img/about/test-01.svg";
 
 const about = () => {
   const breadcrumbs = [
@@ -203,6 +207,10 @@ const about = () => {
                     backgroundPosition: "center",
                     width: "100%",
                     height: "100%",
+                    transition: "opacity ease-in-out 0.3s",
+                    "&:hover": {
+                      opacity: "0.7",
+                    },
                   }}
                 ></Box>
               </Grid>
@@ -230,7 +238,18 @@ const about = () => {
               <Grid item sm={6} md={4} lg={2}>
                 <Stack direction="column" alignItems="center" spacing={1}>
                   <StyledBorderIcon>
-                    <AllInclusiveIcon fontSize="large" sx={{ color: "#fff" }} />
+                    {/* <AllInclusiveIcon fontSize="large" sx={{ color: "#fff" }} /> */}
+                    <Box
+                      sx={{
+                        backgroundImage: `url(./assets/img/about/test-1.png)`,
+                        width: "100px",
+                        height: "100px",
+                        color: "#fff",
+                        backgroundPosition: "center",
+                        backgroundSize: "contain",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    />
                   </StyledBorderIcon>
                   <StyledFs30px>80+</StyledFs30px>
                   <StyledFs20px>Argumented </StyledFs20px>
@@ -241,15 +260,88 @@ const about = () => {
               <Grid item sm={6} md={4} lg={2}>
                 <Stack direction="column" alignItems="center" spacing={1}>
                   <StyledBorderIcon>
-                    <AllInclusiveIcon fontSize="large" sx={{ color: "#fff" }} />
+                    <Box
+                      sx={{
+                        backgroundImage: `url(./assets/img/about/reality-02.png)`,
+                        width: "100px",
+                        height: "100px",
+                        color: "#fff",
+                        backgroundPosition: "center",
+                        backgroundSize: "contain",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    />
                   </StyledBorderIcon>
-                  <StyledFs30px>80+</StyledFs30px>
-                  <StyledFs20px>Argumented </StyledFs20px>
-                  <StyledFs20px>Reality</StyledFs20px>
+                  <StyledFs30px>50+</StyledFs30px>
+                  <StyledFs20px>Collision</StyledFs20px>
+                  <StyledFs20px>Detection</StyledFs20px>
                 </Stack>
               </Grid>
 
               <Grid item sm={6} md={4} lg={2}>
+                <Stack direction="column" alignItems="center" spacing={1}>
+                  <StyledBorderIcon>
+                    <Box
+                      sx={{
+                        backgroundImage: `url(./assets/img/about/reality-03.png)`,
+                        width: "100px",
+                        height: "100px",
+                        color: "#fff",
+                        backgroundPosition: "center",
+                        backgroundSize: "contain",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    />
+                  </StyledBorderIcon>
+                  <StyledFs30px>99+</StyledFs30px>
+                  <StyledFs20px>Interactive</StyledFs20px>
+                  <StyledFs20px>Narrative</StyledFs20px>
+                </Stack>
+              </Grid>
+
+              <Grid item sm={6} md={4} lg={2}>
+                <Stack direction="column" alignItems="center" spacing={1}>
+                  <StyledBorderIcon>
+                    <Box
+                      sx={{
+                        backgroundImage: `url(./assets/img/about/reality-04.png)`,
+                        width: "100px",
+                        height: "100px",
+                        color: "#fff",
+                        backgroundPosition: "center",
+                        backgroundSize: "contain",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    />
+                  </StyledBorderIcon>
+                  <StyledFs30px>1,100+</StyledFs30px>
+                  <StyledFs20px>Embodied</StyledFs20px>
+                  <StyledFs20px>Cognition</StyledFs20px>
+                </Stack>
+              </Grid>
+
+              <Grid item sm={6} md={4} lg={2}>
+                <Stack direction="column" alignItems="center" spacing={1}>
+                  <StyledBorderIcon>
+                    <Box
+                      sx={{
+                        backgroundImage: `url(./assets/img/about/reality-05.png)`,
+                        width: "100px",
+                        height: "100px",
+                        color: "#fff",
+                        backgroundPosition: "center",
+                        backgroundSize: "contain",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    />
+                  </StyledBorderIcon>
+                  <StyledFs30px>80+</StyledFs30px>
+                  <StyledFs20px>Head</StyledFs20px>
+                  <StyledFs20px>Tracking</StyledFs20px>
+                </Stack>
+              </Grid>
+
+              {/* <Grid item sm={6} md={4} lg={2}>
                 <Stack direction="column" alignItems="center" spacing={1}>
                   <StyledBorderIcon>
                     <AllInclusiveIcon fontSize="large" sx={{ color: "#fff" }} />
@@ -258,40 +350,7 @@ const about = () => {
                   <StyledFs20px>Argumented </StyledFs20px>
                   <StyledFs20px>Reality</StyledFs20px>
                 </Stack>
-              </Grid>
-
-              <Grid item sm={6} md={4} lg={2}>
-                <Stack direction="column" alignItems="center" spacing={1}>
-                  <StyledBorderIcon>
-                    <AllInclusiveIcon fontSize="large" sx={{ color: "#fff" }} />
-                  </StyledBorderIcon>
-                  <StyledFs30px>80+</StyledFs30px>
-                  <StyledFs20px>Argumented </StyledFs20px>
-                  <StyledFs20px>Reality</StyledFs20px>
-                </Stack>
-              </Grid>
-
-              <Grid item sm={6} md={4} lg={2}>
-                <Stack direction="column" alignItems="center" spacing={1}>
-                  <StyledBorderIcon>
-                    <AllInclusiveIcon fontSize="large" sx={{ color: "#fff" }} />
-                  </StyledBorderIcon>
-                  <StyledFs30px>80+</StyledFs30px>
-                  <StyledFs20px>Argumented </StyledFs20px>
-                  <StyledFs20px>Reality</StyledFs20px>
-                </Stack>
-              </Grid>
-
-              <Grid item sm={6} md={4} lg={2}>
-                <Stack direction="column" alignItems="center" spacing={1}>
-                  <StyledBorderIcon>
-                    <AllInclusiveIcon fontSize="large" sx={{ color: "#fff" }} />
-                  </StyledBorderIcon>
-                  <StyledFs30px>80+</StyledFs30px>
-                  <StyledFs20px>Argumented </StyledFs20px>
-                  <StyledFs20px>Reality</StyledFs20px>
-                </Stack>
-              </Grid>
+              </Grid> */}
             </Grid>
           </Container>
         </Box>
@@ -307,31 +366,111 @@ const about = () => {
           <Container>
             <Grid container spacing={2}>
               <Grid item xs={12} md={8}>
-                <Box
-                  sx={{
-                    backgroundImage: `url(./assets/img/about/turning-dream.png)`,
-                    height: "100%",
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "cover",
-                    minHeight: "400px",
-                    backgroundPosition: "center",
-                  }}
-                />
+                <Box sx={{ position: "relative" }} className={styles["hero-1"]}>
+                  <Box
+                    component="img"
+                    src="./assets/img/about/turning-dream.png"
+                    sx={{ position: "relative" }}
+                    className={styles["hero-thumbnail-1"]}
+                  />
+
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: "0",
+                      left: "0",
+                      right: "0",
+                      bottom: "0",
+                      zIndex: "100",
+                      flexDirection: "column",
+                      height: "100%",
+                      bgcolor: "rgba(0,0,0,0.3)",
+                      width: "100%",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      opacity: "1",
+                      transition: "opacity ease-in-out 0.3s",
+                    }}
+                    className={styles["text-children-1"]}
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: "16px",
+                        fontWeight: "400",
+                        marginBottom: "10px",
+                        color: "#fff",
+                      }}
+                    >
+                      Into Reality
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: "20px",
+                        fontWeight: "600",
+                        fontFamily: "'Kodchasan', sans-serif",
+                        color: "#fff",
+                      }}
+                    >
+                      Turning Dreams
+                    </Typography>
+                  </Box>
+                </Box>
               </Grid>
 
               <Grid item xs={12} md={4}>
                 <Stack sx={{ height: "100%" }} spacing={2}>
                   <Box
-                    sx={{
-                      backgroundImage: `url(./assets/img/about/interaction.png)`,
-                      height: "50%",
-                      backgroundRepeat: "no-repeat",
-                      backgroundSize: "cover",
-                      minHeight: "400px",
-                      backgroundPosition: "center",
-                    }}
-                  />
-                  <Box
+                    sx={{ position: "relative" }}
+                    className={styles["hero-2"]}
+                  >
+                    <Box
+                      component="img"
+                      src="./assets/img/about/interaction.png"
+                      sx={{ position: "relative" }}
+                      className={styles["hero-thumbnail-2"]}
+                    />
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: "0",
+                        left: "0",
+                        right: "0",
+                        bottom: "0",
+                        zIndex: "100",
+                        flexDirection: "column",
+                        height: "100%",
+                        bgcolor: "rgba(0,0,0,0.3)",
+                        width: "100%",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        opacity: "1",
+                        transition: "opacity ease-in-out 0.3s",
+                      }}
+                      className={styles["text-children-2"]}
+                    >
+                      <Typography
+                        sx={{
+                          fontSize: "16px",
+                          fontWeight: "400",
+                          marginBottom: "10px",
+                          color: "#fff",
+                        }}
+                      >
+                        Interaction
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: "20px",
+                          fontWeight: "600",
+                          fontFamily: "'Kodchasan', sans-serif",
+                          color: "#fff",
+                        }}
+                      >
+                        Multisensory
+                      </Typography>
+                    </Box>
+                  </Box>
+                  {/* <Box
                     sx={{
                       backgroundImage: `url(./assets/img/about/reality.png)`,
                       height: "50%",
@@ -340,7 +479,58 @@ const about = () => {
                       minHeight: "400px",
                       backgroundPosition: "center",
                     }}
-                  />
+                  /> */}
+                  <Box
+                    sx={{ position: "relative" }}
+                    className={styles["hero-3"]}
+                  >
+                    <Box
+                      component="img"
+                      src="./assets/img/about/reality.png"
+                      sx={{ position: "relative" }}
+                      className={styles["hero-thumbnail-3"]}
+                    />
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: "0",
+                        left: "0",
+                        right: "0",
+                        bottom: "0",
+                        zIndex: "100",
+                        flexDirection: "column",
+                        height: "100%",
+                        bgcolor: "rgba(0,0,0,0.3)",
+                        width: "100%",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        opacity: "1",
+                        transition: "opacity ease-in-out 0.3s",
+                      }}
+                      className={styles["text-children-3"]}
+                    >
+                      <Typography
+                        sx={{
+                          fontSize: "16px",
+                          fontWeight: "400",
+                          marginBottom: "10px",
+                          color: "#fff",
+                        }}
+                      >
+                        Interaction
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: "20px",
+                          fontWeight: "600",
+                          fontFamily: "'Kodchasan', sans-serif",
+                          color: "#fff",
+                        }}
+                      >
+                        Multisensory
+                      </Typography>
+                    </Box>
+                  </Box>
                 </Stack>
               </Grid>
             </Grid>

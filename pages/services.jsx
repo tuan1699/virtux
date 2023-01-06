@@ -1,3 +1,5 @@
+import styles from "../styles/Services.module.css";
+
 import * as React from "react";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Typography from "@mui/material/Typography";
@@ -58,14 +60,6 @@ const services = () => {
     // margin: "100px 0",
   });
 
-  const StyledUnderline = styled(Box)({
-    display: "block",
-    bgcolor: "#d23369",
-    width: "50px",
-    height: "3px",
-    marginBottom: "50px",
-  });
-
   return (
     <>
       <Box
@@ -108,20 +102,146 @@ const services = () => {
                   marginBottom: "50px",
                 }}
               ></Box>
-              <Box sx={{ flexGrow: 1 }}>
+              <Box>
                 <Grid container spacing={4}>
                   <Grid item xs={12} md={6}>
                     <Box
-                      component="img"
-                      src="./assets/img/servies/computing.png"
-                    ></Box>
+                      sx={{ position: "relative" }}
+                      className={styles["hero-1"]}
+                    >
+                      <Box
+                        component="img"
+                        src="./assets/img/servies/computing.png"
+                        sx={{ position: "relative" }}
+                        className={styles["hero-thumbnail-1"]}
+                      />
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          top: "0",
+                          left: "0",
+                          right: "0",
+                          bottom: "0",
+                          zIndex: "100",
+                          flexDirection: "column",
+                          height: "100%",
+                          bgcolor: "rgba(0,0,0,0.3)",
+                          width: "100%",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          opacity: "1",
+                          transition: "opacity ease-in-out 0.3s",
+                        }}
+                        className={styles["text-children-1"]}
+                      >
+                        <Typography
+                          sx={{
+                            fontSize: "16px",
+                            fontWeight: "400",
+                            marginBottom: "10px",
+                            color: "#fff",
+                          }}
+                        >
+                          High-End
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontSize: "24px",
+                            fontWeight: "600",
+                            fontFamily: "'Kodchasan', sans-serif",
+                            color: "#fff",
+                            marginBottom: "10px",
+                          }}
+                        >
+                          Computing Device
+                        </Typography>
+
+                        <Typography
+                          sx={{
+                            fontSize: "16px",
+                            fontWeight: "400",
+                            fontFamily: "'Kodchasan', sans-serif",
+                            color: "#fff",
+                            textAlign: "center",
+                          }}
+                        >
+                          Sed vestibulum nulla elementum auctor tincidunt.
+                          Aliquam sit amet cursus mauris. Sed vitae mattis
+                          ipsum. Vestibulum enim nulla, sollicitudin ac
+                          hendrerit nec, tempor quis nisl
+                        </Typography>
+                      </Box>
+                    </Box>
                   </Grid>
 
                   <Grid item xs={12} md={6}>
                     <Box
-                      component="img"
-                      src="./assets/img/servies/headset.png"
-                    ></Box>
+                      sx={{ position: "relative" }}
+                      className={styles["hero-1"]}
+                    >
+                      <Box
+                        component="img"
+                        src="./assets/img/servies/headset.png"
+                        sx={{ position: "relative" }}
+                        className={styles["hero-thumbnail-1"]}
+                      />
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          top: "0",
+                          left: "0",
+                          right: "0",
+                          bottom: "0",
+                          zIndex: "100",
+                          flexDirection: "column",
+                          height: "100%",
+                          bgcolor: "rgba(0,0,0,0.3)",
+                          width: "100%",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          opacity: "1",
+                          transition: "opacity ease-in-out 0.3s",
+                        }}
+                        className={styles["text-children-1"]}
+                      >
+                        <Typography
+                          sx={{
+                            fontSize: "16px",
+                            fontWeight: "400",
+                            marginBottom: "10px",
+                            color: "#fff",
+                          }}
+                        >
+                          Smart
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontSize: "24px",
+                            fontWeight: "600",
+                            fontFamily: "'Kodchasan', sans-serif",
+                            color: "#fff",
+                            marginBottom: "10px",
+                          }}
+                        >
+                          Headset Device
+                        </Typography>
+
+                        <Typography
+                          sx={{
+                            fontSize: "16px",
+                            fontWeight: "400",
+                            fontFamily: "'Kodchasan', sans-serif",
+                            color: "#fff",
+                            textAlign: "center",
+                          }}
+                        >
+                          Sed vestibulum nulla elementum auctor tincidunt.
+                          Aliquam sit amet cursus mauris. Sed vitae mattis
+                          ipsum. Vestibulum enim nulla, sollicitudin ac
+                          hendrerit nec, tempor quis nisl
+                        </Typography>
+                      </Box>
+                    </Box>
                   </Grid>
                 </Grid>
               </Box>
