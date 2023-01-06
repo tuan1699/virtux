@@ -31,7 +31,9 @@ import {
 import { app } from "../lib/firebase";
 import { userSelector } from "../store/selector";
 
-const CartItem = ({ product }) => {
+import { ToastContainer, toast } from "react-toastify";
+
+const CartItem = ({ product, confirmDialog, setConfirmDialog }) => {
   const dispatch = useDispatch();
 
   const { incQty, decQty, removeItem } = useSelector(selectCart);
@@ -60,6 +62,22 @@ const CartItem = ({ product }) => {
   });
 
   const handleRemoveItem = async (id) => {
+    toast.success(`Remove succesfully`, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+
+    setConfirmDialog({
+      ...confirmDialog,
+      isOpen: false,
+    });
+
     const reference = doc(cartRef, id);
     await deleteDoc(reference);
   };
@@ -193,7 +211,16 @@ const CartItem = ({ product }) => {
               color: "#fff",
             },
           }}
-          onClick={() => handleRemoveItem(product.id)}
+          onClick={() =>
+            setConfirmDialog({
+              isOpen: true,
+              title: "Are you sure to remove this product from Cart",
+              subTitle: "You can't undo this operation",
+              onConfirm: () => {
+                handleRemoveItem(product.id);
+              },
+            })
+          }
         >
           <CloseIcon />
         </IconButton>

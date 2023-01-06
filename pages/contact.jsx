@@ -20,6 +20,15 @@ import InputUnstyled from "@mui/base/InputUnstyled";
 import { useForm } from "react-hook-form";
 import { isValidPhoneNumber } from "react-phone-number-input";
 
+import { Navigation, Pagination } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+import Item from "../components/Item/Item";
+import HighQuality from "../components/HighQuality";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const StyledTextareaElement = styled("textarea", {
   shouldForwardProp: (prop) =>
     !["ownerState", "minRows", "maxRows"].includes(prop.toString()),
@@ -54,7 +63,7 @@ const CustomInput = React.forwardRef(function CustomInput(props, ref) {
   );
 });
 
-const Contact = () => {
+const Contact = ({ data }) => {
   const {
     register,
     handleSubmit,
@@ -459,3 +468,17 @@ const Contact = () => {
 };
 
 export default Contact;
+
+export const getServerSideProps = async (context) => {
+  const res = await fetch(
+    "https://63a8fbcd100b7737b987d5fd.mockapi.io/products"
+  );
+
+  const data = await res.json();
+
+  return {
+    props: {
+      data,
+    },
+  };
+};

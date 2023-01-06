@@ -37,6 +37,10 @@ import {
 } from "firebase/firestore";
 import { app } from "../../lib/firebase";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { getAuth } from "firebase/auth";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -48,24 +52,14 @@ const style = {
   p: 4,
 };
 
-const Item = ({ product, view }) => {
+const Item = ({ product, view = "grid" }) => {
   const [open, setOpen] = useState(false);
   const [wishlist, setWishlist] = useState([]);
   const [cart, setCart] = useState([]);
+  const auth = getAuth(app);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const dispatch = useDispatch();
-
-  // const handleAddtoCart = () => {
-  //   dispatch(
-  //     addItemToWishList({
-  //       productId: product.id,
-  //       quantity: 1,
-  //     })
-  //   );
-  // };
 
   const user = useSelector(userSelector);
 
@@ -82,21 +76,52 @@ const Item = ({ product, view }) => {
       setWishlist(data.filter((item) => item.uid == (user && user.uid)));
     });
     return () => wishlist();
-  }, []);
+  }, [user == null ? null : user.uid]);
 
   const handleAddtoWishList = async (product) => {
     const check = wishlist.filter(
       (item) => item.uid == user.uid && item.name == product.name
     );
-
-    if (check.length > 0) {
-      console.log("Cos roi");
+    if (auth.currentUser) {
+      if (check.length > 0) {
+        toast.info(`${product.name} has been in wishlist`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        const reference = doc(wishlistRef);
+        await setDoc(reference, {
+          uid: user.uid,
+          productId: product.id,
+          ...product,
+        });
+        toast.success(`${product.name} added to wish list successfully`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
     } else {
-      const reference = doc(wishlistRef);
-      await setDoc(reference, {
-        uid: user.uid,
-        productId: product.id,
-        ...product,
+      toast.warning(`You need to login to perform this function`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
       });
     }
   };
@@ -108,7 +133,6 @@ const Item = ({ product, view }) => {
     alignItems: "center",
     height: "100%",
     overflow: "hidden",
-    // position: "relative",
     "&:hover": {
       cursor: "pointer",
       ".test": {
@@ -150,9 +174,9 @@ const Item = ({ product, view }) => {
             backgroundSize: view === "grid" ? "cover" : "contain",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
-            "&:hover": {
-              backgroundImage: `url(${product.thumbnail_2})`,
-            },
+            // "&:hover": {
+            //   backgroundImage: `url(${product.thumbnail_2})`,
+            // },
           }}
           className={styles["thumb"]}
         >
@@ -270,6 +294,7 @@ const Item = ({ product, view }) => {
           </Box>
         </Fade>
       </Modal>
+      {/* <ToastContainer /> */}
     </>
   );
 };

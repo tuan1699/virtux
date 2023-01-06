@@ -28,7 +28,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import GoogleIcon from "@mui/icons-material/Google";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { FreeMode, Navigation, Thumbs } from "swiper";
+import { FreeMode, Navigation, Thumbs, Pagination } from "swiper";
 import Item from "../../components/Item/Item";
 
 import { addItem } from "../../store/features/Cart.slice";
@@ -46,6 +46,10 @@ import {
 } from "firebase/firestore";
 import { app } from "../../lib/firebase";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { getAuth } from "firebase/auth";
+
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
@@ -53,11 +57,12 @@ function a11yProps(index) {
   };
 }
 
-const Detail = ({ product, productId }) => {
+const Detail = ({ product, productId, products }) => {
   const [wishlist, setWishlist] = useState([]);
   const [cart, setCart] = useState([]);
   const user = useSelector(userSelector);
   const [count, setCount] = useState(1);
+  const auth = getAuth(app);
 
   const [value, setValue] = useState(0);
   // const [size, setSize] = useState(1);
@@ -65,6 +70,17 @@ const Detail = ({ product, productId }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   const dispatch = useDispatch();
+
+  const swiperProps = {
+    modules: [Navigation, Pagination],
+    spaceBetween: 24,
+    slidesPerView: 4,
+    navigation: false,
+  };
+
+  const productsRelated = products.filter((item) =>
+    item.categories.includes(product.categories)
+  );
 
   // Add to WishList
   const wishlistRef = collection(getFirestore(app), "wishlist");
@@ -75,6 +91,7 @@ const Detail = ({ product, productId }) => {
       let data = [];
       querySnapshot.forEach((doc) => {
         data.push({ ...doc.data(), id: doc.id });
+        console.log(doc);
       });
       setWishlist(data.filter((item) => item.uid == (user && user.uid)));
     });
@@ -86,14 +103,46 @@ const Detail = ({ product, productId }) => {
       (item) => item.uid == user.uid && item.name == product.name
     );
 
-    if (check.length > 0) {
-      console.log("Cos roi");
+    if (auth.currentUser) {
+      if (check.length > 0) {
+        toast.info(`${product.name} has been in wishlist`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        const reference = doc(wishlistRef);
+        await setDoc(reference, {
+          uid: user.uid,
+          productId: product.id,
+          ...product,
+        });
+        toast.success(`${product.name} added to wish list successfully`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
     } else {
-      const reference = doc(wishlistRef);
-      await setDoc(reference, {
-        uid: user.uid,
-        productId: product.id,
-        ...product,
+      toast.warning(`You need to login to perform this function`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
       });
     }
   };
@@ -120,18 +169,52 @@ const Detail = ({ product, productId }) => {
       (item) => item.uid == user.uid && item.name == product.name
     );
 
-    if (check.length > 0) {
-      const reference = doc(cartRef, check[0].id);
-      await updateDoc(reference, {
-        quantity: check[0].quantity + count,
-      });
+    if (auth.currentUser) {
+      if (check.length > 0) {
+        const reference = doc(cartRef, check[0].id);
+        await updateDoc(reference, {
+          quantity: check[0].quantity + count,
+        });
+        toast.success(`${product.name} added to cart successfully`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        const reference = doc(cartRef);
+        await setDoc(reference, {
+          uid: user.uid,
+          productId: product.id,
+          quantity: count,
+          ...product,
+        });
+
+        toast.success(`${product.name} added to cart successfully`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
     } else {
-      const reference = doc(cartRef);
-      await setDoc(reference, {
-        uid: user.uid,
-        productId: product.id,
-        quantity: count,
-        ...product,
+      toast.warning(`You need to login to perform this function`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
       });
     }
   };
@@ -589,24 +672,17 @@ const Detail = ({ product, productId }) => {
               </StyledHeadingDetail>
             </Box>
 
-            <Grid container>
-              {/* <Grid item xs={12} sm={6} md={3}>
-                <Item />
-              </Grid>
-
-              <Grid item xs={12} sm={6} md={3}>
-                <Item />
-              </Grid>
-
-              <Grid item xs={12} sm={6} md={3}>
-                <Item />
-              </Grid>
-
-              <Grid item xs={12} sm={6} md={3}>
-                <Item />
-              </Grid> */}
-            </Grid>
+            <Box>
+              <Swiper {...swiperProps}>
+                {productsRelated.map((product) => (
+                  <SwiperSlide key={product.id}>
+                    <Item product={product} />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </Box>
           </Container>
+          <ToastContainer />
         </Box>
       </Box>
     </>
@@ -623,11 +699,17 @@ export const getStaticProps = async (context) => {
       context.params.productId
   );
 
+  const resAll = await fetch(
+    "https://63a8fbcd100b7737b987d5fd.mockapi.io/products"
+  );
+
   const product = await res.json();
+  const products = await resAll.json();
 
   return {
     props: {
       product,
+      products,
       productId,
     },
   };

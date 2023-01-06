@@ -15,9 +15,12 @@ const FilterSlice = createSlice({
     brandFilterChange: (state, action) => {
       state.brand = action.payload;
     },
+    searchFilterChange: (state, action) => {
+      state.search = action.payload;
+    },
   },
 });
 
 export default FilterSlice;
-export const { categoriesFilterChange, brandFilterChange } =
+export const { categoriesFilterChange, brandFilterChange, searchFilterChange } =
   FilterSlice.actions;

@@ -6,6 +6,9 @@ import "@fontsource/roboto/700.css";
 
 import "swiper/css";
 import "swiper/css/navigation";
+import "swiper/css/pagination";
+
+import "react-toastify/dist/ReactToastify.css";
 
 import { ThemeProvider } from "@emotion/react";
 import { theme } from "../config";

@@ -46,6 +46,8 @@ import { Toys } from "@mui/icons-material";
 import { collection, getDocs, getFirestore, query } from "firebase/firestore";
 // import { app } from "../../lib/firebase";
 import { app } from "../../lib/firebase";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const categories = [
   {
@@ -136,10 +138,6 @@ const Shop = ({ data, filtered, filter, total, page, sort }) => {
           id: item.id,
           ...item.data(),
         }));
-
-        console.log(snapshot);
-        console.log(snapshot.docs);
-        console.log(productsTest);
       })
       .catch((err) => {
         console.error(err);
@@ -236,45 +234,6 @@ const Shop = ({ data, filtered, filter, total, page, sort }) => {
       pathname: "/products",
       query: { ...router.query, page: value },
     });
-
-    // console.log(categories);
-    // console.log(brand);
-
-    // if (categories && brand) {
-    //   router.push({
-    //     pathname: "/products",
-    //     query: {
-    //       page: value,
-    //       categories: categories,
-    //       brand: brand,
-    //     },
-    //   });
-    // } else {
-    //   router.push({
-    //     pathname: "/products",
-    //     query: categories
-    //       ? {
-    //           page: value,
-    //           categories,
-    //         }
-    //       : brand
-    //       ? {
-    //           page: value,
-    //           brand,
-    //         }
-    //       : {
-    //           page: value,
-    //         },
-    //   });
-    // }
-
-    // console.log(value);
-    // router.push({
-    //   url: "/products",
-    //   query: {
-    //     page: value,
-    //   },
-    // });
   };
 
   return (
@@ -386,40 +345,10 @@ const Shop = ({ data, filtered, filter, total, page, sort }) => {
                         min={10}
                         max={2000}
                         step={100}
-                        // {...register("price")}
                         onChange={handlePriceChange}
                         valueLabelDisplay="auto"
                       />
-                      {/* <input
-                        type="range"
-                        id="points"
-                        name="points"
-                        min="0"
-                        max="1000"
-                        {...register("")}
-                      ></input> */}
                     </Box>
-                    {/* <RadioGroup
-                      aria-labelledby="demo-radio-buttons-group-label"
-                      defaultValue="female"
-                      name="radio-buttons-group"
-                    >
-                      <FormControlLabel
-                        value="female"
-                        control={<Radio />}
-                        label="Female"
-                      />
-                      <FormControlLabel
-                        value="male"
-                        control={<Radio />}
-                        label="Male"
-                      />
-                      <FormControlLabel
-                        value="other"
-                        control={<Radio />}
-                        label="Other"
-                      />
-                    </RadioGroup> */}
                   </Box>
                   <Box mb="30px">
                     <StyledHeadingFilter>Shop By Brand</StyledHeadingFilter>
@@ -528,6 +457,7 @@ const Shop = ({ data, filtered, filter, total, page, sort }) => {
               </Grid>
             </Grid>
           </Container>
+          <ToastContainer />
         </Box>
       </Box>
     </>

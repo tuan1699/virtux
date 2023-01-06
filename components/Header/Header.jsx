@@ -9,6 +9,7 @@ import {
   Button,
   Container,
   IconButton,
+  Input,
   Menu,
   MenuItem,
   Stack,
@@ -27,6 +28,8 @@ import MobileMenu from "../MobileMenu/MobileMenu";
 import PersonIcon from "@mui/icons-material/Person";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import SearchIcon from "@mui/icons-material/Search";
+
+import { searchFilterChange } from "../../store/features/Filter.slice";
 
 import Link from "next/link";
 import {
@@ -49,11 +52,19 @@ import {
   query,
 } from "firebase/firestore";
 import { app } from "../../lib/firebase";
-import { userSelector } from "../../store/selector";
+import {
+  productsRemainingSelector,
+  selectAllProduct,
+  userSelector,
+} from "../../store/selector";
+import { fetchProducts } from "../../store/features/Product.slice";
+import ItemSearch from "../ItemSearch";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorAuth, setanchorAuth] = useState(null);
+  const [value, setValue] = useState(1);
+  const [search, setSearch] = useState("");
 
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
@@ -67,21 +78,11 @@ const Header = () => {
   const [wishlist, setWishlist] = useState([]);
 
   useEffect(() => {
-    auth.onAuthStateChanged((auth, error) => {
-      if (auth && !user) {
-        dispatch(
-          setUser({
-            accessToken: auth.accessToken,
-            uid: auth.uid,
-            displayName: auth.displayName,
-            email: auth.email,
-          })
-        );
-      } else {
-        dispatch(setUser(null));
-      }
-    });
+    dispatch(fetchProducts());
   }, []);
+
+  const products = useSelector(selectAllProduct);
+  const productSearched = useSelector(productsRemainingSelector);
 
   useEffect(() => {
     const q = query(cartRef);
@@ -105,10 +106,6 @@ const Header = () => {
     });
     return () => wishlist();
   }, [user == null ? null : user.uid]);
-
-  console.log(auth.currentUser);
-
-  const [value, setValue] = useState(1);
 
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
@@ -138,6 +135,11 @@ const Header = () => {
   const openAuth = Boolean(anchorAuth);
   const idAuth = openAuth ? "simple-popover" : undefined;
 
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+    dispatch(searchFilterChange(e.target.value));
+  };
+
   return (
     <React.Fragment>
       <Container>
@@ -157,13 +159,7 @@ const Header = () => {
                   <Tab label="Home" component={Link} href="/" />
                   <Tab label="About VR" component={Link} href="/about" />
                   <Tab label="Services" component={Link} href="/services" />
-                  <Tab
-                    label="Shop"
-                    // icon={<KeyboardArrowDownIcon />}
-                    // iconPosition="end"
-                    component={Link}
-                    href="/products"
-                  />
+                  <Tab label="Shop" component={Link} href="/products" />
                   <Tab
                     label="Page"
                     icon={<KeyboardArrowDownIcon />}
@@ -208,15 +204,16 @@ const Header = () => {
                   sx={{ marginLeft: "auto" }}
                   alignItems="center"
                 >
-                  {/* <Link href="/signup">
-                    <IconButton>
-                      <PersonIcon />
-                    </IconButton>
-                  </Link> */}
-
                   {!auth.currentUser ? (
                     <Link href="/login">
-                      <Button variant="contained">Log in</Button>
+                      <Button
+                        variant="contained"
+                        sx={{
+                          width: "80px",
+                        }}
+                      >
+                        Log in
+                      </Button>
                     </Link>
                   ) : (
                     <Box>
@@ -229,7 +226,7 @@ const Header = () => {
 
                       <Popover
                         anchorReference="anchorPosition"
-                        anchorPosition={{ top: 73, left: 1265 }}
+                        anchorPosition={{ top: 72, left: 1100 }}
                         id={idAuth}
                         open={openAuth}
                         anchorEl={anchorAuth}
@@ -254,18 +251,6 @@ const Header = () => {
                         </Stack>
                       </Popover>
                     </Box>
-                    // <Stack direction="row">
-                    //   <IconButton>
-                    //     <PersonIcon />
-                    //     <Typography>{auth.currentUser.displayName}</Typography>
-                    //   </IconButton>
-                    //   <Button
-                    //     variant="contained"
-                    //     onClick={() => auth.signOut()}
-                    //   >
-                    //     Đăng xuất
-                    //   </Button>
-                    // </Stack>
                   )}
 
                   <Link href="/wishList">
@@ -275,9 +260,44 @@ const Header = () => {
                       </Badge>
                     </IconButton>
                   </Link>
-                  <IconButton>
-                    <SearchIcon />
-                  </IconButton>
+                  <Box
+                    sx={{
+                      position: "relative",
+                    }}
+                  >
+                    <Input
+                      placeholder="Search..."
+                      sx={{ width: "100%", padding: "10px" }}
+                      onChange={(e) => handleSearchChange(e)}
+                      value={search}
+                    />
+                    <Box
+                      sx={{
+                        maxHeight: "500px",
+                        width: "300px",
+                        background: "#fff",
+                        position: "absolute",
+                        paddingLeft: "10px",
+                        top: "62px",
+                        right: "0px",
+                        zIndex: "1000",
+                        overflow: "scroll",
+                        "::-webkit-scrollbar": {
+                          display: "none",
+                        },
+                        boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+                        borderBottomLeftRadius: "15px",
+                        borderBottomRightRadius: "15px",
+                      }}
+                    >
+                      {productSearched.length !== 0
+                        ? productSearched.map((product) => (
+                            <ItemSearch product={product} />
+                          ))
+                        : ""}
+                    </Box>
+                  </Box>
+
                   <Link href="/cart">
                     <Badge
                       badgeContent={carts.reduce(

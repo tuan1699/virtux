@@ -40,6 +40,10 @@ import {
 import { app } from "../lib/firebase";
 import { useSelector } from "react-redux";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { getAuth } from "firebase/auth";
+
 const DetailModal = ({ product }) => {
   const [wishlist, setWishlist] = useState([]);
   const [cart, setCart] = useState([]);
@@ -48,6 +52,8 @@ const DetailModal = ({ product }) => {
   const [size, setSize] = useState(1);
   const [model, setModel] = useState("VRG07E");
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
+
+  const auth = getAuth(app);
 
   const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
     "& .MuiToggleButtonGroup-grouped": {
@@ -117,14 +123,46 @@ const DetailModal = ({ product }) => {
       (item) => item.uid == user.uid && item.name == product.name
     );
 
-    if (check.length > 0) {
-      console.log("Cos roi");
+    if (auth.currentUser) {
+      if (check.length > 0) {
+        toast.info(`${product.name} has been in wishlist`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        const reference = doc(wishlistRef);
+        await setDoc(reference, {
+          uid: user.uid,
+          productId: product.id,
+          ...product,
+        });
+        toast.success(`${product.name} added to wish list successfully`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
     } else {
-      const reference = doc(wishlistRef);
-      await setDoc(reference, {
-        uid: user.uid,
-        productId: product.id,
-        ...product,
+      toast.warning(`You need to login to perform this function`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
       });
     }
   };
@@ -151,18 +189,51 @@ const DetailModal = ({ product }) => {
       (item) => item.uid == user.uid && item.name == product.name
     );
 
-    if (check.length > 0) {
-      const reference = doc(cartRef, check[0].id);
-      await updateDoc(reference, {
-        quantity: check[0].quantity + count,
-      });
+    if (auth.currentUser) {
+      if (check.length > 0) {
+        const reference = doc(cartRef, check[0].id);
+        await updateDoc(reference, {
+          quantity: check[0].quantity + count,
+        });
+        toast.success(`${product.name} added to cart successfully`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        const reference = doc(cartRef);
+        await setDoc(reference, {
+          uid: user.uid,
+          productId: product.id,
+          quantity: count,
+          ...product,
+        });
+        toast.success(`${product.name} added to cart successfully`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
     } else {
-      const reference = doc(cartRef);
-      await setDoc(reference, {
-        uid: user.uid,
-        productId: product.id,
-        quantity: count,
-        ...product,
+      toast.warning(`You need to login to perform this function`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
       });
     }
   };
