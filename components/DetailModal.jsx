@@ -280,59 +280,6 @@ const DetailModal = ({ product }) => {
                 <StyledDecrDetail>{product.price} $</StyledDecrDetail>
               </ListItem>
 
-              {/* <ListItem
-                sx={{
-                  padding: "0px",
-
-                  minHeight: "50px",
-                }}
-              >
-                <StyledTitleDetail>Size:</StyledTitleDetail>
-                <StyledToggleButtonGroup
-                  value={size}
-                  color="primary"
-                  exclusive
-                  onChange={handleSelectSize}
-                  aria-label="text alignment"
-                >
-                  <ToggleButton value="1" aria-label="left aligned">
-                    4.7
-                  </ToggleButton>
-                  <ToggleButton value="2" aria-label="centered">
-                    5.2
-                  </ToggleButton>
-                  <ToggleButton value="3" aria-label="right aligned">
-                    6.2
-                  </ToggleButton>
-                </StyledToggleButtonGroup>
-              </ListItem>
-
-              <ListItem
-                sx={{
-                  padding: "0px",
-                  minHeight: "50px",
-                }}
-              >
-                <StyledTitleDetail>Model:</StyledTitleDetail>
-                <StyledToggleButtonGroup
-                  value={model}
-                  color="primary"
-                  exclusive
-                  onChange={handleSelectModel}
-                  aria-label="text alignment"
-                >
-                  <ToggleButton value="VRG07E" aria-label="left aligned">
-                    VRG07E
-                  </ToggleButton>
-                  <ToggleButton value="VRG06E" aria-label="centered">
-                    VRG06E
-                  </ToggleButton>
-                  <ToggleButton value="VRG08E" aria-label="right aligned">
-                    VRG08E
-                  </ToggleButton>
-                </StyledToggleButtonGroup>
-              </ListItem> */}
-
               <ListItem sx={{ padding: "0px", minHeight: "50px" }}>
                 <StyledTitleDetail>Quantity:</StyledTitleDetail>
                 <ButtonGroup
@@ -404,7 +351,7 @@ const DetailModal = ({ product }) => {
               {product.over_view}
             </StyledDecrDetail>
 
-            <Link
+            {/* <Link
               href="./detail"
               sx={{
                 "&:hover": {
@@ -414,9 +361,9 @@ const DetailModal = ({ product }) => {
             >
               {" "}
               View Product
-            </Link>
+            </Link> */}
           </Grid>
-        </Grid>
+        </Grid> 
       </Container>
     </>
   );
