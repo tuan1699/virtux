@@ -1,0 +1,9 @@
+.link-page {
+  text-decoration: none;
+  color: #000;
+}
+
+.link-page:hover {
+  cursor: pointer;
+  background-color: #ffbaba;
+}

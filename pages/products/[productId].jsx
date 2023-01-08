@@ -27,7 +27,6 @@ import GoogleIcon from "@mui/icons-material/Google";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs, Pagination } from "swiper";
-import Item from "../../components/Item/Item";
 
 import { userSelector } from "../../store/selector";
 import {
@@ -53,7 +52,7 @@ function a11yProps(index) {
   };
 }
 
-const Detail = ({ product, productId, products }) => {
+const Detail = ({ product, products }) => {
   const [wishlist, setWishlist] = useState([]);
   const [cart, setCart] = useState([]);
   const user = useSelector(userSelector);
@@ -625,12 +624,37 @@ const Detail = ({ product, productId, products }) => {
 
 export default Detail;
 
+export async function loadPosts() {
+  const res = await fetch("https://.../posts/");
+  const data = await res.json();
+
+  return data;
+}
+
+export const getStaticPaths = async () => {
+  const res = await fetch(
+    "https://63a8fbcd100b7737b987d5fd.mockapi.io/products"
+  );
+
+  const data = await res.json();
+
+  const paths = data.map((product) => {
+    return {
+      params: { productId: product.id },
+    };
+  });
+
+  return {
+    paths,
+    fallback: false,
+  };
+};
+
 export const getStaticProps = async (context) => {
   const productId = context.params.productId;
 
   const res = await fetch(
-    "https://63a8fbcd100b7737b987d5fd.mockapi.io/products/" +
-      context.params.productId
+    "https://63a8fbcd100b7737b987d5fd.mockapi.io/products/" + productId
   );
 
   const resAll = await fetch(
@@ -642,28 +666,8 @@ export const getStaticProps = async (context) => {
 
   return {
     props: {
-      product,
-      products,
-      productId,
+      product: product,
+      products: products,
     },
   };
 };
-
-export async function getStaticPaths() {
-  const res = await fetch(
-    "https://63a8fbcd100b7737b987d5fd.mockapi.io/products"
-  );
-
-  const data = await res.json();
-
-  const paths = data.map((product) => {
-    return {
-      params: { productId: product.id.toString() },
-    };
-  });
-
-  return {
-    paths,
-    fallback: false,
-  };
-}

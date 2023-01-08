@@ -36,19 +36,11 @@ import { ToastContainer, toast } from "react-toastify";
 const CartItem = ({ product, confirmDialog, setConfirmDialog }) => {
   const dispatch = useDispatch();
 
-  const { incQty, decQty, removeItem } = useSelector(selectCart);
   const cartRef = collection(getFirestore(app), "cart");
 
   const StyledItemTitle = styled(Typography)({
     fontSize: "24px",
     fontWeight: "700",
-    fontFamily: "'Kodchasan', sans-serif",
-    marginBottom: "10px",
-  });
-
-  const StyledItemType = styled(Typography)({
-    fontSize: "18px",
-    fontWeight: "300",
     fontFamily: "'Kodchasan', sans-serif",
     marginBottom: "10px",
   });
@@ -131,17 +123,7 @@ const CartItem = ({ product, confirmDialog, setConfirmDialog }) => {
                 alignItems: { xs: "center", md: "flex-start" },
               }}
             >
-              <StyledItemTitle>
-                <Link
-                  href={{
-                    pathname: "products/[productId]",
-                    query: { productId: product.id },
-                  }}
-                  className={styles["link-item"]}
-                >
-                  {product.name}
-                </Link>
-              </StyledItemTitle>
+              <StyledItemTitle>{product.name}</StyledItemTitle>
 
               <StyledItemPrice>{product.price} $</StyledItemPrice>
               <ButtonGroup
