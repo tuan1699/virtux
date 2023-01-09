@@ -14,13 +14,14 @@ import Review from "../components/Review";
 import Slider from "../components/SliderItem/SliderItem";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, FreeMode, Thumbs } from "swiper";
+import { Navigation, FreeMode, Thumbs, Autoplay } from "swiper";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import HighQuality from "../components/HighQuality";
 
 import { ToastContainer } from "react-toastify";
+import Item from "../components/Item/Item";
 
 export default function Home({ data, reviews }) {
   const StyledSection = styled(Box)({
@@ -31,6 +32,9 @@ export default function Home({ data, reviews }) {
     textAlign: "center",
   });
 
+  const data1 = data.slice(0, 4);
+  const data2 = data.slice(4, 8);
+
   return (
     <div>
       <Head>
@@ -40,7 +44,7 @@ export default function Home({ data, reviews }) {
 
       <Header />
 
-      <Box sx={{ marginTop: "72px", position: "relative" }}>
+      <Box sx={{ marginTop: { xs: "56px", md: "72px" }, position: "relative" }}>
         <Slider />
 
         <Box
@@ -82,6 +86,35 @@ export default function Home({ data, reviews }) {
           ></Box>
           <Box>
             <HighQuality data={data} />
+            {/* <Swiper
+              loop={true}
+              autoplay={{
+                delay: 10000,
+                disableOnInteraction: false,
+              }}
+              slidesPerGroup={1}
+              slidesPerView={1}
+              modules={[Autoplay]}
+            >
+              <SwiperSlide>
+                <Grid container>
+                  {data1.map((item) => (
+                    <Grid item xs={12} md={3}>
+                      <Item product={item} />
+                    </Grid>
+                  ))}
+                </Grid>
+              </SwiperSlide>
+              <SwiperSlide>
+                <Grid container>
+                  {data2.map((item) => (
+                    <Grid item xs={12} md={3}>
+                      <Item product={item} />
+                    </Grid>
+                  ))}
+                </Grid>
+              </SwiperSlide>
+            </Swiper> */}
           </Box>
         </StyledSection>
 
@@ -351,6 +384,17 @@ export default function Home({ data, reviews }) {
               watchSlidesProgress={true}
               modules={[FreeMode, Navigation, Thumbs]}
               className="mySwiper"
+              breakpoints={{
+                0: {
+                  slidesPerView: 1,
+                },
+                600: {
+                  slidesPerView: 2,
+                },
+                900: {
+                  slidesPerView: 3,
+                },
+              }}
             >
               {reviews.map((review) => (
                 <SwiperSlide key={review.id}>
@@ -367,7 +411,7 @@ export default function Home({ data, reviews }) {
   );
 }
 
-export const getServerSideProps = async (context) => {
+export const getStaticProps = async (context) => {
   const res = await fetch(
     "https://63a8fbcd100b7737b987d5fd.mockapi.io/products"
   );

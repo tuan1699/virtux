@@ -3,7 +3,20 @@
   color: #000;
 }
 
-.link-page:hover {
-  cursor: pointer;
+.link-text {
+  font-family: "Kodchasan", sans-serif !important;
+}
+
+.link-button:hover .link-page {
   background-color: #ffbaba;
+  color: #fff;
+}
+
+.link-button {
+  font-family: "Kodchasan", sans-serif;
+}
+
+.link-button:hover {
+  background-color: #ffbaba;
+  color: #fff;
 }

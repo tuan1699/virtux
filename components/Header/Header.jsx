@@ -240,7 +240,14 @@ const Header = () => {
                         }}
                       >
                         <Stack>
-                          <Button>{auth.currentUser.displayName}</Button>
+                          <Link
+                            href="/account"
+                            sx={{}}
+                            className={styles["link-account"]}
+                          >
+                            <Button>{auth.currentUser.displayName}</Button>
+                          </Link>
+
                           <Button
                             variant="contained"
                             onClick={() => auth.signOut()}

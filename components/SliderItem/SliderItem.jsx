@@ -83,24 +83,6 @@ const Slider = () => {
                       Explore More
                     </Button>
                   </Box>
-                  {/* <div className={styles["slider-info"]}>
-                  <h2 className={styles["slider-title"]}>
-                    We Craft Virtual and Augmented Reality Experiences
-                  </h2>
-                  <div className={styles["slider-decr"]}>
-                    3D Virtual and Augmented Reality panoramas to demonstrate
-                    your products and also offer an improved user experience.
-                  </div>
-
-                  <div className="btn">
-                    <Button
-                      variant="contained"
-                      sx={{ borderRadius: "100px", padding: "12px 30px" }}
-                    >
-                      Explore More
-                    </Button>
-                  </div>
-                </div> */}
                 </Box>
               </Box>
             </div>
@@ -108,11 +90,13 @@ const Slider = () => {
 
           <SwiperSlide>
             <div className={styles["slider-item"]}>
-              <Container position="relative">
+              <Box position="relative">
                 <Box
                   sx={{
                     backgroundImage: `url(./assets/img/slide-02.png)`,
                     paddingTop: { md: "50%" },
+                    paddingRight: "0px",
+                    paddingLeft: "0px",
                     minHeight: { xs: "350px", md: "0px" },
                     backgroundSize: "cover",
                     backgroundRepeat: "no-repeat",
@@ -184,7 +168,7 @@ const Slider = () => {
                     </Button>
                   </Box>
                 </Box>
-              </Container>
+              </Box>
             </div>
           </SwiperSlide>
 
@@ -267,41 +251,6 @@ const Slider = () => {
                   </Box>
                 </Box>
               </Box>
-              {/* <Box
-                sx={{
-                  backgroundImage: `url(./assets/img/slide-03.png)`,
-                  paddingTop: "50%",
-                  backgroundSize: "cover",
-                  backgroundRepeat: "no-repeat",
-                }}
-              >
-                <div className={styles["slider-info"]}>
-                  <div
-                    style={{
-                      fontSize: "40px",
-                      color: "#D23369",
-                      fontWeight: "600",
-                    }}
-                  >
-                    Introducing magus 360
-                  </div>
-                  <h2 className={styles["slider-title"]}>Reshaping reality</h2>
-                  <div className={styles["slider-decr"]}>
-                    Create virtual reality world wide variety of VR equipment
-                  </div>
-
-                  <div className="btn">
-                    <Button
-                      variant="contained"
-                      sx={{ borderRadius: "100px", padding: "12px 30px" }}
-                    >
-                      Explore More
-                    </Button>
-                  </div>
-                </div>
-              </Box> */}
-
-              {/* <img src="/assets/img/slide-01.png" alt="" /> */}
             </div>
           </SwiperSlide>
         </Swiper>

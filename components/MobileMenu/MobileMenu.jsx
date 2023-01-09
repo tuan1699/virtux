@@ -19,40 +19,71 @@ const MobileMenu = () => {
     <React.Fragment>
       <Drawer open={openMenu} onClose={() => setOpenMenu(false)}>
         <List>
-          <Link href="/">
-            <ListItemButton sx={{ padding: "4px 150px 4px 50px" }}>
-              <ListItemIcon>
-                <ListItemText onClick={() => setOpenMenu(!openMenu)}>
-                  Home
-                </ListItemText>
-              </ListItemIcon>
+          <Link href="/" className={styles["link-page"]}>
+            <ListItemButton
+              sx={{ padding: "4px 150px 4px 50px" }}
+              className={styles["link-button"]}
+              onClick={() => setOpenMenu(!openMenu)}
+            >
+              <ListItemText
+                sx={{
+                  color: "#000",
+                }}
+                className={styles["link-text"]}
+              >
+                Home
+              </ListItemText>
             </ListItemButton>
           </Link>
 
-          <Link href="/about">
-            <ListItemButton sx={{ padding: "4px 150px 4px 50px" }}>
+          <Link href="/about" className={styles["link-page"]}>
+            <ListItemButton
+              sx={{ padding: "4px 150px 4px 50px" }}
+              className={styles["link-button"]}
+              onClick={() => setOpenMenu(!openMenu)}
+            >
               <ListItemIcon>
-                <ListItemText onClick={() => setOpenMenu(!openMenu)}>
+                <ListItemText
+                  sx={{
+                    color: "#000",
+                  }}
+                >
                   About VR
                 </ListItemText>
               </ListItemIcon>
             </ListItemButton>
           </Link>
 
-          <Link href="/services">
-            <ListItemButton sx={{ padding: "4px 150px 4px 50px" }}>
+          <Link href="/services" className={styles["link-page"]}>
+            <ListItemButton
+              sx={{ padding: "4px 150px 4px 50px" }}
+              className={styles["link-button"]}
+              onClick={() => setOpenMenu(!openMenu)}
+            >
               <ListItemIcon>
-                <ListItemText onClick={() => setOpenMenu(!openMenu)}>
+                <ListItemText
+                  sx={{
+                    color: "#000",
+                  }}
+                >
                   Services
                 </ListItemText>
               </ListItemIcon>
             </ListItemButton>
           </Link>
 
-          <Link href="/products">
-            <ListItemButton sx={{ padding: "4px 150px 4px 50px" }}>
+          <Link href="/products" className={styles["link-page"]}>
+            <ListItemButton
+              sx={{ padding: "4px 150px 4px 50px" }}
+              className={styles["link-button"]}
+              onClick={() => setOpenMenu(!openMenu)}
+            >
               <ListItemIcon>
-                <ListItemText onClick={() => setOpenMenu(!openMenu)}>
+                <ListItemText
+                  sx={{
+                    color: "#000",
+                  }}
+                >
                   Shop
                 </ListItemText>
               </ListItemIcon>
@@ -60,13 +91,18 @@ const MobileMenu = () => {
           </Link>
 
           <Link href="/news" className={styles["link-page"]}>
-            <ListItemButton sx={{ padding: "4px 150px 4px 50px" }}>
+            <ListItemButton
+              sx={{
+                padding: "4px 150px 4px 50px",
+              }}
+              className={styles["link-button"]}
+              onClick={() => setOpenMenu(!openMenu)}
+            >
               <ListItemIcon>
                 <ListItemText
                   sx={{
                     color: "#000",
                   }}
-                  onClick={() => setOpenMenu(!openMenu)}
                 >
                   News
                 </ListItemText>
@@ -74,20 +110,36 @@ const MobileMenu = () => {
             </ListItemButton>
           </Link>
 
-          <Link href="/faq">
-            <ListItemButton sx={{ padding: "4px 150px 4px 50px" }}>
+          <Link href="/faq" className={styles["link-page"]}>
+            <ListItemButton
+              sx={{ padding: "4px 150px 4px 50px" }}
+              onClick={() => setOpenMenu(!openMenu)}
+              className={styles["link-button"]}
+            >
               <ListItemIcon>
-                <ListItemText onClick={() => setOpenMenu(!openMenu)}>
+                <ListItemText
+                  sx={{
+                    color: "#000",
+                  }}
+                >
                   Faq
                 </ListItemText>
               </ListItemIcon>
             </ListItemButton>
           </Link>
 
-          <Link href="/contact">
-            <ListItemButton sx={{ padding: "4px 150px 4px 50px" }}>
+          <Link href="/contact" className={styles["link-page"]}>
+            <ListItemButton
+              sx={{ padding: "4px 150px 4px 50px" }}
+              onClick={() => setOpenMenu(!openMenu)}
+              className={styles["link-button"]}
+            >
               <ListItemIcon>
-                <ListItemText onClick={() => setOpenMenu(!openMenu)}>
+                <ListItemText
+                  sx={{
+                    color: "#000",
+                  }}
+                >
                   Contact Us
                 </ListItemText>
               </ListItemIcon>

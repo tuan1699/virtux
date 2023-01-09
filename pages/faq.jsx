@@ -102,7 +102,7 @@ const Faq = () => {
         sx={{
           backgroundImage: `url(./assets/img/background-page.png)`,
           minHeight: "900px",
-          marginTop: "70px",
+          marginTop: { xs: "56px", md: "72px" },
         }}
       >
         <BreadCumb breadcrumbs={breadcrumbs} Page={"Faq"} />

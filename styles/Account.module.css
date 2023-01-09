@@ -1,0 +1,23 @@
+.label {
+  width: 100px;
+  display: inline-block;
+}
+
+.input {
+  padding: 4px 8px;
+  font-size: 16px;
+  font-family: "Kodchasan", sans-serif;
+  border: none;
+}
+
+.title::after {
+  content: "";
+  display: block;
+  width: 70px;
+  height: 2px;
+  background-color: #d23369;
+  position: relative;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+}

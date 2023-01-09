@@ -9,6 +9,7 @@ export const filterCategoriesSelector = (state) => state.filter.categories;
 export const filterBrandSelector = (state) => state.filter.brand;
 export const searchSelector = (state) => state.filter.search;
 export const loaderReview = (state) => state.reviews.loading;
+export const loaderDetail = (state) => state.productDetail.loading;
 export const detailSelector = (state) => state.productDetail.data;
 
 export const userSelector = (state) => state.auth.user;

@@ -11,6 +11,20 @@ const HighQuality = ({ data }) => {
     spaceBetween: 24,
     slidesPerView: 4,
     navigation: false,
+    breakpoints: {
+      0: {
+        slidesPerView: 1,
+      },
+      600: {
+        slidesPerView: 2,
+      },
+      900: {
+        slidesPerView: 3,
+      },
+      1200: {
+        slidesPerView: 4,
+      },
+    },
   };
 
   return (

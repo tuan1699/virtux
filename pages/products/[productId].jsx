@@ -46,6 +46,9 @@ import { getAuth } from "firebase/auth";
 import ItemRelated from "../../components/Item/ItemRelated";
 import { useParams } from "react-router";
 
+import { fetchDetail } from "../../store/features/detail.slice";
+import { loaderDetail } from "../../store/selector";
+
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
@@ -53,7 +56,7 @@ function a11yProps(index) {
   };
 }
 
-const Detail = ({ product, products }) => {
+const Detail = ({}) => {
   const [wishlist, setWishlist] = useState([]);
   const [cart, setCart] = useState([]);
   const user = useSelector(userSelector);
@@ -62,14 +65,15 @@ const Detail = ({ product, products }) => {
   const [value, setValue] = useState(0);
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
-  // const { productId } = useParams();
+  const { productId } = useParams();
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch(fetchDetail(productId));
-  // }, []);
+  useEffect(() => {
+    dispatch(fetchDetail(productId));
+  }, []);
 
-  // const product = useSelector(detailSelector);
+  const product = useSelector(detailSelector);
+  const loading = useSelector(loaderDetail);
 
   const swiperProps = {
     modules: [Navigation, Pagination],
@@ -78,145 +82,145 @@ const Detail = ({ product, products }) => {
     navigation: false,
   };
 
-  const productsRelated = products.filter((item) =>
-    item.categories.includes(product.categories)
-  );
+  // const productsRelated = products.filter((item) =>
+  //   item.categories.includes(product.categories)
+  // );
 
   // Add to WishList
-  const wishlistRef = collection(getFirestore(app), "wishlist");
+  // const wishlistRef = collection(getFirestore(app), "wishlist");
 
-  useEffect(() => {
-    const q = query(wishlistRef);
-    const wishlist = onSnapshot(q, (querySnapshot) => {
-      let data = [];
-      querySnapshot.forEach((doc) => {
-        data.push({ ...doc.data(), id: doc.id });
-      });
-      setWishlist(data.filter((item) => item.uid == (user && user.uid)));
-    });
-    return () => wishlist();
-  }, []);
+  // useEffect(() => {
+  //   const q = query(wishlistRef);
+  //   const wishlist = onSnapshot(q, (querySnapshot) => {
+  //     let data = [];
+  //     querySnapshot.forEach((doc) => {
+  //       data.push({ ...doc.data(), id: doc.id });
+  //     });
+  //     setWishlist(data.filter((item) => item.uid == (user && user.uid)));
+  //   });
+  //   return () => wishlist();
+  // }, []);
 
-  const handleAddtoWishList = async (product) => {
-    const check = wishlist.filter(
-      (item) => item.uid == user.uid && item.name == product.name
-    );
+  // const handleAddtoWishList = async (product) => {
+  //   const check = wishlist.filter(
+  //     (item) => item.uid == user.uid && item.name == product.name
+  //   );
 
-    if (auth.currentUser) {
-      if (check.length > 0) {
-        toast.info(`${product.name} has been in wishlist`, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      } else {
-        const reference = doc(wishlistRef);
-        await setDoc(reference, {
-          uid: user.uid,
-          productId: product.id,
-          ...product,
-        });
-        toast.success(`${product.name} added to wish list successfully`, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      }
-    } else {
-      toast.warning(`You need to login to perform this function`, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-    }
-  };
+  //   if (auth.currentUser) {
+  //     if (check.length > 0) {
+  //       toast.info(`${product.name} has been in wishlist`, {
+  //         position: "top-right",
+  //         autoClose: 5000,
+  //         hideProgressBar: false,
+  //         closeOnClick: true,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         progress: undefined,
+  //         theme: "light",
+  //       });
+  //     } else {
+  //       const reference = doc(wishlistRef);
+  //       await setDoc(reference, {
+  //         uid: user.uid,
+  //         productId: product.id,
+  //         ...product,
+  //       });
+  //       toast.success(`${product.name} added to wish list successfully`, {
+  //         position: "top-right",
+  //         autoClose: 5000,
+  //         hideProgressBar: false,
+  //         closeOnClick: true,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         progress: undefined,
+  //         theme: "light",
+  //       });
+  //     }
+  //   } else {
+  //     toast.warning(`You need to login to perform this function`, {
+  //       position: "top-right",
+  //       autoClose: 5000,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //       theme: "light",
+  //     });
+  //   }
+  // };
 
-  // Add to Cart
+  // // Add to Cart
 
-  const cartRef = collection(getFirestore(app), "cart");
+  // const cartRef = collection(getFirestore(app), "cart");
 
-  useEffect(() => {
-    const q = query(cartRef);
-    const wishlist = onSnapshot(q, (querySnapshot) => {
-      let data = [];
-      querySnapshot.forEach((doc) => {
-        data.push({ ...doc.data(), id: doc.id });
-      });
-      setCart(data.filter((item) => item.uid == (user && user.uid)));
-    });
-    return () => wishlist();
-  }, []);
+  // useEffect(() => {
+  //   const q = query(cartRef);
+  //   const wishlist = onSnapshot(q, (querySnapshot) => {
+  //     let data = [];
+  //     querySnapshot.forEach((doc) => {
+  //       data.push({ ...doc.data(), id: doc.id });
+  //     });
+  //     setCart(data.filter((item) => item.uid == (user && user.uid)));
+  //   });
+  //   return () => wishlist();
+  // }, []);
 
-  const handleAddtoCart = async (product) => {
-    // check product exist
-    const check = cart.filter(
-      (item) => item.uid == user.uid && item.name == product.name
-    );
+  // const handleAddtoCart = async (product) => {
+  //   // check product exist
+  //   const check = cart.filter(
+  //     (item) => item.uid == user.uid && item.name == product.name
+  //   );
 
-    if (auth.currentUser) {
-      if (check.length > 0) {
-        const reference = doc(cartRef, check[0].id);
-        await updateDoc(reference, {
-          quantity: check[0].quantity + count,
-        });
-        toast.success(`${product.name} added to cart successfully`, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      } else {
-        const reference = doc(cartRef);
-        await setDoc(reference, {
-          uid: user.uid,
-          productId: product.id,
-          quantity: count,
-          ...product,
-        });
+  //   if (auth.currentUser) {
+  //     if (check.length > 0) {
+  //       const reference = doc(cartRef, check[0].id);
+  //       await updateDoc(reference, {
+  //         quantity: check[0].quantity + count,
+  //       });
+  //       toast.success(`${product.name} added to cart successfully`, {
+  //         position: "top-right",
+  //         autoClose: 5000,
+  //         hideProgressBar: false,
+  //         closeOnClick: true,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         progress: undefined,
+  //         theme: "light",
+  //       });
+  //     } else {
+  //       const reference = doc(cartRef);
+  //       await setDoc(reference, {
+  //         uid: user.uid,
+  //         productId: product.id,
+  //         quantity: count,
+  //         ...product,
+  //       });
 
-        toast.success(`${product.name} added to cart successfully`, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      }
-    } else {
-      toast.warning(`You need to login to perform this function`, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-    }
-  };
+  //       toast.success(`${product.name} added to cart successfully`, {
+  //         position: "top-right",
+  //         autoClose: 5000,
+  //         hideProgressBar: false,
+  //         closeOnClick: true,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         progress: undefined,
+  //         theme: "light",
+  //       });
+  //     }
+  //   } else {
+  //     toast.warning(`You need to login to perform this function`, {
+  //       position: "top-right",
+  //       autoClose: 5000,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //       theme: "light",
+  //     });
+  //   }
+  // };
 
   const breadcrumbs = [
     <Link
@@ -362,7 +366,7 @@ const Detail = ({ product, products }) => {
                   padding: "20px",
                 }}
               >
-                <Swiper
+                {/* <Swiper
                   style={{
                     "--swiper-navigation-color": "#fff",
                     "--swiper-pagination-color": "#fff",
@@ -412,7 +416,7 @@ const Detail = ({ product, products }) => {
                       </SwiperSlide>
                     );
                   })}
-                </Swiper>
+                </Swiper> */}
               </Grid>
 
               <Grid item xs={12} md={6}>
@@ -498,14 +502,14 @@ const Detail = ({ product, products }) => {
                 >
                   <Button
                     variant="contained"
-                    onClick={() => handleAddtoCart(product)}
+                    // onClick={() => handleAddtoCart(product)}
                   >
                     Add to Cart
                   </Button>
 
                   <Button
                     variant="contained"
-                    onClick={() => handleAddtoWishList(product)}
+                    // onClick={() => handleAddtoWishList(product)}
                   >
                     Add to wishlist
                   </Button>
@@ -613,13 +617,13 @@ const Detail = ({ product, products }) => {
             </Box>
 
             <Box>
-              <Swiper {...swiperProps}>
-                {productsRelated.map((product) => (
-                  <SwiperSlide key={product.id}>
-                    <ItemRelated product={product} />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+              {/* <Swiper {...swiperProps}>
+                  {productsRelated.map((product) => (
+                    <SwiperSlide key={product.id}>
+                      <ItemRelated product={product} />
+                    </SwiperSlide>
+                  ))}
+                </Swiper> */}
             </Box>
           </Container>
           <ToastContainer />
@@ -628,40 +632,39 @@ const Detail = ({ product, products }) => {
     </>
   );
 };
-
 export default Detail;
 
-export const getStaticPaths = async () => {
-  const res = await fetch(
-    "https://63a8fbcd100b7737b987d5fd.mockapi.io/products"
-  );
+// export const getStaticPaths = async () => {
+//   const res = await fetch(
+//     "https://63a8fbcd100b7737b987d5fd.mockapi.io/products"
+//   );
 
-  const data = await res.json();
+//   const data = await res.json();
 
-  return {
-    paths: data.map((product) => ({ params: { productId: product.id } })),
-    fallback: false,
-  };
-};
+//   return {
+//     paths: data.map((product) => ({ params: { productId: product.id } })),
+//     fallback: false,
+//   };
+// };
 
-export const getStaticProps = async (context) => {
-  const productId = context.params.productId;
+// export const getStaticProps = async (context) => {
+//   const productId = context.params.productId;
 
-  const res = await fetch(
-    "https://63a8fbcd100b7737b987d5fd.mockapi.io/products/" + productId
-  );
+//   const res = await fetch(
+//     "https://63a8fbcd100b7737b987d5fd.mockapi.io/products/" + productId
+//   );
 
-  const resAll = await fetch(
-    "https://63a8fbcd100b7737b987d5fd.mockapi.io/products"
-  );
+//   const resAll = await fetch(
+//     "https://63a8fbcd100b7737b987d5fd.mockapi.io/products"
+//   );
 
-  const product = await res.json();
-  const products = await resAll.json();
+//   const product = await res.json();
+//   const products = await resAll.json();
 
-  return {
-    props: {
-      product: product,
-      products: products,
-    },
-  };
-};
+//   return {
+//     props: {
+//       product: product,
+//       products: products,
+//     },
+//   };
+// };
