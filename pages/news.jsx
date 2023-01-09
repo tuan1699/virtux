@@ -90,7 +90,7 @@ export default News;
 export const getServerSideProps = async (context) => {
   let { page = 1 } = context.query;
 
-  const res = await fetch("https://63a8fbcd100b7737b987d5fd.mockapi.io/news");
+  const res = await fetch("https://63bc2b36fa38d30d85be625b.mockapi.io/news");
 
   const data = await res.json();
 

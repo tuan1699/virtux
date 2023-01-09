@@ -413,13 +413,13 @@ export default function Home({ data, reviews }) {
 
 export const getStaticProps = async (context) => {
   const res = await fetch(
-    "https://63a8fbcd100b7737b987d5fd.mockapi.io/products"
+    "https://63bc2b36fa38d30d85be625b.mockapi.io/products"
   );
 
   const data = await res.json();
 
   const resReview = await fetch(
-    "https://63a8fbcd100b7737b987d5fd.mockapi.io/reviews"
+    "https://63bc2b36fa38d30d85be625b.mockapi.io/reviews"
   );
 
   const reviews = await resReview.json();

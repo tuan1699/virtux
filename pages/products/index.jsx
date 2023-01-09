@@ -435,7 +435,7 @@ const Shop = ({ data, total, page, sort }) => {
 
 export default Shop;
 
-export const getStaticProps = async (context) => {
+export const getServerSideProps = async (context) => {
   let {
     categories = [],
     brand = [],
@@ -466,7 +466,7 @@ export const getStaticProps = async (context) => {
   }
 
   const res = await fetch(
-    "https://63a8fbcd100b7737b987d5fd.mockapi.io/products"
+    "https://63bc2b36fa38d30d85be625b.mockapi.io/products"
   );
 
   const data = await res.json();
