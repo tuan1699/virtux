@@ -435,7 +435,7 @@ const Shop = ({ data, total, page, sort }) => {
 
 export default Shop;
 
-export const getServerSideProps = async (context) => {
+export const getStaticProps = async (context) => {
   let {
     categories = [],
     brand = [],
