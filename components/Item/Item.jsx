@@ -24,7 +24,6 @@ import DetailModal from "../DetailModal";
 import Image from "next/image";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { addItemToWishList } from "../../store/features/Wishlist.slice";
 import { userSelector } from "../../store/selector";
 import {
   collection,
@@ -213,19 +212,6 @@ const Item = ({ product, view = "grid" }) => {
             </Stack>
           </ActionItem>
         </Box>
-        {/* <Box
-          alt="The house from the offer."
-          sx={{
-            backgroundImage: `url(${product.thumbnail_2})`,
-            width: { xs: "400px", sm: "200px" },
-            height: { xs: "450px", sm: "0px" },
-            opacity: 0.5,
-            transition: "opacity 0.5s ease-in-out",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-          className="thumb-2"
-        /> */}
 
         <Box>
           <Link

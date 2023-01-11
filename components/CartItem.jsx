@@ -12,11 +12,9 @@ import {
 } from "@mui/material";
 
 import React from "react";
-import Counter from "./Counter";
 
 import CloseIcon from "@mui/icons-material/Close";
 import { useDispatch, useSelector } from "react-redux";
-import { selectCart } from "../store/features/Cart.slice";
 import Link from "next/link";
 
 import {
@@ -29,7 +27,6 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { app } from "../lib/firebase";
-import { userSelector } from "../store/selector";
 
 import { ToastContainer, toast } from "react-toastify";
 

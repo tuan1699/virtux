@@ -24,7 +24,6 @@ import DetailModal from "../DetailModal";
 import Image from "next/image";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { addItemToWishList } from "../../store/features/Wishlist.slice";
 import { userSelector } from "../../store/selector";
 import {
   collection,

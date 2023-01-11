@@ -13,7 +13,6 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import BreadCumb from "../components/BreadCumb/BreadCumb";
 import CartItem from "../components/CartItem";
-import { selectCart } from "../store/features/Cart.slice";
 
 import {
   getFirestore,

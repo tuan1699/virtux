@@ -214,6 +214,7 @@ const Account = () => {
                           sx={{
                             "&:last-child td, &:last-child th": { border: 0 },
                           }}
+                          key={bill.date}
                         >
                           <TableCell
                             component="th"
@@ -228,7 +229,9 @@ const Account = () => {
                           </TableCell>
                           <StyledNameProduct align="center">
                             {item.bill.map((product) => (
-                              <Typography>{product.name}</Typography>
+                              <Typography key={product.id}>
+                                {product.name}
+                              </Typography>
                             ))}
                           </StyledNameProduct>
 
