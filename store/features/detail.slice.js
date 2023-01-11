@@ -19,9 +19,9 @@ export const ProductDetail = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchDetail.pending, (state, action) => {
-        state.loading = true;
-      })
+      // .addCase(fetchDetail.pending, (state, action) => {
+      //   state.loading = true;
+      // })
 
       .addCase(fetchDetail.fulfilled, (state, action) => {
         state.data = action.payload;

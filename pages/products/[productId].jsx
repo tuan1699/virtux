@@ -28,7 +28,11 @@ import GoogleIcon from "@mui/icons-material/Google";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs, Pagination } from "swiper";
 
-import { detailSelector, userSelector } from "../../store/selector";
+import {
+  detailSelector,
+  selectProductById,
+  userSelector,
+} from "../../store/selector";
 import {
   collection,
   doc,
@@ -58,7 +62,7 @@ function a11yProps(index) {
   };
 }
 
-const Detail = ({}) => {
+const Detail = () => {
   const [wishlist, setWishlist] = useState([]);
   const [cart, setCart] = useState([]);
   const user = useSelector(userSelector);
@@ -67,23 +71,17 @@ const Detail = ({}) => {
   const [value, setValue] = useState(0);
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
+  const dispatch = useDispatch();
   const router = useRouter();
 
-  const dispatch = useDispatch();
   const {
     query: { productId },
   } = router;
 
-  useEffect(() => {
-    dispatch(fetchDetail(productId));
-  }, []);
-
-  const product = useSelector(detailSelector);
+  const product = useSelector(selectProductById(productId));
   const products = useSelector(selectAllProduct);
-  const loading = useSelector(loaderDetail);
-  console.log(loading);
+
   console.log(product);
-  console.log(productId);
 
   const swiperProps = {
     modules: [Navigation, Pagination],
@@ -387,21 +385,22 @@ const Detail = ({}) => {
                   modules={[FreeMode, Navigation, Thumbs]}
                   className="mySwiper2"
                 >
-                  {product.screen_shots.map((item) => {
-                    return (
-                      <SwiperSlide key={item}>
-                        <Box
-                          sx={{
-                            width: "100%",
-                            paddingTop: "100%",
-                            backgroundImage: `url(${item})`,
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                          }}
-                        ></Box>
-                      </SwiperSlide>
-                    );
-                  })}
+                  {product &&
+                    product.screen_shots.map((item) => {
+                      return (
+                        <SwiperSlide key={item}>
+                          <Box
+                            sx={{
+                              width: "100%",
+                              paddingTop: "100%",
+                              backgroundImage: `url(${item})`,
+                              backgroundSize: "cover",
+                              backgroundPosition: "center",
+                            }}
+                          ></Box>
+                        </SwiperSlide>
+                      );
+                    })}
                 </Swiper>
                 <Swiper
                   spaceBetween={10}
@@ -411,26 +410,29 @@ const Detail = ({}) => {
                   modules={[FreeMode, Navigation, Thumbs]}
                   className="mySwiper"
                 >
-                  {product.screen_shots.map((item) => {
-                    return (
-                      <SwiperSlide key={item}>
-                        <Box
-                          sx={{
-                            width: "170px",
-                            paddingTop: "80%",
-                            backgroundImage: `url(${item})`,
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                          }}
-                        ></Box>
-                      </SwiperSlide>
-                    );
-                  })}
+                  {product &&
+                    product.screen_shots.map((item) => {
+                      return (
+                        <SwiperSlide key={item}>
+                          <Box
+                            sx={{
+                              width: "170px",
+                              paddingTop: "80%",
+                              backgroundImage: `url(${item})`,
+                              backgroundSize: "cover",
+                              backgroundPosition: "center",
+                            }}
+                          ></Box>
+                        </SwiperSlide>
+                      );
+                    })}
                 </Swiper>
               </Grid>
 
               <Grid item xs={12} md={6}>
-                <StyledHeadingDetail>{product.name}</StyledHeadingDetail>
+                <StyledHeadingDetail>
+                  {product && product.name}
+                </StyledHeadingDetail>
                 <Rating value={5} />
 
                 <StyledDecrDetail
@@ -438,7 +440,7 @@ const Detail = ({}) => {
                     marginTop: "10px",
                   }}
                 >
-                  {product.over_view}
+                  {product && product.over_view}
                 </StyledDecrDetail>
 
                 <List
@@ -453,7 +455,9 @@ const Detail = ({}) => {
                     }}
                   >
                     <StyledTitleDetail>Price: </StyledTitleDetail>
-                    <StyledDecrDetail>$ {product.price}</StyledDecrDetail>
+                    <StyledDecrDetail>
+                      $ {product && product.price}
+                    </StyledDecrDetail>
                   </ListItem>
 
                   <ListItem sx={{ padding: "0px", minHeight: "50px" }}>
