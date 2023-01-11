@@ -154,12 +154,12 @@ const Header = () => {
               <>
                 <Tabs
                   sx={{ marginLeft: "auto" }}
-                  value={value}
+                  // value={value}
                   indicatorColor="primary"
-                  onChange={(e, value) => {
-                    console.log(value);
-                    setValue(value);
-                  }}
+                  // onChange={(e, value) => {
+                  //   console.log(value);
+                  //   setValue(value);
+                  // }}
                 >
                   <Tab
                     label="Home"
@@ -171,9 +171,36 @@ const Header = () => {
                         : styles["nav-link"]
                     }
                   />
-                  <Tab label="About VR" component={Link} href="/about" />
-                  <Tab label="Services" component={Link} href="/services" />
-                  <Tab label="Shop" component={Link} href="/products" />
+                  <Tab
+                    label="About VR"
+                    component={Link}
+                    href="/about"
+                    className={
+                      router.pathname == "/about"
+                        ? styles["nav-active"]
+                        : styles["nav-link"]
+                    }
+                  />
+                  <Tab
+                    label="Services"
+                    component={Link}
+                    href="/services"
+                    className={
+                      router.pathname == "/services"
+                        ? styles["nav-active"]
+                        : styles["nav-link"]
+                    }
+                  />
+                  <Tab
+                    label="Shop"
+                    component={Link}
+                    href="/products"
+                    className={
+                      router.pathname == "/products"
+                        ? styles["nav-active"]
+                        : styles["nav-link"]
+                    }
+                  />
                   <Tab
                     label="Page"
                     icon={<KeyboardArrowDownIcon />}
@@ -181,7 +208,7 @@ const Header = () => {
                     aria-owns={anchorEl ? "simple-menu" : undefined}
                     aria-haspopup="true"
                     onClick={handleClick}
-                    onMouseOver={handleClick}
+                    className={styles["nav-link"]}
                   />
                   <Menu
                     id="simple-menu"
@@ -194,6 +221,11 @@ const Header = () => {
                       onClick={handleClose}
                       component={Link}
                       href="/news"
+                      className={
+                        router.pathname == "/news"
+                          ? styles["nav-active"]
+                          : styles["nav-link"]
+                      }
                     >
                       News
                     </MenuItem>
@@ -201,6 +233,11 @@ const Header = () => {
                       onClick={handleClose}
                       component={Link}
                       href="/faq"
+                      className={
+                        router.pathname == "/faq"
+                          ? styles["nav-active"]
+                          : styles["nav-link"]
+                      }
                     >
                       Faq
                     </MenuItem>
@@ -208,6 +245,11 @@ const Header = () => {
                       onClick={handleClose}
                       component={Link}
                       href="/contact"
+                      className={
+                        router.pathname == "/contact"
+                          ? styles["nav-active"]
+                          : styles["nav-link"]
+                      }
                     >
                       Contact Us
                     </MenuItem>
