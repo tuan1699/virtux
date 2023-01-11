@@ -9,7 +9,7 @@ import NewsSlice from "./features/News.slice";
 const store = configureStore({
   reducer: {
     products: ProductsSlice.reducer,
-    filter: FilterSlice.reducer,
+    // filter: FilterSlice.reducer,
     auth: AuthSlice.reducer,
     reviews: ReviewsSlice.reducer,
     productDetail: ProductDetail.reducer,

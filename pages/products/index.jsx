@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
@@ -30,13 +30,23 @@ import BreadCumb from "../../components/BreadCumb/BreadCumb";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 
-import { fetchProducts } from "../../store/features/Product.slice";
+import {
+  fetchProducts,
+  pageChanged,
+  priceFilterChange,
+  sortFilterChange,
+} from "../../store/features/Product.slice";
 import { useDispatch, useSelector } from "react-redux";
 
 import { collection, getDocs, getFirestore, query } from "firebase/firestore";
 import { app } from "../../lib/firebase";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { productsRemaining, selectAllProduct } from "../../store/selector";
+import {
+  brandFilterChange,
+  categoriesFilterChange,
+} from "../../store/features/Product.slice";
 
 const categories = [
   {
@@ -109,40 +119,43 @@ const brand = [
   },
 ];
 
-const Shop = ({ data, total, page, sort }) => {
+const Shop = () => {
   const [view, setView] = useState("grid");
   const [priceFilter, setPriceFilter] = useState([10, 2000]);
+  const [sort, setSort] = useState("");
+
+  const filterRef = useRef();
 
   const router = useRouter();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const q = query(collection(getFirestore(app), "products"));
+  const { products, currentPage, totalPage, filteredProducts } =
+    useSelector(productsRemaining);
 
-    console.log(q);
-
-    getDocs(q)
-      .then((snapshot) => {
-        const productsTest = snapshot.docs.map((item) => ({
-          id: item.id,
-          ...item.data(),
-        }));
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+  const { register, handleSubmit, getValues } = useForm({
+    defaultValues: {},
   });
 
   useEffect(() => {
     dispatch(fetchProducts());
   }, []);
 
-  const { register, handleSubmit, getValues } = useForm({
-    defaultValues: {},
-  });
-
   const handlePriceChange = (e, newPrice) => {
     setPriceFilter(newPrice);
+    dispatch(priceFilterChange(newPrice));
+  };
+
+  const handleChangeView = (e, nextView) => {
+    setView(nextView);
+  };
+
+  const handleChangePageCur = (event, value) => {
+    dispatch(pageChanged(value));
+  };
+
+  const handleChangeSort = (e) => {
+    setSort(e.target.value);
+    dispatch(sortFilterChange(e.target.value));
   };
 
   const breadcrumbs = [
@@ -184,27 +197,6 @@ const Shop = ({ data, total, page, sort }) => {
     borderBottom: "1px solid #d23369",
   });
 
-  const handleChangeView = (e, nextView) => {
-    setView(nextView);
-  };
-
-  const handleChangeSort = (e) => {
-    router.push({
-      pathname: "/products",
-      query: {
-        ...router.query,
-        sort: e.target.value,
-      },
-    });
-  };
-
-  const handleChangePageCur = (event, value) => {
-    router.push({
-      pathname: "/products",
-      query: { ...router.query, page: value },
-    });
-  };
-
   return (
     <>
       <Box
@@ -220,75 +212,24 @@ const Shop = ({ data, total, page, sort }) => {
             <Grid container>
               <Grid item xs={12} sm={5} md={3} p={2}>
                 <form
-                  onSubmit={handleSubmit((data) => {
-                    console.log(priceFilter);
-                    if (
-                      data.categories &&
-                      data.brand &&
-                      (priceFilter[0] !== 10 || priceFilter[1] !== 2000)
-                    ) {
-                      router.push({
-                        pathname: "/products",
-                        query: {
-                          ...data,
-                          min: priceFilter[0],
-                          max: priceFilter[1],
-                        },
-                      });
-                    } else if (data.categories && data.brand) {
-                      router.push({
-                        pathname: "/products",
-                        query: {
-                          ...data,
-                        },
-                      });
-                    } else if (
-                      data.categories &&
-                      (priceFilter[0] !== 10 || priceFilter[1] !== 2000)
-                    ) {
-                      router.push({
-                        pathname: "/products",
-                        query: {
-                          categories: data.categories,
-                          min: priceFilter[0],
-                          max: priceFilter[1],
-                        },
-                      });
-                    } else if (
-                      data.brand &&
-                      (priceFilter[0] !== 10 || priceFilter[1] !== 2000)
-                    ) {
-                      router.push({
-                        pathname: "/products",
-                        query: {
-                          brand: data.brand,
-                          min: priceFilter[0],
-                          max: priceFilter[1],
-                        },
-                      });
-                    } else if (!data.brand && !data.categories) {
-                      router.push({
-                        pathname: "/products",
-                        query: {
-                          min: priceFilter[0],
-                          max: priceFilter[1],
-                        },
-                      });
-                    } else {
-                      router.push({
-                        pathname: "/products",
-                        query: data.categories
-                          ? {
-                              categories: data.categories,
-                            }
-                          : data.brand
-                          ? {
-                              brand: data.brand,
-                            }
-                          : "",
-                      });
-                    }
-                  })}
+                  ref={filterRef}
+                  onChange={() => {
+                    const cateChecked = [];
+                    const brandChecked = [];
+
+                    filterRef.current.elements.categories.forEach(
+                      (checkbox) => {
+                        if (checkbox.checked) cateChecked.push(checkbox.value);
+                      }
+                    );
+
+                    filterRef.current.elements.brands.forEach((checkbox) => {
+                      if (checkbox.checked) brandChecked.push(checkbox.value);
+                    });
+
+                    dispatch(categoriesFilterChange(cateChecked));
+                    dispatch(brandFilterChange(brandChecked));
+                  }}
                 >
                   <Box mb="30px">
                     <StyledHeadingFilter>Category</StyledHeadingFilter>
@@ -297,10 +238,9 @@ const Shop = ({ data, total, page, sort }) => {
                         return (
                           <FormControlLabel
                             key={categories.id}
-                            control={<Checkbox />}
+                            control={<Checkbox name="categories" />}
                             label={categories.label}
                             value={categories.value}
-                            {...register("categories", {})}
                           />
                         );
                       })}
@@ -326,18 +266,14 @@ const Shop = ({ data, total, page, sort }) => {
                         return (
                           <FormControlLabel
                             key={brand.id}
-                            control={<Checkbox />}
+                            control={<Checkbox name="brands" />}
                             label={brand.label}
                             value={brand.value}
-                            {...register("brand", {})}
                           />
                         );
                       })}
                     </FormGroup>
                   </Box>
-                  <Button type="submit" variant="contained">
-                    Lọc
-                  </Button>
                 </form>
               </Grid>
 
@@ -380,8 +316,8 @@ const Shop = ({ data, total, page, sort }) => {
                       <Select
                         displayEmpty
                         inputProps={{ "aria-label": "Without label" }}
-                        value={sort}
                         onChange={handleChangeSort}
+                        value={sort}
                         sx={{
                           height: "30px",
                         }}
@@ -396,8 +332,8 @@ const Shop = ({ data, total, page, sort }) => {
                 </Stack>
 
                 <Grid container spacing={1}>
-                  {data
-                    ? data.map((product) => (
+                  {products
+                    ? products.map((product) => (
                         <Grid
                           key={product.id}
                           item
@@ -416,8 +352,8 @@ const Shop = ({ data, total, page, sort }) => {
                   sx={{ alignItems: "center", marginTop: "60px" }}
                 >
                   <Pagination
-                    count={total}
-                    page={page}
+                    count={totalPage}
+                    page={currentPage}
                     variant="outlined"
                     shape="rounded"
                     onChange={handleChangePageCur}
@@ -434,113 +370,3 @@ const Shop = ({ data, total, page, sort }) => {
 };
 
 export default Shop;
-
-export const getServerSideProps = async ({ req, res, context }) => {
-  res.setHeader(
-    "Cache-Control",
-    "public, s-maxage=10, stale-while-revalidate=59"
-  );
-  let {
-    categories = [],
-    brand = [],
-    page = 1,
-    sort = "",
-    min = 0,
-    max = 2000,
-  } = context.query;
-  let cate = [];
-  let brands = [];
-
-  console.log(sort);
-
-  if (typeof categories == "string") {
-    cate.push(categories);
-  }
-
-  if (typeof brand == "string") {
-    brands.push(brand);
-  }
-
-  if (typeof categories == "object") {
-    Array.prototype.push.apply(cate, categories);
-  }
-
-  if (typeof brand == "object") {
-    Array.prototype.push.apply(brands, brand);
-  }
-
-  const response = await fetch(
-    "https://63bc2b36fa38d30d85be625b.mockapi.io/products"
-  );
-
-  const data = await response.json();
-
-  let filtered = data.filter((product) => {
-    if (categories.length !== 0 && brands.length !== 0) {
-      return (
-        cate.includes(product.categories) && brands.includes(product.brand)
-      );
-    } else
-      return categories.length !== 0
-        ? cate.includes(product.categories)
-        : brands.length !== 0
-        ? brands.includes(product.brand)
-        : product;
-  });
-
-  if (sort !== "") {
-    switch (sort) {
-      case "AZ": {
-        filtered.sort((a, b) => {
-          if (a.name >= b.name) return 1;
-          else return -1;
-        });
-        break;
-      }
-
-      case "ZA": {
-        filtered.sort((a, b) => {
-          if (a.name >= b.name) return -1;
-          else return 1;
-        });
-        break;
-      }
-
-      case "highToLow": {
-        filtered.sort((a, b) => {
-          if (a.price >= b.price) return -1;
-          else return 1;
-        });
-        break;
-      }
-
-      case "lowToHigh": {
-        filtered.sort((a, b) => {
-          if (a.price >= b.price) return 1;
-          else return -1;
-        });
-        break;
-      }
-    }
-  }
-
-  if (min !== 0 || max !== 2000) {
-    filtered = filtered.filter(
-      (item) => item.price >= min && item.price <= max
-    );
-  }
-
-  return {
-    props: {
-      filtered,
-      filter: {
-        categories,
-        brand,
-      },
-      sort,
-      page: Number(page),
-      total: Math.ceil(filtered.length / 6),
-      data: filtered.slice((page - 1) * 6, page * 6),
-    },
-  };
-};

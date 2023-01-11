@@ -53,7 +53,7 @@ import {
 } from "firebase/firestore";
 import { app } from "../../lib/firebase";
 import {
-  productsRemainingSelector,
+  productsSearched,
   selectAllProduct,
   userSelector,
 } from "../../store/selector";
@@ -84,7 +84,7 @@ const Header = () => {
     dispatch(fetchProducts());
   }, []);
 
-  const productSearched = useSelector(productsRemainingSelector);
+  const productSearched = useSelector(productsSearched);
 
   useEffect(() => {
     const q = query(cartRef);
