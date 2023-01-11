@@ -59,6 +59,8 @@ import {
 } from "../../store/selector";
 import { fetchProducts } from "../../store/features/Product.slice";
 import ItemSearch from "../ItemSearch";
+import { useRouter } from "next/router";
+import Nav from "../Nav/Nav";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -69,6 +71,7 @@ const Header = () => {
   const [wishlist, setWishlist] = useState([]);
 
   const auth = getAuth(app);
+  const router = useRouter();
 
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
@@ -153,9 +156,21 @@ const Header = () => {
                   sx={{ marginLeft: "auto" }}
                   value={value}
                   indicatorColor="primary"
-                  onChange={(e, value) => setValue(value)}
+                  onChange={(e, value) => {
+                    console.log(value);
+                    setValue(value);
+                  }}
                 >
-                  <Tab label="Home" component={Link} href="/" />
+                  <Tab
+                    label="Home"
+                    component={Link}
+                    href="/"
+                    className={
+                      router.pathname == "/"
+                        ? styles["nav-active"]
+                        : styles["nav-link"]
+                    }
+                  />
                   <Tab label="About VR" component={Link} href="/about" />
                   <Tab label="Services" component={Link} href="/services" />
                   <Tab label="Shop" component={Link} href="/products" />
@@ -198,6 +213,8 @@ const Header = () => {
                     </MenuItem>
                   </Menu>
                 </Tabs>
+
+                {/* <Nav /> */}
                 <Stack
                   direction="row"
                   sx={{ marginLeft: "auto" }}

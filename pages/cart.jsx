@@ -110,18 +110,14 @@ const Cart = () => {
               <Grid container spacing={4}>
                 <Grid item xs={12} md={8}>
                   <StyledHeadingCart>Products</StyledHeadingCart>
-                  {carts.length == 0 ? (
-                    <Typography>Giỏ hàng trống</Typography>
-                  ) : (
-                    carts.map((product) => (
-                      <CartItem
-                        key={product.id}
-                        product={product}
-                        confirmDialog={confirmDialog}
-                        setConfirmDialog={setConfirmDialog}
-                      />
-                    ))
-                  )}
+                  {carts.map((product) => (
+                    <CartItem
+                      key={product.id}
+                      product={product}
+                      confirmDialog={confirmDialog}
+                      setConfirmDialog={setConfirmDialog}
+                    />
+                  ))}
 
                   <Stack justifyContent="space-between" direction="row">
                     <Button variant="contained">Continue shopping</Button>

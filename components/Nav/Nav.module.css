@@ -1,0 +1,11 @@
+.nav-link {
+  color: #000;
+  font-weight: 600;
+  padding: 22px 0;
+}
+
+.nav-active {
+  color: red;
+  font-weight: 600;
+  padding: 22px 0;
+}

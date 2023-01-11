@@ -20,7 +20,7 @@ import InputUnstyled from "@mui/base/InputUnstyled";
 import { useForm } from "react-hook-form";
 import { isValidPhoneNumber } from "react-phone-number-input";
 
-  import "react-toastify/dist/ReactToastify.css";
+import "react-toastify/dist/ReactToastify.css";
 
 const StyledTextareaElement = styled("textarea", {
   shouldForwardProp: (prop) =>
@@ -366,12 +366,7 @@ const Contact = () => {
                         input: { fontFamily: "'Kodchasan', sans-serif" },
                       }}
                     >
-                      <TextField
-                        placeholder="Name"
-                        fullWidth
-                        autoFocus
-                        {...fullname}
-                      />
+                      <TextField placeholder="Name" fullWidth {...fullname} />
                       <Typography
                         sx={{
                           color: "red",
@@ -386,12 +381,7 @@ const Contact = () => {
                         input: { fontFamily: "'Kodchasan', sans-serif" },
                       }}
                     >
-                      <TextField
-                        placeholder="Email"
-                        fullWidth
-                        autoFocus
-                        {...email}
-                      />
+                      <TextField placeholder="Email" fullWidth {...email} />
                       <Typography
                         sx={{
                           color: "red",
@@ -406,12 +396,7 @@ const Contact = () => {
                         input: { fontFamily: "'Kodchasan', sans-serif" },
                       }}
                     >
-                      <TextField
-                        placeholder="+84"
-                        fullWidth
-                        autoFocus
-                        {...phone}
-                      />
+                      <TextField placeholder="+84" fullWidth {...phone} />
                       <Typography
                         sx={{
                           color: "red",

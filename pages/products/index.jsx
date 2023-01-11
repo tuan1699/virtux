@@ -469,6 +469,8 @@ export const getServerSideProps = async (context) => {
     "https://63bc2b36fa38d30d85be625b.mockapi.io/products"
   );
 
+  console.log(res);
+
   const data = await res.json();
 
   let filtered = data.filter((product) => {

@@ -18,9 +18,13 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { app } from "../lib/firebase";
+import { useRouter } from "next/router";
+
+import { ToastContainer, toast } from "react-toastify";
 
 const Login = () => {
   const {
+    reset: reset3,
     register: register3,
     handleSubmit: handleSubmit3,
     formState: { errors: errors3, isSubmitSuccessful },
@@ -31,6 +35,7 @@ const Login = () => {
 
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
+  const router = useRouter();
 
   const email = register3("email", {
     required: "Please fill out this field.",
@@ -81,7 +86,20 @@ const Login = () => {
           action=""
           onSubmit={handleSubmit3((data) => {
             signInWithEmailAndPassword(auth, data.email, data.password);
-            console.log(auth.currentUser);
+            toast.success(`Login successfully`, {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+            reset3();
+            if (auth) {
+              router.push("/");
+            }
           })}
         >
           <Box
@@ -94,6 +112,7 @@ const Login = () => {
               label="Email or Phone Number"
               variant="outlined"
               fullWidth
+              autoFocus
               {...email}
             />
             <Typography
@@ -152,22 +171,27 @@ const Login = () => {
           variant="contained"
           sx={{
             width: "100%",
-            bgcolor: "#205295",
-            marginBottom: "10px",
-          }}
-        >
-          Continue With Facebook
-        </Button>
-
-        <Button
-          variant="contained"
-          sx={{
-            width: "100%",
             bgcolor: "#009EFF",
             marginBottom: "20px",
           }}
           onClick={() => {
-            signInWithPopup(auth, provider).catch((err) => console.error(err));
+            signInWithPopup(auth, provider)
+              .then(() => {
+                if (auth.currentUser) {
+                  toast.success(`Login successfully`, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                  });
+                  router.push("/");
+                }
+              })
+              .catch((err) => console.error(err));
           }}
         >
           Continue With Google
@@ -180,21 +204,23 @@ const Login = () => {
               marginBottom: "16px",
               fontWeight: "300",
               color: "#000",
+              textDecoration: "none",
             }}
           >
-            Don't have account? <Link href="./signup">Sign up</Link>
-          </Typography>
-
-          <Typography
-            sx={{
-              textAlign: "center",
-              fontWeight: "300",
-            }}
-          >
-            Forgot your password? <Link href="/signup">Reset it</Link>
+            Don't have account?{" "}
+            <Link
+              href="./signup"
+              sx={{
+                textDecoration: "none",
+                fontFamily: "'Kodchasan', sans-serif",
+              }}
+            >
+              Sign up
+            </Link>
           </Typography>
         </Box>
       </Box>
+      <ToastContainer />
     </>
   );
 };

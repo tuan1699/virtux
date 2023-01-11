@@ -28,20 +28,35 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ItemCheckout from "../components/ItemCheckout";
 import { useForm } from "react-hook-form";
 
+import { isValidPhoneNumber } from "react-phone-number-input";
+
 import {
   getFirestore,
   collection,
   onSnapshot,
   query,
+  addDoc,
+  doc,
+  deleteDoc,
 } from "firebase/firestore";
 import { app } from "../lib/firebase";
 import { userSelector } from "../store/selector";
 import { useSelector } from "react-redux";
+import ConfirmDialog from "../components/ConfirmDialog";
+
+import { toast, ToastContainer } from "react-toastify";
+import { getAuth } from "firebase/auth";
 
 const Checkout = () => {
   const [payment, setPayment] = useState("credit");
   const [carts, setCart] = useState([]);
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    title: "",
+    subTitle: "",
+  });
 
+  const auth = getAuth(app);
   const user = useSelector(userSelector);
   const cartRef = collection(getFirestore(app), "cart");
 
@@ -53,11 +68,12 @@ const Checkout = () => {
         console.log(doc.data());
         data.push({ ...doc.data(), id: doc.id });
       });
-      setCart(data);
+      setCart(data.filter((item) => item.uid == (user && user.uid)));
     });
-  }, []);
+  }, [user == null ? null : user.uid]);
 
   const {
+    reset,
     register: register4,
     handleSubmit: handleSubmit4,
     formState: { errors: errors4, isSubmitSuccessful },
@@ -69,6 +85,37 @@ const Checkout = () => {
   const handleChangePayment = (e) => {
     setPayment(e.target.value);
   };
+
+  const deleteAll = async (id) => {
+    const reference = doc(cartRef, id);
+    await deleteDoc(reference);
+  };
+
+  const clearCart = () => {
+    carts.forEach((item) => deleteAll(item.id));
+  };
+
+  const date = () => {
+    let d = new Date(),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear(),
+      h = "" + d.getHours(),
+      m = "" + d.getMinutes(),
+      s = "" + d.getSeconds();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+    if (h.length < 2) h = "0" + h;
+    if (m.length < 2) m = "0" + m;
+    if (s.length < 2) day = "0" + s;
+
+    return [day, month, year].join("-") + " " + [h, m, s].join(":");
+  };
+
+  const total = carts.reduce((total, cur) => {
+    return (total += cur.quantity * cur.price);
+  }, 0);
 
   const breadcrumbs = [
     <Link
@@ -115,22 +162,10 @@ const Checkout = () => {
 
   const firstname = register4("firstname", {
     required: "Please fill out this field.",
-    validate: {
-      length: (v) =>
-        (6 <= v.toLowerCase().trim().length &&
-          v.toLowerCase().trim().length <= 50) ||
-        "Firstname must be between 6 and 50 characters long",
-    },
   });
 
   const lastname = register4("lastname", {
     required: "Please fill out this field.",
-    validate: {
-      length: (v) =>
-        (6 <= v.toLowerCase().trim().length &&
-          v.toLowerCase().trim().length <= 50) ||
-        "Firstname must be between 6 and 50 characters long",
-    },
   });
 
   const address = register4("address", {
@@ -174,399 +209,487 @@ const Checkout = () => {
           }}
         >
           <Container>
-            <Grid container>
-              <Grid item xs={12} sm={7}>
-                <form
-                  key={4}
-                  onSubmit={handleSubmit4((data) => console.log(data))}
-                >
-                  <Box
-                    sx={{
-                      marginBottom: "30px",
-                    }}
+            {auth.currentUser && carts.length !== 0 ? (
+              <Grid container>
+                <Grid item xs={12} sm={7}>
+                  <form
+                    key={4}
+                    onSubmit={handleSubmit4((data) => {
+                      setConfirmDialog({
+                        isOpen: true,
+                        title: "Do you sure to order all of products in cart",
+                        subTitle: "You can't undo this operation",
+                        onConfirm: () => {
+                          setConfirmDialog({
+                            ...confirmDialog,
+                            isOpen: false,
+                          });
+                          // console.log(data);
+                          const reference = collection(
+                            getFirestore(app),
+                            "checkout"
+                          );
+
+                          const bill = {
+                            uid: user == null ? null : user.uid,
+                            infor: data,
+                            bill: carts,
+                            date: date(),
+                            total: total,
+                          };
+
+                          addDoc(reference, bill).catch(console.error);
+                          clearCart();
+                          toast.success(
+                            `Order successfully, check your order in order history`,
+                            {
+                              position: "top-right",
+                              autoClose: 5000,
+                              hideProgressBar: false,
+                              closeOnClick: true,
+                              pauseOnHover: false,
+                              draggable: true,
+                              progress: undefined,
+                              theme: "light",
+                            }
+                          );
+                          reset();
+                        },
+                      });
+                    })}
                   >
-                    <Stack
-                      direction="row"
-                      justifyContent="space-between"
-                      sx={{
-                        marginBottom: "20px",
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          fontSize: "20px",
-                        }}
-                      >
-                        Contact information
-                      </Typography>
-                      <Box>
-                        Already have an account? <Link>Log in</Link>
-                      </Box>
-                    </Stack>
                     <Box
                       sx={{
-                        marginBottom: "20px",
-                        input: { fontFamily: "'Kodchasan', sans-serif" },
+                        marginBottom: "30px",
                       }}
                     >
-                      <TextField
-                        label="Email"
-                        variant="outlined"
-                        fullWidth
-                        {...mail}
-                      />
-                      <Typography
+                      <Stack
+                        direction="row"
+                        justifyContent="space-between"
                         sx={{
-                          color: "red",
+                          marginBottom: "20px",
                         }}
                       >
-                        {errors4.mail?.message}
+                        <Typography
+                          sx={{
+                            fontSize: "20px",
+                          }}
+                        >
+                          Contact information
+                        </Typography>
+                        {/* <Box>
+                        Already have an account? <Link>Log in</Link>
+                      </Box> */}
+                      </Stack>
+                      <Box
+                        sx={{
+                          marginBottom: "20px",
+                          input: { fontFamily: "'Kodchasan', sans-serif" },
+                        }}
+                      >
+                        <TextField
+                          label="Email"
+                          variant="outlined"
+                          fullWidth
+                          {...mail}
+                        />
+                        <Typography
+                          sx={{
+                            color: "red",
+                          }}
+                        >
+                          {errors4.mail?.message}
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <TextField
+                          label="Phone"
+                          variant="outlined"
+                          fullWidth
+                          {...phone}
+                        />
+                        <Typography
+                          sx={{
+                            color: "red",
+                          }}
+                        >
+                          {errors4.phone?.message}
+                        </Typography>
+                      </Box>
+                      <Typography
+                        sx={{
+                          fontSize: "14px",
+                          color: "#737373",
+                        }}
+                      >
+                        You may receive text messages related to order
+                        confirmation and shipping updates. Reply STOP to
+                        unsubscribe. Reply HELP for help. Message frequency
+                        varies. Msg & data rates may apply. View our Privacy
+                        policy and Terms of service.
                       </Typography>
                     </Box>
                     <Box>
-                      <TextField
-                        label="Phone"
-                        variant="outlined"
-                        fullWidth
-                        {...phone}
-                      />
                       <Typography
                         sx={{
-                          color: "red",
-                        }}
-                      >
-                        {errors4.phone?.message}
-                      </Typography>
-                    </Box>
-                    <Typography
-                      sx={{
-                        fontSize: "14px",
-                        color: "#737373",
-                      }}
-                    >
-                      You may receive text messages related to order
-                      confirmation and shipping updates. Reply STOP to
-                      unsubscribe. Reply HELP for help. Message frequency
-                      varies. Msg & data rates may apply. View our Privacy
-                      policy and Terms of service.
-                    </Typography>
-                  </Box>
-                  <Box>
-                    <Typography
-                      sx={{
-                        marginBottom: "20px",
-                        fontSize: "20px",
-                      }}
-                    >
-                      Shipping address
-                    </Typography>
-                    <Stack direction="row" spacing={2}>
-                      <Box
-                        sx={{
                           marginBottom: "20px",
-                          input: { fontFamily: "'Kodchasan', sans-serif" },
-                          width: "100%",
+                          fontSize: "20px",
                         }}
                       >
-                        <TextField
-                          label="First name"
-                          variant="outlined"
-                          fullWidth
-                          {...firstname}
-                        />
-                        <Typography
-                          sx={{
-                            color: "red",
-                          }}
-                        >
-                          {errors4.firstname?.message}
-                        </Typography>
-                      </Box>
-                      <Box
-                        sx={{
-                          marginBottom: "20px",
-                          width: "100%",
-                          input: { fontFamily: "'Kodchasan', sans-serif" },
-                        }}
-                      >
-                        <TextField
-                          label="Last name"
-                          variant="outlined"
-                          fullWidth
-                          {...lastname}
-                        />
-                        <Typography
-                          sx={{
-                            color: "red",
-                          }}
-                        >
-                          {errors4.lastname?.message}
-                        </Typography>
-                      </Box>
-                    </Stack>
-                    <Box
-                      sx={{
-                        marginBottom: "20px",
-                        input: { fontFamily: "'Kodchasan', sans-serif" },
-                      }}
-                    >
-                      <TextField
-                        label="Country/Region"
-                        variant="outlined"
-                        fullWidth
-                      />
-                    </Box>
-                    <Box
-                      sx={{
-                        marginBottom: "20px",
-                        input: { fontFamily: "'Kodchasan', sans-serif" },
-                      }}
-                    >
-                      <TextField
-                        label="Address"
-                        variant="outlined"
-                        fullWidth
-                        {...address}
-                      />
-                      <Typography
-                        sx={{
-                          color: "red",
-                        }}
-                      >
-                        {errors4.address?.message}
+                        Shipping address
                       </Typography>
-                    </Box>
-                  </Box>
-                  <Box>
-                    <Typography
-                      sx={{
-                        marginBottom: "20px",
-                        fontSize: "20px",
-                      }}
-                    >
-                      Payment Method
-                    </Typography>
-                    <RadioGroup
-                      aria-labelledby="demo-radio-buttons-group-label"
-                      defaultValue="credit"
-                      name="radio-buttons-group"
-                      onChange={(e) => handleChangePayment(e)}
-                    >
-                      {/* Pay with credit card */}
-                      <Box>
-                        <FormControlLabel
-                          control={<Radio />}
-                          value="credit"
-                          label="Pay with credit card"
-                        />
+                      <Stack direction="row" spacing={2}>
                         <Box
                           sx={{
-                            height: payment == "credit" ? "180px" : "0px",
-                            overflow: "hidden",
+                            marginBottom: "20px",
+                            input: { fontFamily: "'Kodchasan', sans-serif" },
+                            width: "100%",
                           }}
-                          className={styles["trans-height"]}
-                        >
-                          <Stack direction="row" spacing={2}>
-                            <Box
-                              sx={{
-                                marginBottom: "20px",
-                                input: {
-                                  fontFamily: "'Kodchasan', sans-serif",
-                                },
-                                width: "100%",
-                              }}
-                            >
-                              <TextField
-                                label="Cart Number"
-                                variant="outlined"
-                                fullWidth
-                                {...cartNumber}
-                              />
-                              <Typography
-                                sx={{
-                                  color: "red",
-                                }}
-                              >
-                                {errors4.cartNumber?.message}
-                              </Typography>
-                            </Box>
-                            <Box
-                              sx={{
-                                marginBottom: "20px",
-                                width: "100%",
-                                input: {
-                                  fontFamily: "'Kodchasan', sans-serif",
-                                },
-                              }}
-                            >
-                              <TextField
-                                label="Exp Date"
-                                variant="outlined"
-                                fullWidth
-                                {...expDate}
-                              />
-                              <Typography
-                                sx={{
-                                  color: "red",
-                                }}
-                              >
-                                {errors4.expDate?.message}
-                              </Typography>
-                            </Box>
-                          </Stack>
-                          <Stack direction="row" spacing={2}>
-                            <Box
-                              sx={{
-                                marginBottom: "20px",
-                                input: {
-                                  fontFamily: "'Kodchasan', sans-serif",
-                                },
-                                width: "100%",
-                              }}
-                            >
-                              <TextField
-                                label="Cardholder name"
-                                variant="outlined"
-                                fullWidth
-                                {...cartHolder}
-                              />
-                              <Typography
-                                sx={{
-                                  color: "red",
-                                }}
-                              >
-                                {errors4.cartHolder?.message}
-                              </Typography>
-                            </Box>
-                            <Box
-                              sx={{
-                                marginBottom: "20px",
-                                width: "100%",
-                                input: {
-                                  fontFamily: "'Kodchasan', sans-serif",
-                                },
-                              }}
-                            >
-                              <TextField
-                                label="Security code"
-                                variant="outlined"
-                                fullWidth
-                                {...securityDate}
-                              />
-                              <Typography
-                                sx={{
-                                  color: "red",
-                                }}
-                              >
-                                {errors4.securityDate?.message}
-                              </Typography>
-                            </Box>
-                          </Stack>
-                        </Box>
-                      </Box>
-                      {/* Pay with Paypal */}
-                      <Box>
-                        <FormControlLabel
-                          control={<Radio />}
-                          value="paypal"
-                          label="Pay with Paypal"
-                        />
-                        <Box
-                          sx={{
-                            height: payment === "paypal" ? "80px" : "0px",
-                            overflow: "hidden",
-                          }}
-                          className={styles["trans-height"]}
                         >
                           <TextField
-                            label="Paypal Email"
+                            label="First name"
                             variant="outlined"
                             fullWidth
-                            {...paypalMail}
+                            {...firstname}
                           />
                           <Typography
                             sx={{
                               color: "red",
                             }}
                           >
-                            {errors4.paypalMail?.message}
+                            {errors4.firstname?.message}
                           </Typography>
                         </Box>
-                      </Box>
-                      {/* Pay with cash delivery */}
-                      <FormControlLabel
-                        control={<Radio />}
-                        value="cash"
-                        label="Cash On Delivery"
-                      />
-                    </RadioGroup>
-                  </Box>
-                  <Stack direction="row" justifyContent="space-between">
-                    <Link
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                      href="/cart"
-                    >
-                      <ArrowBackIosIcon />
-                      Return to cart
-                    </Link>
-                    <Button variant="contained" type="submit">
-                      Order Now
-                    </Button>
-                  </Stack>
-                </form>
-              </Grid>
-
-              <Grid item xs={12} sm={5}>
-                <Box>
-                  <Typography
-                    sx={{
-                      margin: "0 0 20px 20px",
-                      fontSize: "18px",
-                    }}
-                  >
-                    List Item Checkout
-                  </Typography>
-                  <List
-                    sx={{
-                      margin: "0 20px 20px",
-                      borderBottom: "1px solid #ccc",
-                    }}
-                  >
-                    {carts.length !== 0 && user ? (
-                      carts.map((product) => (
-                        <ListItem
-                          key={product.id}
-                          disablePadding
+                        <Box
                           sx={{
                             marginBottom: "20px",
+                            width: "100%",
+                            input: { fontFamily: "'Kodchasan', sans-serif" },
                           }}
                         >
-                          <ItemCheckout product={product} />
-                        </ListItem>
-                      ))
-                    ) : (
-                      <Typography>Giỏ hàng trống</Typography>
-                    )}
-                  </List>
-
-                  <Box
-                    sx={{
-                      borderBottom: "1px solid #ccc",
-                      margin: " 20px 20px",
-                      paddingBottom: "20px",
-                    }}
-                  >
+                          <TextField
+                            label="Last name"
+                            variant="outlined"
+                            fullWidth
+                            {...lastname}
+                          />
+                          <Typography
+                            sx={{
+                              color: "red",
+                            }}
+                          >
+                            {errors4.lastname?.message}
+                          </Typography>
+                        </Box>
+                      </Stack>
+                      <Box
+                        sx={{
+                          marginBottom: "20px",
+                          input: { fontFamily: "'Kodchasan', sans-serif" },
+                        }}
+                      >
+                        <TextField
+                          label="Country/Region"
+                          variant="outlined"
+                          fullWidth
+                        />
+                      </Box>
+                      <Box
+                        sx={{
+                          marginBottom: "20px",
+                          input: { fontFamily: "'Kodchasan', sans-serif" },
+                        }}
+                      >
+                        <TextField
+                          label="Address"
+                          variant="outlined"
+                          fullWidth
+                          {...address}
+                        />
+                        <Typography
+                          sx={{
+                            color: "red",
+                          }}
+                        >
+                          {errors4.address?.message}
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <Box>
+                      <Typography
+                        sx={{
+                          marginBottom: "20px",
+                          fontSize: "20px",
+                        }}
+                      >
+                        Payment Method
+                      </Typography>
+                      <RadioGroup
+                        aria-labelledby="demo-radio-buttons-group-label"
+                        defaultValue="credit"
+                        name="radio-buttons-group"
+                        onChange={(e) => handleChangePayment(e)}
+                      >
+                        {/* Pay with credit card */}
+                        <Box>
+                          <FormControlLabel
+                            control={<Radio />}
+                            value="credit"
+                            label="Pay with credit card"
+                          />
+                          <Box
+                            sx={{
+                              height: payment == "credit" ? "180px" : "0px",
+                              overflow: "hidden",
+                            }}
+                            className={styles["trans-height"]}
+                          >
+                            <Stack direction="row" spacing={2}>
+                              <Box
+                                sx={{
+                                  marginBottom: "20px",
+                                  input: {
+                                    fontFamily: "'Kodchasan', sans-serif",
+                                  },
+                                  width: "100%",
+                                }}
+                              >
+                                <TextField
+                                  label="Cart Number"
+                                  variant="outlined"
+                                  fullWidth
+                                  {...cartNumber}
+                                />
+                                <Typography
+                                  sx={{
+                                    color: "red",
+                                  }}
+                                >
+                                  {errors4.cartNumber?.message}
+                                </Typography>
+                              </Box>
+                              <Box
+                                sx={{
+                                  marginBottom: "20px",
+                                  width: "100%",
+                                  input: {
+                                    fontFamily: "'Kodchasan', sans-serif",
+                                  },
+                                }}
+                              >
+                                <TextField
+                                  label="Exp Date"
+                                  variant="outlined"
+                                  fullWidth
+                                  {...expDate}
+                                />
+                                <Typography
+                                  sx={{
+                                    color: "red",
+                                  }}
+                                >
+                                  {errors4.expDate?.message}
+                                </Typography>
+                              </Box>
+                            </Stack>
+                            <Stack direction="row" spacing={2}>
+                              <Box
+                                sx={{
+                                  marginBottom: "20px",
+                                  input: {
+                                    fontFamily: "'Kodchasan', sans-serif",
+                                  },
+                                  width: "100%",
+                                }}
+                              >
+                                <TextField
+                                  label="Cardholder name"
+                                  variant="outlined"
+                                  fullWidth
+                                  {...cartHolder}
+                                />
+                                <Typography
+                                  sx={{
+                                    color: "red",
+                                  }}
+                                >
+                                  {errors4.cartHolder?.message}
+                                </Typography>
+                              </Box>
+                              <Box
+                                sx={{
+                                  marginBottom: "20px",
+                                  width: "100%",
+                                  input: {
+                                    fontFamily: "'Kodchasan', sans-serif",
+                                  },
+                                }}
+                              >
+                                <TextField
+                                  label="Security code"
+                                  variant="outlined"
+                                  fullWidth
+                                  {...securityDate}
+                                />
+                                <Typography
+                                  sx={{
+                                    color: "red",
+                                  }}
+                                >
+                                  {errors4.securityDate?.message}
+                                </Typography>
+                              </Box>
+                            </Stack>
+                          </Box>
+                        </Box>
+                        {/* Pay with Paypal */}
+                        <Box>
+                          <FormControlLabel
+                            control={<Radio />}
+                            value="paypal"
+                            label="Pay with Paypal"
+                          />
+                          <Box
+                            sx={{
+                              height: payment === "paypal" ? "80px" : "0px",
+                              overflow: "hidden",
+                            }}
+                            className={styles["trans-height"]}
+                          >
+                            <TextField
+                              label="Paypal Email"
+                              variant="outlined"
+                              fullWidth
+                              {...paypalMail}
+                            />
+                            <Typography
+                              sx={{
+                                color: "red",
+                              }}
+                            >
+                              {errors4.paypalMail?.message}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        {/* Pay with cash delivery */}
+                        <FormControlLabel
+                          control={<Radio />}
+                          value="cash"
+                          label="Cash On Delivery"
+                        />
+                      </RadioGroup>
+                    </Box>
                     <Stack direction="row" justifyContent="space-between">
+                      <Link
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                        href="/cart"
+                      >
+                        <ArrowBackIosIcon />
+                        Return to cart
+                      </Link>
+                      <Button variant="contained" type="submit">
+                        Order Now
+                      </Button>
+                    </Stack>
+                  </form>
+                </Grid>
+
+                <Grid item xs={12} sm={5}>
+                  <Box>
+                    <Typography
+                      sx={{
+                        margin: "0 0 20px 20px",
+                        fontSize: "18px",
+                      }}
+                    >
+                      List Item Checkout
+                    </Typography>
+                    <List
+                      sx={{
+                        margin: "0 20px 20px",
+                        borderBottom: "1px solid #ccc",
+                      }}
+                    >
+                      {carts.length !== 0 && user ? (
+                        carts.map((product) => (
+                          <ListItem
+                            key={product.id}
+                            disablePadding
+                            sx={{
+                              marginBottom: "20px",
+                            }}
+                          >
+                            <ItemCheckout product={product} />
+                          </ListItem>
+                        ))
+                      ) : (
+                        <Typography>Giỏ hàng trống</Typography>
+                      )}
+                    </List>
+
+                    <Box
+                      sx={{
+                        borderBottom: "1px solid #ccc",
+                        margin: " 20px 20px",
+                        paddingBottom: "20px",
+                      }}
+                    >
+                      <Stack direction="row" justifyContent="space-between">
+                        <Typography
+                          sx={{
+                            fontWeight: "400",
+                            fontFamily: '"Kodchasan", sans-serif',
+                          }}
+                        >
+                          Subtotal
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontWeight: "600",
+                          }}
+                        >
+                          {carts.reduce((total, cur) => {
+                            return (total += cur.price * cur.quantity);
+                          }, 0)}{" "}
+                          $
+                        </Typography>
+                      </Stack>
+                      <Stack direction="row" justifyContent="space-between">
+                        <Typography
+                          sx={{
+                            fontWeight: "400",
+                            fontFamily: '"Kodchasan", sans-serif',
+                          }}
+                        >
+                          Shipping
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontWeight: "600",
+                          }}
+                        >
+                          Free Ship
+                        </Typography>
+                      </Stack>
+                    </Box>
+
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      sx={{
+                        padding: " 0 20px",
+                      }}
+                    >
                       <Typography
                         sx={{
                           fontWeight: "400",
                           fontFamily: '"Kodchasan", sans-serif',
                         }}
                       >
-                        Subtotal
+                        Total
                       </Typography>
                       <Typography
                         sx={{
@@ -579,55 +702,58 @@ const Checkout = () => {
                         $
                       </Typography>
                     </Stack>
-                    <Stack direction="row" justifyContent="space-between">
-                      <Typography
-                        sx={{
-                          fontWeight: "400",
-                          fontFamily: '"Kodchasan", sans-serif',
-                        }}
-                      >
-                        Shipping
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontWeight: "600",
-                        }}
-                      >
-                        Free Ship
-                      </Typography>
-                    </Stack>
                   </Box>
-
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    sx={{
-                      padding: " 0 20px",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontWeight: "400",
-                        fontFamily: '"Kodchasan", sans-serif',
-                      }}
-                    >
-                      Total
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontWeight: "600",
-                      }}
-                    >
-                      {carts.reduce((total, cur) => {
-                        return (total += cur.price * cur.quantity);
-                      }, 0)}{" "}
-                      $
-                    </Typography>
-                  </Stack>
-                </Box>
+                </Grid>
               </Grid>
-            </Grid>
+            ) : (
+              <Stack
+                direction="column"
+                alignItems="center"
+                sx={{
+                  minHeight: "450px",
+                }}
+              >
+                <Box
+                  sx={{
+                    width: "150px",
+                    height: "150px",
+                    backgroundImage: `url(/assets/img/cart/empty-cart.png)`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    marginBottom: "30px",
+                  }}
+                />
+                <Typography
+                  sx={{
+                    fontSize: "30px",
+                    fontWeight: "700",
+                    fontFamily: "'Kodchasan', sans-serif",
+                    marginBottom: "20px",
+                  }}
+                >
+                  No Items in cart
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: "18px",
+                    fontWeight: "400",
+                    fontFamily: "'Kodchasan', sans-serif",
+                    marginBottom: "20px",
+                  }}
+                >
+                  Add items you want to shop
+                </Typography>
+                <Link href="/products">
+                  <Button variant="contained">Start Shopping</Button>
+                </Link>
+              </Stack>
+            )}
           </Container>
+          <ConfirmDialog
+            confirmDialog={confirmDialog}
+            setConfirmDialog={setConfirmDialog}
+          />
+          <ToastContainer />
         </Box>
       </Box>
     </>

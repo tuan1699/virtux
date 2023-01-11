@@ -22,8 +22,12 @@ import {
 import { app } from "../lib/firebase";
 import { collection, getDoc, getFirestore, setDoc } from "firebase/firestore";
 
+import { ToastContainer, toast } from "react-toastify";
+import { useRouter } from "next/router";
+
 const Signup = () => {
   const {
+    reset: reset2,
     register: register2,
     handleSubmit: handleSubmit2,
     getValues,
@@ -35,6 +39,7 @@ const Signup = () => {
 
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
+  const router = useRouter();
 
   const name = register2("name", {
     required: "Please fill out this field.",
@@ -74,8 +79,6 @@ const Signup = () => {
     },
   });
 
-  const onSubmit = (data) => console.log(data);
-
   return (
     <>
       <Box
@@ -109,9 +112,31 @@ const Signup = () => {
                 updateProfile(auth.currentUser, {
                   displayName: data.name,
                 });
+
+                toast.success(`Login successfully`, {
+                  position: "top-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                });
+                reset2();
+                router.push("/");
               })
               .catch(function (error) {
-                console.log(error);
+                toast.error(`Account already exists`, {
+                  position: "top-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                });
               });
           })}
         >
@@ -144,7 +169,7 @@ const Signup = () => {
           >
             <TextField
               id="outlined-basic"
-              label="Email or Phone Number"
+              label="Email"
               variant="outlined"
               fullWidth
               {...mail}
@@ -238,17 +263,6 @@ const Signup = () => {
           variant="contained"
           sx={{
             width: "100%",
-            bgcolor: "#205295",
-            marginBottom: "10px",
-          }}
-        >
-          Continue With Facebook
-        </Button>
-
-        <Button
-          variant="contained"
-          sx={{
-            width: "100%",
             bgcolor: "#009EFF",
             marginBottom: "20px",
           }}
@@ -270,6 +284,7 @@ const Signup = () => {
           </Typography>
         </Box>
       </Box>
+      <ToastContainer />
     </>
   );
 };

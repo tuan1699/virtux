@@ -1,3 +1,7 @@
 .link-account {
   text-decoration: none;
 }
+
+.nav-active {
+  color: red;
+}
