@@ -48,6 +48,8 @@ import { useParams } from "react-router";
 
 import { fetchDetail } from "../../store/features/detail.slice";
 import { loaderDetail } from "../../store/selector";
+import { selectAllProduct } from "../../store/selector";
+import { useRouter } from "next/router";
 
 function a11yProps(index) {
   return {
@@ -65,15 +67,23 @@ const Detail = ({}) => {
   const [value, setValue] = useState(0);
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
-  const { productId } = useParams();
+  const router = useRouter();
+
   const dispatch = useDispatch();
+  const {
+    query: { productId },
+  } = router;
 
   useEffect(() => {
     dispatch(fetchDetail(productId));
   }, []);
 
   const product = useSelector(detailSelector);
+  const products = useSelector(selectAllProduct);
   const loading = useSelector(loaderDetail);
+  console.log(loading);
+  console.log(product);
+  console.log(productId);
 
   const swiperProps = {
     modules: [Navigation, Pagination],
@@ -82,145 +92,145 @@ const Detail = ({}) => {
     navigation: false,
   };
 
-  // const productsRelated = products.filter((item) =>
-  //   item.categories.includes(product.categories)
-  // );
+  const productsRelated = products.filter((item) =>
+    item.categories.includes(product.categories)
+  );
 
   // Add to WishList
-  // const wishlistRef = collection(getFirestore(app), "wishlist");
+  const wishlistRef = collection(getFirestore(app), "wishlist");
 
-  // useEffect(() => {
-  //   const q = query(wishlistRef);
-  //   const wishlist = onSnapshot(q, (querySnapshot) => {
-  //     let data = [];
-  //     querySnapshot.forEach((doc) => {
-  //       data.push({ ...doc.data(), id: doc.id });
-  //     });
-  //     setWishlist(data.filter((item) => item.uid == (user && user.uid)));
-  //   });
-  //   return () => wishlist();
-  // }, []);
+  useEffect(() => {
+    const q = query(wishlistRef);
+    const wishlist = onSnapshot(q, (querySnapshot) => {
+      let data = [];
+      querySnapshot.forEach((doc) => {
+        data.push({ ...doc.data(), id: doc.id });
+      });
+      setWishlist(data.filter((item) => item.uid == (user && user.uid)));
+    });
+    return () => wishlist();
+  }, []);
 
-  // const handleAddtoWishList = async (product) => {
-  //   const check = wishlist.filter(
-  //     (item) => item.uid == user.uid && item.name == product.name
-  //   );
+  const handleAddtoWishList = async (product) => {
+    const check = wishlist.filter(
+      (item) => item.uid == user.uid && item.name == product.name
+    );
 
-  //   if (auth.currentUser) {
-  //     if (check.length > 0) {
-  //       toast.info(`${product.name} has been in wishlist`, {
-  //         position: "top-right",
-  //         autoClose: 5000,
-  //         hideProgressBar: false,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //         progress: undefined,
-  //         theme: "light",
-  //       });
-  //     } else {
-  //       const reference = doc(wishlistRef);
-  //       await setDoc(reference, {
-  //         uid: user.uid,
-  //         productId: product.id,
-  //         ...product,
-  //       });
-  //       toast.success(`${product.name} added to wish list successfully`, {
-  //         position: "top-right",
-  //         autoClose: 5000,
-  //         hideProgressBar: false,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //         progress: undefined,
-  //         theme: "light",
-  //       });
-  //     }
-  //   } else {
-  //     toast.warning(`You need to login to perform this function`, {
-  //       position: "top-right",
-  //       autoClose: 5000,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //       theme: "light",
-  //     });
-  //   }
-  // };
+    if (auth.currentUser) {
+      if (check.length > 0) {
+        toast.info(`${product.name} has been in wishlist`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        const reference = doc(wishlistRef);
+        await setDoc(reference, {
+          uid: user.uid,
+          productId: product.id,
+          ...product,
+        });
+        toast.success(`${product.name} added to wish list successfully`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    } else {
+      toast.warning(`You need to login to perform this function`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  };
 
-  // // Add to Cart
+  // Add to Cart
 
-  // const cartRef = collection(getFirestore(app), "cart");
+  const cartRef = collection(getFirestore(app), "cart");
 
-  // useEffect(() => {
-  //   const q = query(cartRef);
-  //   const wishlist = onSnapshot(q, (querySnapshot) => {
-  //     let data = [];
-  //     querySnapshot.forEach((doc) => {
-  //       data.push({ ...doc.data(), id: doc.id });
-  //     });
-  //     setCart(data.filter((item) => item.uid == (user && user.uid)));
-  //   });
-  //   return () => wishlist();
-  // }, []);
+  useEffect(() => {
+    const q = query(cartRef);
+    const wishlist = onSnapshot(q, (querySnapshot) => {
+      let data = [];
+      querySnapshot.forEach((doc) => {
+        data.push({ ...doc.data(), id: doc.id });
+      });
+      setCart(data.filter((item) => item.uid == (user && user.uid)));
+    });
+    return () => wishlist();
+  }, []);
 
-  // const handleAddtoCart = async (product) => {
-  //   // check product exist
-  //   const check = cart.filter(
-  //     (item) => item.uid == user.uid && item.name == product.name
-  //   );
+  const handleAddtoCart = async (product) => {
+    // check product exist
+    const check = cart.filter(
+      (item) => item.uid == user.uid && item.name == product.name
+    );
 
-  //   if (auth.currentUser) {
-  //     if (check.length > 0) {
-  //       const reference = doc(cartRef, check[0].id);
-  //       await updateDoc(reference, {
-  //         quantity: check[0].quantity + count,
-  //       });
-  //       toast.success(`${product.name} added to cart successfully`, {
-  //         position: "top-right",
-  //         autoClose: 5000,
-  //         hideProgressBar: false,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //         progress: undefined,
-  //         theme: "light",
-  //       });
-  //     } else {
-  //       const reference = doc(cartRef);
-  //       await setDoc(reference, {
-  //         uid: user.uid,
-  //         productId: product.id,
-  //         quantity: count,
-  //         ...product,
-  //       });
+    if (auth.currentUser) {
+      if (check.length > 0) {
+        const reference = doc(cartRef, check[0].id);
+        await updateDoc(reference, {
+          quantity: check[0].quantity + count,
+        });
+        toast.success(`${product.name} added to cart successfully`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        const reference = doc(cartRef);
+        await setDoc(reference, {
+          uid: user.uid,
+          productId: product.id,
+          quantity: count,
+          ...product,
+        });
 
-  //       toast.success(`${product.name} added to cart successfully`, {
-  //         position: "top-right",
-  //         autoClose: 5000,
-  //         hideProgressBar: false,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //         progress: undefined,
-  //         theme: "light",
-  //       });
-  //     }
-  //   } else {
-  //     toast.warning(`You need to login to perform this function`, {
-  //       position: "top-right",
-  //       autoClose: 5000,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //       theme: "light",
-  //     });
-  //   }
-  // };
+        toast.success(`${product.name} added to cart successfully`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    } else {
+      toast.warning(`You need to login to perform this function`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  };
 
   const breadcrumbs = [
     <Link
@@ -366,7 +376,7 @@ const Detail = ({}) => {
                   padding: "20px",
                 }}
               >
-                {/* <Swiper
+                <Swiper
                   style={{
                     "--swiper-navigation-color": "#fff",
                     "--swiper-pagination-color": "#fff",
@@ -416,7 +426,7 @@ const Detail = ({}) => {
                       </SwiperSlide>
                     );
                   })}
-                </Swiper> */}
+                </Swiper>
               </Grid>
 
               <Grid item xs={12} md={6}>
@@ -502,14 +512,14 @@ const Detail = ({}) => {
                 >
                   <Button
                     variant="contained"
-                    // onClick={() => handleAddtoCart(product)}
+                    onClick={() => handleAddtoCart(product)}
                   >
                     Add to Cart
                   </Button>
 
                   <Button
                     variant="contained"
-                    // onClick={() => handleAddtoWishList(product)}
+                    onClick={() => handleAddtoWishList(product)}
                   >
                     Add to wishlist
                   </Button>
@@ -617,13 +627,13 @@ const Detail = ({}) => {
             </Box>
 
             <Box>
-              {/* <Swiper {...swiperProps}>
-                  {productsRelated.map((product) => (
-                    <SwiperSlide key={product.id}>
-                      <ItemRelated product={product} />
-                    </SwiperSlide>
-                  ))}
-                </Swiper> */}
+              <Swiper {...swiperProps}>
+                {productsRelated.map((product) => (
+                  <SwiperSlide key={product.id}>
+                    <ItemRelated product={product} />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
             </Box>
           </Container>
           <ToastContainer />

@@ -39,19 +39,36 @@ const ProductsSlice = createSlice({
     },
     categoriesFilterChange: (state, action) => {
       state.filter.categories = action.payload;
+      state.currentPage = 1;
     },
 
     brandFilterChange: (state, action) => {
       state.filter.brand = action.payload;
+      state.currentPage = 1;
     },
     sortFilterChange: (state, action) => {
       state.filter.sort = action.payload;
+      state.currentPage = 1;
     },
     priceFilterChange: (state, action) => {
       state.filter.price = action.payload;
+      state.currentPage = 1;
     },
     searchFilterChange: (state, action) => {
       state.filter.search = action.payload;
+    },
+    clearFilter: (state, action) => {
+      return {
+        ...state,
+        currentPage: 1,
+        filter: {
+          search: "",
+          sort: "",
+          categories: [],
+          brand: [],
+          price: [0, 2000],
+        },
+      };
     },
   },
   extraReducers: (builder) => {
@@ -78,6 +95,7 @@ export const {
   pageChanged,
   sortFilterChange,
   priceFilterChange,
+  clearFilter,
 } = ProductsSlice.actions;
 
 export default ProductsSlice;

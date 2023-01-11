@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchDetail = createAsyncThunk("product.detail", async (id) => {
   const res = await fetch(
-    "https://63a8fbcd100b7737b987d5fd.mockapi.io/products/" + id
+    "https://63bc2b36fa38d30d85be625b.mockapi.io/products/" + id
   );
 
   const data = await res.json();

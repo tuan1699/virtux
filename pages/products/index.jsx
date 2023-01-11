@@ -31,6 +31,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 
 import {
+  clearFilter,
   fetchProducts,
   pageChanged,
   priceFilterChange,
@@ -123,6 +124,7 @@ const Shop = () => {
   const [view, setView] = useState("grid");
   const [priceFilter, setPriceFilter] = useState([10, 2000]);
   const [sort, setSort] = useState("");
+  const [checked, setChecked] = useState(false);
 
   const filterRef = useRef();
 
@@ -132,7 +134,7 @@ const Shop = () => {
   const { products, currentPage, totalPage, filteredProducts } =
     useSelector(productsRemaining);
 
-  const { register, handleSubmit, getValues } = useForm({
+  const { register, handleSubmit, getValues, reset } = useForm({
     defaultValues: {},
   });
 
@@ -157,6 +159,8 @@ const Shop = () => {
     setSort(e.target.value);
     dispatch(sortFilterChange(e.target.value));
   };
+
+  const handleClearFilter = () => {};
 
   const breadcrumbs = [
     <Link
@@ -238,9 +242,16 @@ const Shop = () => {
                         return (
                           <FormControlLabel
                             key={categories.id}
-                            control={<Checkbox name="categories" />}
+                            control={
+                              <Checkbox
+                                name="categories"
+                                className="check-box"
+                              />
+                            }
+                            className="check-box"
                             label={categories.label}
                             value={categories.value}
+                            {...register("categories", {})}
                           />
                         );
                       })}
@@ -269,12 +280,31 @@ const Shop = () => {
                             control={<Checkbox name="brands" />}
                             label={brand.label}
                             value={brand.value}
+                            {...register("brand", {})}
                           />
                         );
                       })}
                     </FormGroup>
                   </Box>
                 </form>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    const checkTest = filterRef.current.elements.categories;
+
+                    checkTest.forEach((item) => {
+                      if (item.checked) {
+                        item.checked = false;
+                      }
+                    });
+
+                    setPriceFilter([10, 2000]);
+                    setSort("");
+                    dispatch(clearFilter());
+                  }}
+                >
+                  Clear Filter
+                </Button>
               </Grid>
 
               <Grid item xs={12} sm={7} md={9}>

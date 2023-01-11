@@ -29,7 +29,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import SearchIcon from "@mui/icons-material/Search";
 
-import { searchFilterChange } from "../../store/features/Filter.slice";
+import { searchFilterChange } from "../../store/features/Product.slice";
 
 import Link from "next/link";
 import {

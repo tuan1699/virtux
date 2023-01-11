@@ -214,7 +214,7 @@ const ItemRelated = ({ product, view = "grid" }) => {
         </Box>
 
         <Box>
-          {/* <Link
+          <Link
             href={{
               url: "products/[productId]",
               query: { productId: product.id },
@@ -241,7 +241,7 @@ const ItemRelated = ({ product, view = "grid" }) => {
             >
               {product.name}
             </Typography>
-          </Link> */}
+          </Link>
           <Box
             sx={{
               marginTop: "auto",
