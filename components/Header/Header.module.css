@@ -1,22 +1,22 @@
 .link-account {
   text-decoration: none;
   font-family: "Kodchasan", sans-serif;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .nav-active {
-  color: #d23369;
-  font-family: "Kodchasan", sans-serif;
-  font-size: 18px;
+  color: #d23369 !important;
+  font-family: "Kodchasan", sans-serif !important;
+  font-size: 16px !important;
 }
 
 .nav-link:hover {
-  color: #d23369;
-  font-family: "Kodchasan", sans-serif;
+  color: #d23369 !important;
+  font-family: "Kodchasan", sans-serif !important;
 }
 
 .nav-link {
-  font-family: "Kodchasan", sans-serif;
-  font-weight: 700;
-  font-size: 16px;
+  font-family: "Kodchasan", sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
 }
