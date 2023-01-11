@@ -12,6 +12,11 @@ import {
   Stack,
   styled,
   Tab,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   Tabs,
   ToggleButtonGroup,
   Typography,
@@ -80,8 +85,6 @@ const Detail = () => {
 
   const product = useSelector(selectProductById(productId));
   const products = useSelector(selectAllProduct);
-
-  console.log(product);
 
   const swiperProps = {
     modules: [Navigation, Pagination],
@@ -263,7 +266,7 @@ const Detail = () => {
         fontSize: "18px",
       }}
     >
-      3D VR Headset Glass
+      {product && product.name}
     </Typography>,
   ];
 
@@ -461,8 +464,10 @@ const Detail = () => {
                   </ListItem>
 
                   <ListItem sx={{ padding: "0px", minHeight: "50px" }}>
-                    <StyledTitleDetail>Vendor: </StyledTitleDetail>
-                    <StyledDecrDetail>3D Reality</StyledDecrDetail>
+                    <StyledTitleDetail>Categories: </StyledTitleDetail>
+                    <StyledDecrDetail>
+                      {product && product.categories}
+                    </StyledDecrDetail>
                   </ListItem>
 
                   <ListItem sx={{ padding: "0px", minHeight: "50px" }}>
@@ -558,13 +563,150 @@ const Detail = () => {
             </Box>
 
             <Box value={value} index={0} hidden={value !== 0}>
-              <Typography>
-                Nam tempus turpis at metus scelerisque placerat nulla deumantos
-                solicitud felis. Pellentesque diam dolor, elementum etos
-                lobortis des mollis ut risus. Sedcus faucibus an sullamcorper
-                mattis drostique des commodo pharetras loremos.Donec pretium
-                egestas sapien et mollis.
-              </Typography>
+              <Table
+                sx={{ width: { xs: "100%", lg: "60%" } }}
+                aria-label="simple table"
+              >
+                <TableRow
+                  sx={{
+                    borderBottom: "1px solid #ccc",
+                  }}
+                >
+                  <TableCell
+                    sx={{
+                      fontWeight: "600",
+                    }}
+                  >
+                    Screen
+                  </TableCell>
+                  <TableCell> Dual RGB low persistence LCD</TableCell>
+                </TableRow>
+
+                <TableRow
+                  sx={{
+                    borderBottom: "1px solid #ccc",
+                  }}
+                >
+                  <TableCell
+                    sx={{
+                      fontWeight: "600",
+                    }}
+                  >
+                    Resolution
+                  </TableCell>
+                  <TableCell>
+                    {" "}
+                    2448 × 2448 pixels per eye (4896 x 2448 pixels combined)
+                  </TableCell>
+                </TableRow>
+
+                <TableRow
+                  sx={{
+                    borderBottom: "1px solid #ccc",
+                  }}
+                >
+                  <TableCell
+                    sx={{
+                      fontWeight: "600",
+                    }}
+                  >
+                    Refresh Rate
+                  </TableCell>
+                  <TableCell>
+                    {" "}
+                    90/120 Hz (only 90Hz supported via VIVE Wireless Adapter)
+                  </TableCell>
+                </TableRow>
+
+                <TableRow
+                  sx={{
+                    borderBottom: "1px solid #ccc",
+                  }}
+                >
+                  <TableCell
+                    sx={{
+                      fontWeight: "600",
+                    }}
+                  >
+                    Field of view
+                  </TableCell>
+                  <TableCell> Up to 120 degrees</TableCell>
+                </TableRow>
+
+                <TableRow
+                  sx={{
+                    borderBottom: "1px solid #ccc",
+                  }}
+                >
+                  <TableCell
+                    sx={{
+                      fontWeight: "600",
+                    }}
+                  >
+                    Audio
+                  </TableCell>
+                  <TableCell>
+                    <p>Hi-Res certified headset (via USB-C analog signal)</p>{" "}
+                    <p>
+                      Hi-Res certified headphones (removable) High impedance
+                    </p>
+                    <p>headphones support (via USB-C analog signal)</p>
+                  </TableCell>
+                </TableRow>
+
+                <TableRow
+                  sx={{
+                    borderBottom: "1px solid #ccc",
+                  }}
+                >
+                  <TableCell
+                    sx={{
+                      fontWeight: "600",
+                    }}
+                  >
+                    Connections
+                  </TableCell>
+                  <TableCell>Bluetooth, USB-C port for peripherals</TableCell>
+                </TableRow>
+
+                <TableRow
+                  sx={{
+                    borderBottom: "1px solid #ccc",
+                  }}
+                >
+                  <TableCell
+                    sx={{
+                      fontWeight: "600",
+                    }}
+                  >
+                    Sensors
+                  </TableCell>
+                  <TableCell>
+                    G-sensor, gyroscope, proximity, IPD sensor, SteamVR Tracking
+                    V2.0 (compatible with SteamVR 1.0 and 2.0 base stations)
+                  </TableCell>
+                </TableRow>
+
+                <TableRow
+                  sx={{
+                    borderBottom: "1px solid #ccc",
+                  }}
+                >
+                  <TableCell
+                    sx={{
+                      fontWeight: "600",
+                    }}
+                  >
+                    Ergonomics
+                  </TableCell>
+                  <TableCell>
+                    <p>Eye relief with lens distance adjustment</p>
+                    <p>Adjustable IPD</p>
+                    <p>Adjustable headphones</p>
+                    <p>Adjustable headstrap</p>
+                  </TableCell>
+                </TableRow>
+              </Table>
             </Box>
 
             <Box value={value} index={1} hidden={value !== 1}>

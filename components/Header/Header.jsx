@@ -278,43 +278,46 @@ const Header = () => {
                       <IconButton
                         aria-describedby={auth}
                         onClick={handleClickModalAuth}
+                        sx={{ position: "relative" }}
                       >
                         <PersonIcon />
+                        <Popover
+                          id={idAuth}
+                          open={openAuth}
+                          anchorEl={anchorAuth}
+                          onClose={handleCloseModalAuth}
+                          anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "left",
+                          }}
+                          transformOrigin={{
+                            vertical: "top",
+                            horizontal: "left",
+                          }}
+                          sx={{
+                            position: "absolute",
+                            top: "14px",
+                            left: "-70px",
+                          }}
+                        >
+                          <Stack>
+                            <Link
+                              href="/account"
+                              sx={{}}
+                              className={styles["link-account"]}
+                            >
+                              <Button>{auth.currentUser.displayName}</Button>
+                            </Link>
+
+                            <Button
+                              variant="contained"
+                              onClick={() => auth.signOut()}
+                            >
+                              Đăng xuất
+                            </Button>
+                          </Stack>
+                        </Popover>
                       </IconButton>
-
-                      <Popover
-                        anchorReference="anchorPosition"
-                        anchorPosition={{ top: 72, left: 1100 }}
-                        id={idAuth}
-                        open={openAuth}
-                        anchorEl={anchorAuth}
-                        onClose={handleCloseModalAuth}
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "left",
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "left",
-                        }}
-                      >
-                        <Stack>
-                          <Link
-                            href="/account"
-                            sx={{}}
-                            className={styles["link-account"]}
-                          >
-                            <Button>{auth.currentUser.displayName}</Button>
-                          </Link>
-
-                          <Button
-                            variant="contained"
-                            onClick={() => auth.signOut()}
-                          >
-                            Đăng xuất
-                          </Button>
-                        </Stack>
-                      </Popover>
                     </Box>
                   )}
 
