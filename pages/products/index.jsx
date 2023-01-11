@@ -435,7 +435,11 @@ const Shop = ({ data, total, page, sort }) => {
 
 export default Shop;
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps = async ({ req, res, context }) => {
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=10, stale-while-revalidate=59"
+  );
   let {
     categories = [],
     brand = [],
@@ -465,13 +469,11 @@ export const getServerSideProps = async (context) => {
     Array.prototype.push.apply(brands, brand);
   }
 
-  const res = await fetch(
+  const response = await fetch(
     "https://63bc2b36fa38d30d85be625b.mockapi.io/products"
   );
 
-  console.log(res);
-
-  const data = await res.json();
+  const data = await response.json();
 
   let filtered = data.filter((product) => {
     if (categories.length !== 0 && brands.length !== 0) {
