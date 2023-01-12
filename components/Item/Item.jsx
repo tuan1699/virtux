@@ -127,6 +127,7 @@ const Item = ({ product, view = "grid" }) => {
 
   const StyledItem = styled(Box)({
     display: "flex",
+    // display: { xs: "block", md: "flex" },
     flexDirection: view == "grid" ? "column" : "row",
     gap: view == "grid" ? "10px" : "30px",
     alignItems: "center",
@@ -166,8 +167,8 @@ const Item = ({ product, view = "grid" }) => {
           sx={{
             position: "relative",
             backgroundImage: `url(${product.thumbnail_1})`,
-            width: { xs: "400px", sm: view === "grid" ? "200px" : "300px" },
-            height: { xs: "450px", sm: "230px" },
+            width: { xs: "250px", sm: view === "grid" ? "200px" : "200px" },
+            height: { xs: "200px", sm: "230px" },
             opacity: 1,
             transition: "opacity 0.5s ease-in-out",
             backgroundSize: view === "grid" ? "cover" : "contain",
@@ -185,6 +186,7 @@ const Item = ({ product, view = "grid" }) => {
               opacity: 0,
               transform: "translate(10px,0px)",
               transition: "transform  0.3s",
+              display: { xs: "none", md: "block" },
             }}
           >
             <Stack>
@@ -225,7 +227,7 @@ const Item = ({ product, view = "grid" }) => {
               sx={{
                 fontSize: "20px",
                 fontFamily: "'Kodchasan', sans-serif",
-                padding: "0 10px",
+                padding: { xs: "0px", md: "0 10px" },
                 fontWeight: "600",
                 textAlign: view == "grid" ? "center" : "left",
                 overflow: "hidden",
@@ -273,6 +275,9 @@ const Item = ({ product, view = "grid" }) => {
         BackdropProps={{
           timeout: 500,
         }}
+        sx={{
+          display: { xs: "none", md: "block" },
+        }}
       >
         <Fade in={open}>
           <Box sx={style}>
@@ -280,7 +285,6 @@ const Item = ({ product, view = "grid" }) => {
           </Box>
         </Fade>
       </Modal>
-      {/* <ToastContainer /> */}
     </>
   );
 };

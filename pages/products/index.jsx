@@ -214,7 +214,7 @@ const Shop = () => {
         <Box sx={{ display: "block", padding: "95px 0", bgcolor: "#fff" }}>
           <Container>
             <Grid container>
-              <Grid item xs={12} sm={5} md={3} p={2}>
+              <Grid item xs={12} sm={4} md={3} p={2}>
                 <form
                   ref={filterRef}
                   onChange={() => {
@@ -307,7 +307,7 @@ const Shop = () => {
                 </Button>
               </Grid>
 
-              <Grid item xs={12} sm={7} md={9}>
+              <Grid item xs={12} sm={8} md={9}>
                 <Stack
                   direction="row"
                   justifyContent="space-between"
@@ -368,6 +368,7 @@ const Shop = () => {
                           key={product.id}
                           item
                           xs={12}
+                          sm={6}
                           md={view === "grid" ? 6 : 12}
                           lg={view === "grid" ? 4 : 12}
                         >

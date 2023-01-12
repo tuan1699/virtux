@@ -313,7 +313,7 @@ const Header = () => {
                               variant="contained"
                               onClick={() => auth.signOut()}
                             >
-                              Đăng xuất
+                              Log out
                             </Button>
                           </Stack>
                         </Popover>

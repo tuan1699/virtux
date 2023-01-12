@@ -32,8 +32,8 @@ export default function Home({ data, reviews }) {
     textAlign: "center",
   });
 
-  const data1 = data.slice(0, 4);
-  const data2 = data.slice(4, 8);
+  const data1 = data.filter((item) => item.categories === "headset");
+  const data2 = data.filter((item) => item.categories === "accessories");
 
   return (
     <div>
@@ -85,36 +85,7 @@ export default function Home({ data, reviews }) {
             }}
           ></Box>
           <Box>
-            <HighQuality data={data} />
-            {/* <Swiper
-              loop={true}
-              autoplay={{
-                delay: 10000,
-                disableOnInteraction: false,
-              }}
-              slidesPerGroup={1}
-              slidesPerView={1}
-              modules={[Autoplay]}
-            >
-              <SwiperSlide>
-                <Grid container>
-                  {data1.map((item) => (
-                    <Grid item xs={12} md={3}>
-                      <Item product={item} />
-                    </Grid>
-                  ))}
-                </Grid>
-              </SwiperSlide>
-              <SwiperSlide>
-                <Grid container>
-                  {data2.map((item) => (
-                    <Grid item xs={12} md={3}>
-                      <Item product={item} />
-                    </Grid>
-                  ))}
-                </Grid>
-              </SwiperSlide>
-            </Swiper> */}
+            <HighQuality data={data1} />
           </Box>
         </StyledSection>
 
@@ -183,7 +154,7 @@ export default function Home({ data, reviews }) {
         {/* Lastest Arrivals */}
         <StyledSection>
           <Typography sx={{ fontSize: "18px", fontWeight: "100" }}>
-            Latest Arrivals
+            Accessories Arrivals
           </Typography>
           <Typography
             sx={{
@@ -205,7 +176,7 @@ export default function Home({ data, reviews }) {
           ></Box>
           <Box>
             <Box>
-              <HighQuality data={data} />
+              <HighQuality data={data2} />
             </Box>
           </Box>
         </StyledSection>
@@ -298,57 +269,81 @@ export default function Home({ data, reviews }) {
             <Grid container spacing={4}>
               <Grid
                 item
-                xs={12}
-                sm={6}
+                xs={6}
+                sm={4}
                 md={2}
                 sx={{ marginBottom: { sx: "20px", md: "0px" } }}
               >
-                <Box component="img" src="./assets/img/partner-01.png"></Box>
+                <Box
+                  component="img"
+                  src="./assets/img/partner-01.png"
+                  alt="partner-01"
+                ></Box>
               </Grid>
               <Grid
                 item
-                xs={12}
-                sm={6}
+                xs={6}
+                sm={4}
                 md={2}
                 sx={{ marginBottom: { sx: "20px", md: "0px" } }}
               >
-                <Box component="img" src="./assets/img/partner-02.png"></Box>
+                <Box
+                  component="img"
+                  src="./assets/img/partner-02.png"
+                  alt="partner-02"
+                ></Box>
               </Grid>
               <Grid
                 item
-                xs={12}
-                sm={6}
+                xs={6}
+                sm={4}
                 md={2}
                 sx={{ marginBottom: { sx: "20px", md: "0px" } }}
               >
-                <Box component="img" src="./assets/img/partner-03.png"></Box>
+                <Box
+                  component="img"
+                  src="./assets/img/partner-03.png"
+                  alt="partner-03"
+                ></Box>
               </Grid>
               <Grid
                 item
-                xs={12}
-                sm={6}
+                xs={6}
+                sm={4}
                 md={2}
                 sx={{ marginBottom: { sx: "20px", md: "0px" } }}
               >
-                <Box component="img" src="./assets/img/partner-04.png"></Box>
+                <Box
+                  component="img"
+                  src="./assets/img/partner-04.png"
+                  alt="partner-04"
+                ></Box>
               </Grid>
               <Grid
                 item
-                xs={12}
-                sm={6}
+                xs={6}
+                sm={4}
                 md={2}
                 sx={{ marginBottom: { sx: "20px", md: "0px" } }}
               >
-                <Box component="img" src="./assets/img/partner-05.png"></Box>
+                <Box
+                  component="img"
+                  src="./assets/img/partner-05.png"
+                  alt="partner-05"
+                ></Box>
               </Grid>
               <Grid
                 item
-                xs={12}
-                sm={6}
+                xs={6}
+                sm={4}
                 md={2}
                 sx={{ marginBottom: { sx: "20px", md: "0px" } }}
               >
-                <Box component="img" src="./assets/img/partner-05.png"></Box>
+                <Box
+                  component="img"
+                  src="./assets/img/partner-05.png"
+                  alt="partner-05"
+                ></Box>
               </Grid>
             </Grid>
           </Box>

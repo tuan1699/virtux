@@ -42,6 +42,7 @@ const Review = ({ review }) => {
               margin: "20px 0",
             }}
             src={review.avatar}
+            alt={review.name}
           />
           <Typography>Art Director</Typography>
         </Stack>

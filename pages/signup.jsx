@@ -62,20 +62,20 @@ const Signup = () => {
   });
 
   const password = register2("password", {
-    required: "Vui lòng nhập mật khẩu",
+    required: "Please fill out this field.",
     validate: {
       length: (v) =>
         (4 <= v.length && v.length <= 30) ||
-        "Mật khẩu phải có độ dài từ 4 đến 30 ký tự",
+        "Password must be between 4 and 20 characters long",
     },
   });
 
   const rePassword = register2("rePassword", {
-    required: "Vui lòng xác nhận mật khẩu",
+    required: "Please confirm password",
     deps: ["password"],
     validate: {
       match: (v) =>
-        v === getValues("password") || "Xác nhận mật khẩu không trùng khớp",
+        v === getValues("password") || "Confirm password does not match",
     },
   });
 
@@ -143,6 +143,7 @@ const Signup = () => {
           <Box
             sx={{
               marginBottom: "20px",
+              input: { fontFamily: "'Kodchasan', sans-serif" },
             }}
           >
             <TextField
@@ -156,6 +157,8 @@ const Signup = () => {
             <Typography
               sx={{
                 color: "red",
+                fontFamily: "'Kodchasan', sans-serif",
+                fontSize: "14px",
               }}
             >
               {errors2.name?.message}
@@ -165,6 +168,7 @@ const Signup = () => {
           <Box
             sx={{
               marginBottom: "20px",
+              input: { fontFamily: "'Kodchasan', sans-serif" },
             }}
           >
             <TextField
@@ -177,6 +181,8 @@ const Signup = () => {
             <Typography
               sx={{
                 color: "red",
+                fontFamily: "'Kodchasan', sans-serif",
+                fontSize: "14px",
               }}
             >
               {errors2.mail?.message}
@@ -186,6 +192,7 @@ const Signup = () => {
           <Box
             sx={{
               marginBottom: "30px",
+              input: { fontFamily: "'Kodchasan', sans-serif" },
             }}
           >
             <TextField
@@ -199,6 +206,8 @@ const Signup = () => {
             <Typography
               sx={{
                 color: "red",
+                fontFamily: "'Kodchasan', sans-serif",
+                fontSize: "14px",
               }}
             >
               {errors2.password?.message}
@@ -208,6 +217,7 @@ const Signup = () => {
           <Box
             sx={{
               marginBottom: "20px",
+              input: { fontFamily: "'Kodchasan', sans-serif" },
             }}
           >
             <TextField
@@ -221,6 +231,8 @@ const Signup = () => {
             <Typography
               sx={{
                 color: "red",
+                fontFamily: "'Kodchasan', sans-serif",
+                fontSize: "14px",
               }}
             >
               {errors2.rePassword?.message}
@@ -233,8 +245,10 @@ const Signup = () => {
             Terms & Condtion"
             sx={{
               marginBottom: "20px",
+              span: { fontFamily: "'Kodchasan', sans-serif" },
             }}
-          ></FormControlLabel>
+            required
+          />
 
           <Button
             variant="contained"

@@ -211,7 +211,7 @@ const Checkout = () => {
           <Container>
             {auth.currentUser && carts.length !== 0 ? (
               <Grid container>
-                <Grid item xs={12} sm={7}>
+                <Grid item xs={12} md={7} order={{ xs: 2, md: 1 }}>
                   <form
                     key={4}
                     onSubmit={handleSubmit4((data) => {
@@ -577,8 +577,12 @@ const Checkout = () => {
                   </form>
                 </Grid>
 
-                <Grid item xs={12} sm={5}>
-                  <Box>
+                <Grid item xs={12} md={5} order={{ xs: 1, md: 2 }}>
+                  <Box
+                    sx={{
+                      marginBottom: "20px",
+                    }}
+                  >
                     <Typography
                       sx={{
                         margin: "0 0 20px 20px",

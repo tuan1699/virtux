@@ -314,7 +314,6 @@ const Detail = () => {
     display: "flex",
     flexDirection: "column",
     gap: "20px",
-    borderTop: "0.5px solid #ccc",
     borderBottom: "0.5px solid #ccc",
   });
 
@@ -533,29 +532,21 @@ const Detail = () => {
                     Add to wishlist
                   </Button>
                 </Stack>
-
-                <Stack direction="row" spacing={2} alignItems="center">
-                  <Typography>Share with us</Typography>
-                  <IconButton>
-                    <FacebookIcon />
-                  </IconButton>
-
-                  <IconButton>
-                    <TwitterIcon />
-                  </IconButton>
-
-                  <IconButton>
-                    <GoogleIcon />
-                  </IconButton>
-                </Stack>
               </Grid>
             </Grid>
 
-            <Box>
+            <Box
+              sx={{
+                marginBottom: "20px",
+              }}
+            >
               <Tabs
                 value={value}
                 onChange={handleChange}
                 aria-label="basic tabs example"
+                sx={{
+                  button: { fontFamily: "'Kodchasan', sans-serif" },
+                }}
               >
                 <Tab label="Product Decription" {...a11yProps(0)} />
                 <Tab label="Reviews" {...a11yProps(1)} />
@@ -710,51 +701,62 @@ const Detail = () => {
             </Box>
 
             <Box value={value} index={1} hidden={value !== 1}>
-              <Typography>Customer Reviews</Typography>
-
               <StyledReview>
-                <Rating value={5} />
-                <StyledTitle>asd</StyledTitle>
                 <Typography>
                   <StyledTextHighLight component="span">
-                    Tuan Dang{" "}
+                    Kate{" "}
                   </StyledTextHighLight>
                   on{" "}
                   <StyledTextHighLight component="span">
-                    Jan 05, 2021
+                    Dec 22, 2022
                   </StyledTextHighLight>
                 </Typography>
-                <StyledReviewDecr>w214rrf</StyledReviewDecr>
+
+                <Rating value={4} />
+
+                <StyledReviewDecr>
+                  Packaged and delivered in a tip top condition. On-time
+                  delivery as well.
+                </StyledReviewDecr>
               </StyledReview>
 
               <StyledReview>
-                <Rating value={5} />
-                <StyledTitle>asd</StyledTitle>
                 <Typography>
                   <StyledTextHighLight component="span">
-                    Tuan Dang{" "}
+                    Syafiz{" "}
                   </StyledTextHighLight>
                   on{" "}
                   <StyledTextHighLight component="span">
-                    Jan 05, 2021
+                    Dec 05, 2022
                   </StyledTextHighLight>
                 </Typography>
-                <StyledReviewDecr>w214rrf</StyledReviewDecr>
+
+                <Rating value={5} />
+
+                <StyledReviewDecr>
+                  I haven’t purchased anything like this in a while and it was
+                  the best purchase I’ve been waiting to get one really soon.
+                  And thats what I got here. It was a good price and it shipped
+                  fast.
+                </StyledReviewDecr>
               </StyledReview>
 
               <StyledReview>
-                <Rating value={5} />
-                <StyledTitle>asd</StyledTitle>
                 <Typography>
                   <StyledTextHighLight component="span">
-                    Tuan Dang{" "}
+                    Mark T{" "}
                   </StyledTextHighLight>
                   on{" "}
                   <StyledTextHighLight component="span">
-                    Jan 05, 2021
+                    Nov 17, 2021
                   </StyledTextHighLight>
                 </Typography>
-                <StyledReviewDecr>w214rrf</StyledReviewDecr>
+
+                <Rating value={5} />
+
+                <StyledReviewDecr>
+                  Good customer service. Fast delivery will buy again if good.
+                </StyledReviewDecr>
               </StyledReview>
             </Box>
 

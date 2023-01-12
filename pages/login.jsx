@@ -48,11 +48,11 @@ const Login = () => {
   });
 
   const password = register3("password", {
-    required: "Vui lòng nhập mật khẩu",
+    required: "Please fill out this field.",
     validate: {
       length: (v) =>
-        (4 <= v.length && v.length <= 30) ||
-        "Mật khẩu phải có độ dài từ 4 đến 30 ký tự",
+        (4 <= v.length && v.length <= 20) ||
+        "Password must be between 4 and 20 characters long",
     },
   });
 
@@ -85,26 +85,42 @@ const Login = () => {
           key={3}
           action=""
           onSubmit={handleSubmit3((data) => {
-            signInWithEmailAndPassword(auth, data.email, data.password);
-            toast.success(`Login successfully`, {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-            reset3();
-            if (auth) {
-              router.push("/");
-            }
+            signInWithEmailAndPassword(auth, data.email, data.password)
+              .then(() => {
+                if (auth.currentUser) {
+                  toast.success(`Login successfully`, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                  });
+                  reset3();
+
+                  router.push("/");
+                }
+              })
+              .catch((err) => {
+                toast.error(`Incorrect account or password`, {
+                  position: "top-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                });
+              });
           })}
         >
           <Box
             sx={{
               marginBottom: "20px",
+              input: { fontFamily: "'Kodchasan', sans-serif" },
             }}
           >
             <TextField
@@ -118,6 +134,8 @@ const Login = () => {
             <Typography
               sx={{
                 color: "red",
+                fontFamily: "'Kodchasan', sans-serif",
+                fontSize: "14px",
               }}
             >
               {errors3.email?.message}
@@ -126,6 +144,7 @@ const Login = () => {
           <Box
             sx={{
               marginBottom: "30px",
+              input: { fontFamily: "'Kodchasan', sans-serif" },
             }}
           >
             <TextField
@@ -139,6 +158,8 @@ const Login = () => {
             <Typography
               sx={{
                 color: "red",
+                fontFamily: "'Kodchasan', sans-serif",
+                fontSize: "14px",
               }}
             >
               {errors3.password?.message}
@@ -191,7 +212,18 @@ const Login = () => {
                   router.push("/");
                 }
               })
-              .catch((err) => console.error(err));
+              .catch((err) => {
+                toast.error(`Incorrect account or password`, {
+                  position: "top-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                });
+              });
           }}
         >
           Continue With Google

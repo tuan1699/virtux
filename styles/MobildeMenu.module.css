@@ -3,20 +3,20 @@
   color: #000;
 }
 
-.link-text {
+.link-text span {
   font-family: "Kodchasan", sans-serif !important;
 }
 
 .link-button:hover .link-page {
-  background-color: #ffbaba;
+  background-color: #d23369;
   color: #fff;
-}
-
-.link-button {
-  font-family: "Kodchasan", sans-serif;
 }
 
 .link-button:hover {
-  background-color: #ffbaba;
+  background-color: #d23369;
   color: #fff;
+}
+
+.user {
+  color: #000;
 }
