@@ -5,6 +5,7 @@ import styles from "./SliderItem.module.css";
 
 import { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
+import Link from "next/link";
 
 const Slider = () => {
   const swiperProps = {
@@ -72,16 +73,18 @@ const Slider = () => {
                       3D Virtual and Augmented Reality panoramas to demonstrate
                       your products and also offer an improved user experience.
                     </Typography>
-                    <Button
-                      variant="contained"
-                      sx={{
-                        borderRadius: "100px",
-                        padding: "12px 25px",
-                        fontSize: "12px",
-                      }}
-                    >
-                      Explore More
-                    </Button>
+                    <Link href="/products">
+                      <Button
+                        variant="contained"
+                        sx={{
+                          borderRadius: "100px",
+                          padding: "12px 25px",
+                          fontSize: "12px",
+                        }}
+                      >
+                        Explore More
+                      </Button>
+                    </Link>
                   </Box>
                 </Box>
               </Box>
@@ -156,16 +159,18 @@ const Slider = () => {
                     >
                       3D Virtual and augmented reality panoramas to demonstrate
                     </Typography>
-                    <Button
-                      variant="contained"
-                      sx={{
-                        borderRadius: "100px",
-                        padding: "12px 25px",
-                        fontSize: "12px",
-                      }}
-                    >
-                      Shop now
-                    </Button>
+                    <Link href="/products">
+                      <Button
+                        variant="contained"
+                        sx={{
+                          borderRadius: "100px",
+                          padding: "12px 25px",
+                          fontSize: "12px",
+                        }}
+                      >
+                        Shop now
+                      </Button>
+                    </Link>
                   </Box>
                 </Box>
               </Box>
@@ -238,16 +243,18 @@ const Slider = () => {
                     >
                       Create virtual reality world wide variety of VR equipment
                     </Typography>
-                    <Button
-                      variant="contained"
-                      sx={{
-                        borderRadius: "100px",
-                        padding: "12px 25px",
-                        fontSize: "12px",
-                      }}
-                    >
-                      Shop now
-                    </Button>
+                    <Link href="/products">
+                      <Button
+                        variant="contained"
+                        sx={{
+                          borderRadius: "100px",
+                          padding: "12px 25px",
+                          fontSize: "12px",
+                        }}
+                      >
+                        Shop now
+                      </Button>
+                    </Link>
                   </Box>
                 </Box>
               </Box>

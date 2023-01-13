@@ -287,24 +287,6 @@ const Shop = () => {
                     </FormGroup>
                   </Box>
                 </form>
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    const checkTest = filterRef.current.elements.categories;
-
-                    checkTest.forEach((item) => {
-                      if (item.checked) {
-                        item.checked = false;
-                      }
-                    });
-
-                    setPriceFilter([10, 2000]);
-                    setSort("");
-                    dispatch(clearFilter());
-                  }}
-                >
-                  Clear Filter
-                </Button>
               </Grid>
 
               <Grid item xs={12} sm={8} md={9}>

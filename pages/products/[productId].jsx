@@ -566,11 +566,19 @@ const Detail = () => {
                   <TableCell
                     sx={{
                       fontWeight: "600",
+                      fontFamily: "'Kodchasan', sans-serif",
                     }}
                   >
                     Screen
                   </TableCell>
-                  <TableCell> Dual RGB low persistence LCD</TableCell>
+                  <TableCell
+                    sx={{
+                      fontFamily: "'Kodchasan', sans-serif",
+                    }}
+                  >
+                    {" "}
+                    Dual RGB low persistence LCD
+                  </TableCell>
                 </TableRow>
 
                 <TableRow
@@ -581,11 +589,16 @@ const Detail = () => {
                   <TableCell
                     sx={{
                       fontWeight: "600",
+                      fontFamily: "'Kodchasan', sans-serif",
                     }}
                   >
                     Resolution
                   </TableCell>
-                  <TableCell>
+                  <TableCell
+                    sx={{
+                      fontFamily: "'Kodchasan', sans-serif",
+                    }}
+                  >
                     {" "}
                     2448 × 2448 pixels per eye (4896 x 2448 pixels combined)
                   </TableCell>
@@ -599,11 +612,16 @@ const Detail = () => {
                   <TableCell
                     sx={{
                       fontWeight: "600",
+                      fontFamily: "'Kodchasan', sans-serif",
                     }}
                   >
                     Refresh Rate
                   </TableCell>
-                  <TableCell>
+                  <TableCell
+                    sx={{
+                      fontFamily: "'Kodchasan', sans-serif",
+                    }}
+                  >
                     {" "}
                     90/120 Hz (only 90Hz supported via VIVE Wireless Adapter)
                   </TableCell>
@@ -617,11 +635,19 @@ const Detail = () => {
                   <TableCell
                     sx={{
                       fontWeight: "600",
+                      fontFamily: "'Kodchasan', sans-serif",
                     }}
                   >
                     Field of view
                   </TableCell>
-                  <TableCell> Up to 120 degrees</TableCell>
+                  <TableCell
+                    sx={{
+                      fontFamily: "'Kodchasan', sans-serif",
+                    }}
+                  >
+                    {" "}
+                    Up to 120 degrees
+                  </TableCell>
                 </TableRow>
 
                 <TableRow
@@ -632,11 +658,16 @@ const Detail = () => {
                   <TableCell
                     sx={{
                       fontWeight: "600",
+                      fontFamily: "'Kodchasan', sans-serif",
                     }}
                   >
                     Audio
                   </TableCell>
-                  <TableCell>
+                  <TableCell
+                    sx={{
+                      fontFamily: "'Kodchasan', sans-serif",
+                    }}
+                  >
                     <p>Hi-Res certified headset (via USB-C analog signal)</p>{" "}
                     <p>
                       Hi-Res certified headphones (removable) High impedance
@@ -653,11 +684,18 @@ const Detail = () => {
                   <TableCell
                     sx={{
                       fontWeight: "600",
+                      fontFamily: "'Kodchasan', sans-serif",
                     }}
                   >
                     Connections
                   </TableCell>
-                  <TableCell>Bluetooth, USB-C port for peripherals</TableCell>
+                  <TableCell
+                    sx={{
+                      fontFamily: "'Kodchasan', sans-serif",
+                    }}
+                  >
+                    Bluetooth, USB-C port for peripherals
+                  </TableCell>
                 </TableRow>
 
                 <TableRow
@@ -668,11 +706,16 @@ const Detail = () => {
                   <TableCell
                     sx={{
                       fontWeight: "600",
+                      fontFamily: "'Kodchasan', sans-serif",
                     }}
                   >
                     Sensors
                   </TableCell>
-                  <TableCell>
+                  <TableCell
+                    sx={{
+                      fontFamily: "'Kodchasan', sans-serif",
+                    }}
+                  >
                     G-sensor, gyroscope, proximity, IPD sensor, SteamVR Tracking
                     V2.0 (compatible with SteamVR 1.0 and 2.0 base stations)
                   </TableCell>
@@ -686,11 +729,16 @@ const Detail = () => {
                   <TableCell
                     sx={{
                       fontWeight: "600",
+                      fontFamily: "'Kodchasan', sans-serif",
                     }}
                   >
                     Ergonomics
                   </TableCell>
-                  <TableCell>
+                  <TableCell
+                    sx={{
+                      fontFamily: "'Kodchasan', sans-serif",
+                    }}
+                  >
                     <p>Eye relief with lens distance adjustment</p>
                     <p>Adjustable IPD</p>
                     <p>Adjustable headphones</p>

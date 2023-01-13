@@ -225,11 +225,23 @@ const Account = () => {
                               justifyContent: "center",
                             }}
                           >
-                            <Typography>{item.date}</Typography>
+                            <Typography
+                              sx={{
+                                fontFamily: "'Kodchasan', sans-serif",
+                              }}
+                            >
+                              {" "}
+                              {item.date}
+                            </Typography>
                           </TableCell>
                           <StyledNameProduct align="center">
                             {item.bill.map((product) => (
-                              <Typography key={product.id}>
+                              <Typography
+                                key={product.id}
+                                sx={{
+                                  fontFamily: "'Kodchasan', sans-serif",
+                                }}
+                              >
                                 {product.name}
                               </Typography>
                             ))}
@@ -244,7 +256,7 @@ const Account = () => {
                               color: "#d23369",
                             }}
                           >
-                            {item.total}
+                            {item.total} $
                           </TableCell>
                         </TableRow>
                       ))}
