@@ -127,7 +127,7 @@ const Item = ({ product, view = "grid" }) => {
 
   const StyledItem = styled(Box)({
     display: "flex",
-    // display: { xs: "block", md: "flex" },
+
     flexDirection: view == "grid" ? "column" : "row",
     gap: view == "grid" ? "10px" : "30px",
     alignItems: "center",
@@ -174,9 +174,6 @@ const Item = ({ product, view = "grid" }) => {
             backgroundSize: view === "grid" ? "cover" : "contain",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
-            // "&:hover": {
-            //   backgroundImage: `url(${product.thumbnail_2})`,
-            // },
           }}
           className={styles["thumb"]}
         >
