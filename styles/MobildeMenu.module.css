@@ -13,7 +13,7 @@
 }
 
 .link-button:hover {
-  background-color: #d23369;
+  background-color: #d23369 !important;
   color: #fff;
 }
 
