@@ -65,7 +65,6 @@ const Checkout = () => {
     onSnapshot(q, (querySnapshot) => {
       let data = [];
       querySnapshot.forEach((doc) => {
-        console.log(doc.data());
         data.push({ ...doc.data(), id: doc.id });
       });
       setCart(data.filter((item) => item.uid == (user && user.uid)));
@@ -188,9 +187,9 @@ const Checkout = () => {
     required: "Please fill out this field.",
   });
 
-  const paypalMail = register4("paypalMail", {
-    required: "Please fill out this field.",
-  });
+  // const paypalMail = register4("paypalMail", {
+  //   required: "Please fill out this field.",
+  // });
 
   return (
     <>
@@ -440,7 +439,6 @@ const Checkout = () => {
                         sx={{
                           overflow: "hidden",
                         }}
-                        className={styles["trans-height"]}
                       >
                         <Typography
                           sx={{
